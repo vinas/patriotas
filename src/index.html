@@ -1,0 +1,110 @@
+
+<html>
+<head>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+	<title>The Chase</title>
+    <meta content='width=100%, user-scalable=no, initial-scale=1.0' name='viewport' />
+    <!-- build:css -->
+    <link href="css/styles.css" rel="stylesheet">
+    <!-- endbuild -->
+</head>
+
+<body width="100%" style="width: 100%;" topmargin="0" leftmargin="0">
+
+<input type="hidden" name="justOpened" id="justOpened" value="1" />
+
+<div id="background" class="background"><img src="img/background_v2.jpg" id="backgroundImage" /></div>
+
+<div id="presentation" class="presentation"><img id="presentationImage" src="img/title.png" /></div>
+
+<img id="thief" class="personagem" src="img/thief_01.gif" />
+<img id="officer1" class="personagem" src="img/guarda.gif" />
+<img id="officer2" class="personagem" src="img/guarda.gif" />
+
+<div id="counter1" class="counter1">666</div>
+<div id="counter2" class="counter1">666</div>
+
+<img id="clock" class="item" src="img/clock.png" />
+<img id="money" class="item" src="img/money2.png" />
+<img id="molotov" class="item" src="img/molotov_v2.png" />
+<img id="bomb" class="item" src="img/bomb_v2.png" />
+
+<div id="busted">
+    <img id="bustedEndGameImage" src="img/busted_v2.png" alt="You got busted!" />
+    <div class="endGameMessage" id="endGameMessage">Sorry {user}! =(</div>
+    <div class="rankingButton" id="rankingButton"></div>
+</div>
+
+<div id="timeUp">
+    <img id="timeUpEndGameImage" src="img/timeisup_01.png" alt="Time is up!" />
+    <!--div id="loginStatus">
+    </div>
+    <div class="facebookLoginButton" id="facebookLoginButton">
+    </div>
+    <div class="rankingButton"></div-->
+</div>
+
+<div id="ranking">loading...</div>
+<div class="rankingFooter" id="rankingFooter">
+    <div id="rankingLinkButton" data-rankingType="alltimes">CHECK ALL TIMES RANKING</div>
+</div>
+
+<div id="barraInfo">
+    <div id="barLeft">
+        <div id="instructionsBar" class="bar">
+            <img id="setas" src="img/setas.png" alt="slide to move" />
+            <div id="slideLabel">slide to move</div>
+            <img id="thiefInstruction" src="img/thief_bar.png" alt="slide to move" />
+            <div id="collectLabel">
+                collect
+                <div id="items">
+                    <img class="barItem" src="img/money2.png" />
+                    <img class="barItem" src="img/molotov_v2.png" />
+                    <img class="barItem" src="img/bomb_v2.png" />
+                </div>
+            </div>
+        </div>
+        <div id="scoreBar" class="bar">
+            <div class="barBox" id="timeBox">
+                <div class="tituloMostrador">Time:</div>
+                <div id="time" class="mostrador">666</div>
+            </div>
+            <div class="barBox" id="scoreBox">
+                <div class="tituloMostrador">Score:</div>
+                <div id="points" class="mostrador">0</div>
+            </div>
+            <div class="barBox" id="dificultyBox">
+                <div class="tituloMostrador">Dificulty:</div>
+                <div id="fase" class="mostrador">0</div>
+            </div>
+        </div>
+    </div>
+    <div class="barRight">
+        <img id="resetGame" class="actionButton" src="img/start.png" />
+        <img id="login" class="actionButton" src="img/login.png" />
+        <img id="loading" class="actionButton" src="img/loader.gif" />
+    </div>
+</div>
+
+<div class="action" id="actionSubtitle1"></div>
+<div class="action" id="actionSubtitle2"></div>
+<div class="action" id="actionSubtitle3"></div>
+
+</body>
+
+<!-- build:js -->
+<script type="text/javascript" src="js/globals.js"></script>
+<script type="text/javascript" src="js/setup.js"></script>
+<script type="text/javascript" src="js/resizer.js"></script>
+<script type="text/javascript" src="js/display.js"></script>
+<script type="text/javascript" src="js/motion.js"></script>
+<script type="text/javascript" src="js/sounds.js"></script>
+<script type="text/javascript" src="js/controls.js"></script>
+<script type="text/javascript" src="js/calculator.js"></script>
+<script type="text/javascript" src="js/events.js"></script>
+<script type="text/javascript" src="js/game.js"></script>
+<script type="text/javascript" src="js/start-app.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
+<!-- endbuild -->
+
+</html>
