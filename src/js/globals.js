@@ -35,7 +35,7 @@ var Counter1,
 // Dimentional Constants
 var MAPSIZE = 500,
     CHARSIZE = 75,
-    ITEMSIZE = 25,
+    ITEMSIZE = 40,
     CATCHTOLERANCE = 15,
     CROSSBORDERTOLERANCE = 20;
 

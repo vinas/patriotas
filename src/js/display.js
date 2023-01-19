@@ -340,6 +340,7 @@ function Display()
             'bkg_09.jpg',
             'bkg_10.jpg',
             'bkg_11.jpg',
+            'bkg_12.jpg',
             'background_v2.jpg'
         );
         do {
