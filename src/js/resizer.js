@@ -149,6 +149,7 @@ function Resizer()
         document.getElementById('background').style.height = MAPSIZE+'px';
         BackgroundImg.style.width = MAPSIZE+"px";
         BackgroundImg.style.height = MAPSIZE+"px";
+        BackgroundImg.style.opacity = '0.6';
 
         setClassProp('personagem', 'width', CHARSIZE+'px');
         setClassProp('personagem', 'height', CHARSIZE+'px');
