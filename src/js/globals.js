@@ -41,7 +41,7 @@ var MAPSIZE = 500,
 
 // Other game constant settings
 var STANDARDTIME = 20,
-    PTSTOCHANGELEVEL = 40,
+    PTSTOCHANGELEVEL = 20,
     POINTUNITY = 5,
     BONUSTIME = 3,
     MOLOTOVPAUSE = 4,
