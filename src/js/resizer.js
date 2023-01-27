@@ -63,8 +63,8 @@ function Resizer()
 
         document.getElementById('presentation').style.height = MAPSIZE+'px';
         document.getElementById('timeBox').style.paddingLeft = calc.crossMultiply(10)+'px';
-        document.getElementById('scoreBox').style.paddingLeft = calc.crossMultiply(80)+'px';
-        document.getElementById('scoreBox2').style.paddingLeft = calc.crossMultiply(160)+'px';
+        document.getElementById('scoreBox').style.paddingLeft = calc.crossMultiply(85)+'px';
+        document.getElementById('scoreBox2').style.paddingLeft = calc.crossMultiply(170)+'px';
         document.getElementById('items').style.paddingTop = calc.crossMultiply(5)+'px';
         document.getElementById('barLeft').style.fontSize = calc.crossMultiply(10)+'px';
         document.getElementById('ranking').style.width = MAPSIZE+'px';

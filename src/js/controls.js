@@ -31,14 +31,14 @@ function Controls()
 
     function handleResetButton() {
         document.getElementById('resetGame').addEventListener('click', function() {
-            var justOpened = document.getElementById('justOpened');
-            if (justOpened.value == 1) {
+            // var justOpened = document.getElementById('justOpened');
+            // if (justOpened.value == 1) {
                 handleSounds();
-                document.getElementById('presentationImage')
-                    .setAttribute('src', 'img/detalhes.gif');
-                justOpened.value = 0;
-                return;
-            }
+            //     document.getElementById('presentationImage')
+            //         .setAttribute('src', 'img/detalhes.gif');
+            //     justOpened.value = 0;
+            //     return;
+            // }
             display.startPressedTimmer();
             game.resetGame();
         });
