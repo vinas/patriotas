@@ -84,7 +84,7 @@ function Resizer()
 
         thiefInstruction.style.width = calc.crossMultiply(99)+'px';
         thiefInstruction.style.height = calc.crossMultiply(86)+'px';
-        thiefInstruction.style.paddingLeft = calc.crossMultiply(130)+'px';
+        thiefInstruction.style.paddingLeft = calc.crossMultiply(135)+'px';
 
         dificultyBox.style.paddingLeft = calc.crossMultiply(240)+'px';
         dificultyBox.style.width = calc.crossMultiply(95)+'px';

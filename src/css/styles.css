@@ -45,7 +45,7 @@ body {
 	padding: 2.5%;
 	text-align: center;
 	font-weight: bold;
-	font-size: small;
+	font-size: large;
 
 }
 
@@ -245,6 +245,7 @@ body {
 	position: absolute;
 	padding-left: 70px;
 	font-size: 18px;
+	text-align: center;
 }
 
 #thiefInstruction {

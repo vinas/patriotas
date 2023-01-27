@@ -394,16 +394,26 @@ function Display()
 
     function getBustedMessage() {
         var messages = [];
-        messages.push("sorry pal!");
-        messages.push("better luck next time!");
-        messages.push("holy f*ck, "+user.firstName+"!");
-        messages.push("not this time, "+user.firstName+"!");
-        messages.push(user.firstName+", "+user.firstName+"... never gives up!");
-        messages.push("aren't you tired of trying?");
-        messages.push("give up "+user.firstName+"!");
-        messages.push("could be better");
-        messages.push("now aren't you cute, "+user.firstName+"?");
-        messages.push("leave it, "+user.firstName+"!");
+        messages.push("foi mal!");
+        messages.push("terrorismo eh crime");
+        messages.push("vandalismo eh crime");
+        messages.push("no fim, olavo estava errado");
+        messages.push("nao adianta mugir agora");
+        messages.push("sem anistia");
+        messages.push("foi ser locaum, perdel pro xandaum");
+        messages.push("* perdel*, maneh !");
+        messages.push("essa prisao eh terrabolista, tah ?");
+        messages.push("agora vai tomar vacina, fio");
+        messages.push("naum quero saber de mugido aqui");
+        messages.push("quem pagou seu hotel, fio ?");
+        messages.push("o b*ls*narism* dividiu a familia");
+        messages.push("fique em paz, micheque ora por vc");
+        messages.push("vc aqui e o bozo na disney, neh ?");
+        messages.push("micheque orando por vc... na disney");
+        messages.push("51 aptos no dinheiro, e vc aqui !");
+        messages.push("tava baum o churras no quartel ?");
+        messages.push("cagadas acontecem! veja o flavio");
+        messages.push("mito ? ajuda psiquiatrica !");
         return messages[Math.floor(Math.random() * messages.length)];
     }
 
