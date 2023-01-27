@@ -63,7 +63,8 @@ function Display()
     }
 
     function loadingButton() {
-        hideElements(['login', 'resetGame']);
+        // hideElements(['login', 'resetGame']);
+        hideElements(['resetGame']);
         showElements('loading');
     }
 
@@ -73,7 +74,8 @@ function Display()
     }
 
     function startButton() {
-        hideElements(['loading', 'login']);
+        // hideElements(['loading', 'login']);
+        hideElements(['loading']);
         showElements('resetGame');
     }
     

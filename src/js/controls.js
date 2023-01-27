@@ -11,8 +11,8 @@ function Controls()
         preventDblClick();
         handlePressedKey();
         handleResetButton();
-        handleLoginButton();
-        handleRankingButton();
+        // handleLoginButton();
+        // handleRankingButton();
         handleControlSwipes();
         handleSwipePresentation();
     }
@@ -54,10 +54,6 @@ function Controls()
         document.getElementById('rankingButton').addEventListener('click', function() {
             document.getElementById('ranking').style.display = 'block';
             document.getElementById('ranking').innerHTML = 'loading...';
-            /*$.get(
-                    '/api/Games/getRanking/1',
-                    display.ranking
-                );*/
         });
     }
 
