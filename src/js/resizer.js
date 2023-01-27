@@ -120,7 +120,7 @@ function Resizer()
 
         setClassProp('barItem', 'width', calc.crossMultiply(25)+'px');
         setClassProp('barItem', 'height', calc.crossMultiply(25)+'px');
-        setClassProp('barItem', 'padding-right', calc.crossMultiply(14)+'px');
+        setClassProp('barItem', 'padding-right', calc.crossMultiply(12)+'px');
         setClassProp('barItem', 'padding-top', calc.crossMultiply(10)+'px');
 
         setClassProp('actionButton', 'width', calc.crossMultiply(100)+'px');

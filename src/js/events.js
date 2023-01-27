@@ -31,7 +31,6 @@ function Events()
 
     function gotClock() {
         if (calc.reached(thiefPosArr, CHARSIZE, clockPos, ITEMSIZE)) {
-            game.scorePoints();
             time = time + 10;
             display.hideClock();
             display.clockFeedback();
@@ -41,7 +40,6 @@ function Events()
     function gotMolotov() {
         if (calc.reached(thiefPosArr, CHARSIZE, molotovPos, ITEMSIZE)) {
             molotovTime = MOLOTOVPAUSE;
-            game.scorePoints();
             display.molotovFeedback();
         }
     }
