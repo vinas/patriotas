@@ -92,9 +92,9 @@ function Display()
             hideBomb();
             flashOfficers();
             flash(CurrLevel);
-            showFeedback(Officer1, Subtitle1, 'slow');
+            showFeedback(Officer1, Subtitle1, 'devagar');
             if (calc.isTwoPolicemenLevel()) {
-                showFeedback(Officer2, Subtitle1, 'slow');
+                showFeedback(Officer2, Subtitle1, 'devagar');
             }
         }
     }
@@ -112,7 +112,7 @@ function Display()
 
     function clockFeedback() {
         clockSound.play();
-        showFeedback(Thief, Subtitle3, 'time +10');
+        showFeedback(Thief, Subtitle3, 'tempo +10');
     }
 
     function gameInfo() {
@@ -242,10 +242,10 @@ function Display()
 
     function burnDaPolice() {
         Officer1.setAttribute('src', 'img/guarda_fogo_02.gif');
-        showFeedback(Officer1, Subtitle1, "can't move");
+        showFeedback(Officer1, Subtitle1, "queimando");
         if (calc.isTwoPolicemenLevel()) {
             Officer2.setAttribute('src', 'img/guarda_fogo_02.gif');
-            showFeedback(Officer2, Subtitle2, "can't move");
+            showFeedback(Officer2, Subtitle2, "queimando");
         }
     }
 
