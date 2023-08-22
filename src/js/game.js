@@ -19,7 +19,8 @@ function Game()
 
     function endGame(reason) {
         gameOn = false;
-        musicTheme.pause();
+        fastTheme.pause();
+        slowTheme.pause();
         saveGameScores();
         endGameSound.currentTime = 0;
         endGameSound.play();
@@ -37,8 +38,9 @@ function Game()
         display.gameInfo();
         loadingTheme.pause();
         endGameSound.pause();
-        musicTheme.currentTime = 0;
-        musicTheme.play();
+        fastTheme.currentTime = 0;
+        slowTheme.currentTime = 0;
+        slowTheme.play();
         gameOn = true;
     }
 
@@ -123,8 +125,11 @@ function Game()
         if (isLevelChange()) {
             lastChangedLevel = points;
             currLevel = currLevel + 1;
-            if (currLevel == TWOPOLICEMENLEVEL)
+            if (currLevel == TWOPOLICEMENLEVEL) {
+                slowTheme.pause();
+                fastTheme.play();
                 display.show2ndPoliceman();
+            }
             display.updateDificultyDisplay();
             display.setNewBackground();
             motion.changePoliceMoveRate();

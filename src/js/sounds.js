@@ -14,7 +14,12 @@ function Sounds() {
             this.play();
         }, false);
 
-        musicTheme.addEventListener('ended', function() {
+        fastTheme.addEventListener('ended', function() {
+            this.currentTime = 0;
+            this.play();
+        }, false);
+
+        slowTheme.addEventListener('ended', function() {
             this.currentTime = 0;
             this.play();
         }, false);
@@ -25,7 +30,8 @@ function Sounds() {
     }
 
     function prepareSounds() {
-        musicTheme.volume = 0;
+        fastTheme.volume = 0;
+        slowTheme.volume = 0;
         endGameSound.volume = 0;
         loadingTheme.volume = 0;
         bombSound.volume = 0;
@@ -33,8 +39,10 @@ function Sounds() {
         coinSound.volume = 0;
 
         loadingTheme.play();
-        musicTheme.play();
-        musicTheme.pause();
+        fastTheme.play();
+        fastTheme.pause();
+        slowTheme.play();
+        slowTheme.pause();
         endGameSound.play();
         endGameSound.pause();
         bombSound.play();
@@ -44,14 +52,16 @@ function Sounds() {
         coinSound.play();
         coinSound.pause();
 
-        musicTheme.currentTime = 0;
+        fastTheme.currentTime = 0;
+        slowTheme.currentTime = 0;
         endGameSound.currentTime = 0;
         loadingTheme.currentTime = 0;
         bombSound.currentTime = 0;
         clockSound.currentTime = 0;
         coinSound.currentTime = 0;
 
-        musicTheme.volume = 1;
+        fastTheme.volume = 1;
+        slowTheme.volume = 1;
         endGameSound.volume = 1;
         loadingTheme.volume = 1;
         bombSound.volume = 1;

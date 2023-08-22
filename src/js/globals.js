@@ -55,7 +55,8 @@ var STANDARDTIME = 20,
     SPEEDTABLE;
 
 // Sounds
-var musicTheme = new Audio('audio/8bit_sparks.mp3'),
+var fastTheme = new Audio('audio/8bit_sparks.mp3'),
+    slowTheme = new Audio('audio/hino_nacional.mp3'),
     endGameSound = new Audio('audio/endGame.mp3'),
     loadingTheme = new Audio('audio/looperman.mp3'),
     bombSound = new Audio('audio/bomb.mp3'),

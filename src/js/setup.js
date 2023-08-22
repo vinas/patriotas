@@ -74,7 +74,8 @@ function Setup() {
     }
 
     function setSounds(callback) {
-        musicTheme = new Audio('audio/8bit_sparks.mp3');
+        fastTheme = new Audio('audio/8bit_sparks.mp3');
+        slowTheme = new Audio('audio/hino_nacional.mp3'),
         endGameSound = new Audio('audio/endGame.mp3');
         loadingTheme = new Audio('audio/looperman.mp3');
         bombSound = new Audio('audio/bomb.mp3');
@@ -137,14 +138,15 @@ function Setup() {
 
         function focusSettings() {
             window.onblur = function() {
-                musicTheme.pause();
+                fastTheme.pause();
+                slowTheme.pause();
                 loadingTheme.pause();
                 endGameSound.pause();
             };
 
             window.onfocus = function() {
                 if (gameOn) {
-                    musicTheme.play();
+                    slowTheme.play();
                     return;
                 }
                 loadingTheme.play();

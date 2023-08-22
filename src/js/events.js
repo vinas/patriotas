@@ -51,8 +51,11 @@ function Events()
                 currLevel = currLevel - 1;
                 officerMoveRate[0] = SPEEDTABLE[currLevel][0];
                 officerMoveRate[1] = SPEEDTABLE[currLevel][1];
-                if (currLevel < TWOPOLICEMENLEVEL)
+                if (currLevel < TWOPOLICEMENLEVEL) {
+                    fastTheme.pause();
+                    slowTheme.play();
                     display.hideOfficer2();
+                }
             }
             CurrLevel.innerHTML = currLevel;
         }
