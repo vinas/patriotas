@@ -11,9 +11,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     game = Game();
     login = Login();
 
-    // if (setup.isMobile()) {
+    if (setup.isMobile()) {
          game.init();
-    // } else {
-    //     display.errorNotMobile();
-    // }
+    } else {
+        display.errorNotMobile();
+    }
 });

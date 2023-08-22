@@ -59,7 +59,7 @@ function Display()
 
     function errorNotMobile() {
         hideElements(['barraInfo', 'presentation']);
-        element('background').innerHTML = '<br/><br/>&nbsp;&nbsp;&nbsp;Only playable on mobile devices!<br/><br/>=(';
+        element('background').innerHTML = '<br/><br/>&nbsp;&nbsp;&nbsp;Apenas no celular, no modo retrato!<br/><br/>=(';
     }
 
     function loadingButton() {
