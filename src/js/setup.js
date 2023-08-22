@@ -19,6 +19,7 @@ function Setup() {
             'img/detalhes.gif',
             'img/start_over.png',
             'img/guarda_fogo_02.gif',
+            'img/juiz_fogo.gif',
             'img/background_v2.jpg',
             'img/bkg_01.jpg',
             'img/bkg_02.jpg',

@@ -155,7 +155,7 @@ function Display()
 
     function hideOfficer2() {
         hideElements([Counter2, Officer2]);
-        Officer2.setAttribute("src", "img/guarda.gif");
+        Officer2.setAttribute("src", "img/juiz.gif");
     }
 
     function objectAt(obj, posArr) {
@@ -180,7 +180,7 @@ function Display()
         Officer1.setAttribute("src", "img/guarda.gif");
         hideElements(Counter1);
         if (calc.isTwoPolicemenLevel()) {
-            Officer2.setAttribute("src", "img/guarda.gif");
+            Officer2.setAttribute("src", "img/juiz.gif");
             hideElements(Counter2);
         }
     }
@@ -244,7 +244,7 @@ function Display()
         Officer1.setAttribute('src', 'img/guarda_fogo_02.gif');
         showFeedback(Officer1, Subtitle1, "queimando");
         if (calc.isTwoPolicemenLevel()) {
-            Officer2.setAttribute('src', 'img/guarda_fogo_02.gif');
+            Officer2.setAttribute('src', 'img/juiz_fogo.gif');
             showFeedback(Officer2, Subtitle2, "queimando");
         }
     }
@@ -283,7 +283,7 @@ function Display()
     function show2ndPoliceman() {
         police = Officer2;
         if (molotovTime > 0) {
-            police.setAttribute('src', 'img/guarda_fogo_02.gif')
+            police.setAttribute('src', 'img/juiz_fogo.gif')
         }
         calc.officer2StartPos();
         objectAt(Officer2, officerPosArr[1]);
