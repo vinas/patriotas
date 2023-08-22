@@ -50,25 +50,35 @@ function Calculator()
     function nextOfficerPos(whichOfficer) {
         var officer = (whichOfficer == 0) ? Officer1 : Officer2;
         var relativePositions = getRelativePositions(whichOfficer);
+        var limit = MAPSIZE - CHARSIZE;
         if (movingAxis(whichOfficer) == 'horizontal') {
             switch (relativePositions[0]) {
                 case 'right':
                     display.mirrorObj(officer, '-1');
-                    officerPosArr[whichOfficer][0] = officerPosArr[whichOfficer][0] + officerMoveRate[whichOfficer];
+                    var nextVal = officerPosArr[whichOfficer][0] + officerMoveRate[whichOfficer];
+                    if (nextVal > limit) nextVal = limit;
+                    officerPosArr[whichOfficer][0] = nextVal;
                     break;
                 case 'left':
                     display.mirrorObj(officer, '1');
-                    officerPosArr[whichOfficer][0] = officerPosArr[whichOfficer][0] - officerMoveRate[whichOfficer];
+                    var nextVal = officerPosArr[whichOfficer][0] - officerMoveRate[whichOfficer];
+                    if (nextVal < 0) nextVal = 0;
+                    officerPosArr[whichOfficer][0] = nextVal;
             }
             return;
         }
         switch (relativePositions[1]) {
             case 'up':
-                officerPosArr[whichOfficer][1] = officerPosArr[whichOfficer][1] - officerMoveRate[whichOfficer];
+                var nextVal = officerPosArr[whichOfficer][1] - officerMoveRate[whichOfficer];
+                if (nextVal < 0) nextVal = 0;
+                officerPosArr[whichOfficer][1] = nextVal;
                 break;
             case 'down':
-                officerPosArr[whichOfficer][1] = officerPosArr[whichOfficer][1] + officerMoveRate[whichOfficer];
+                var nextVal = officerPosArr[whichOfficer][1] + officerMoveRate[whichOfficer];
+                if (nextVal > limit) nextVal = limit;
+                officerPosArr[whichOfficer][1] = nextVal;
         }
+
     }
 
     function nextThiefPosition(posArr, movRate, direction) {

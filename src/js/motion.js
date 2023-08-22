@@ -1,5 +1,4 @@
-function Motion()
-{
+function Motion() {
 
     this.moveItAll = moveItAll;
     this.throwItem = throwItem;
