@@ -25,6 +25,7 @@ function Sounds() {
         }, false);
 
         endGameSound.addEventListener('ended', function() {
+            loadingTheme.currentTime = Math.floor(Math.random() * 2) == 1 ? 18 : 49;
             loadingTheme.play();
         });
     }
