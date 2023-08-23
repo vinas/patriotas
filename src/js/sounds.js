@@ -55,7 +55,7 @@ function Sounds() {
         fastTheme.currentTime = 0;
         slowTheme.currentTime = 0;
         endGameSound.currentTime = 0;
-        loadingTheme.currentTime = 0;
+        loadingTheme.currentTime = 18;
         bombSound.currentTime = 0;
         clockSound.currentTime = 0;
         coinSound.currentTime = 0;

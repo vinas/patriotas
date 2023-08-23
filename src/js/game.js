@@ -40,7 +40,7 @@ function Game()
         endGameSound.pause();
         fastTheme.currentTime = 0;
         slowTheme.currentTime = 0;
-        loadingTheme.currentTime = 0;
+        loadingTheme.currentTime = 18;
         slowTheme.play();
         gameOn = true;
     }
