@@ -1,13 +1,12 @@
 @font-face {
-    font-family: BitParty;
-    src: url('../font/8_bit_party.ttf');
+  font-family: BitParty;
+  src: url('../font/8_bit_party.ttf');
 }
 
 @font-face {
-    font-family: BitOperator;
-    src: url('../font/8bitoperator.ttf');
+  font-family: BitOperator;
+  src: url('../font/8bitoperator.ttf');
 }
-
 
 body {
 	font-family: BitParty;
