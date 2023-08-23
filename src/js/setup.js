@@ -21,7 +21,7 @@ function Setup() {
 
     function loadContent() {
      var ImgsToPreload = new Array(
-            'img/detalhes.gif',
+            'img/detalhes.png',
             'img/start_over.png',
             'img/guarda_fogo_02.gif',
             'img/juiz_fogo.gif',

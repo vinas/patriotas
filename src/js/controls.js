@@ -35,7 +35,7 @@ function Controls()
             if (justOpened.value == 1) {
                 handleSounds();
                 document.getElementById('presentationImage')
-                    .setAttribute('src', 'img/detalhes.gif');
+                    .setAttribute('src', 'img/detalhes.png');
                 justOpened.value = 0;
                 return;
             }
