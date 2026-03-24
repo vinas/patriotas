@@ -75,7 +75,7 @@ function Display()
 
     function startButton() {
         // hideElements(['loading', 'login']);
-        hideElements(['loading']);
+        hideElements(['loading', 'musicToggle']);
         showElements('resetGame');
     }
     
@@ -265,11 +265,12 @@ function Display()
     }
 
     function showInGameElements() {
-        showElements(['scoreBar', Thief, Officer1, Money]);
+        showElements(['scoreBar', Thief, Officer1, Money, 'musicToggle']);
+        hideElements(['resetGame']);
     }
 
     function hideGameValues() {
-        hideElements([Thief, Officer1, Officer2, Money, Clock, Molotov, Bomb]);
+        hideElements([Thief, Officer1, Officer2, Money, Clock, Molotov, Bomb, 'musicToggle']);
     }
 
     function startPressedTimmer() {

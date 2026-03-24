@@ -11,6 +11,7 @@ function Controls()
         preventDblClick();
         handlePressedKey();
         handleResetButton();
+        handleMusicToggle();
         // handleLoginButton();
         // handleRankingButton();
         handleControlSwipes();
@@ -41,6 +42,12 @@ function Controls()
             }
             display.startPressedTimmer();
             game.resetGame();
+        });
+    }
+
+    function handleMusicToggle() {
+        document.getElementById('musicToggle').addEventListener('click', function() {
+            sounds.toggleMusic();
         });
     }
 

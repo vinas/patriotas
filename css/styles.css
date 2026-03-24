@@ -344,3 +344,27 @@ body {
 	float: left;
 	position: absolute;
 }
+
+#musicToggle {
+	display: none;
+	font-family: BitParty;
+	font-size: 45px;
+	color: #FFD61F;
+	background-color: #3a3a3a;
+	border: 2px solid #FFD61F;
+	width: 52px;
+	height: 52px;
+	line-height: 52px;
+	text-align: center;
+	cursor: pointer;
+	margin-bottom: 4px;
+	border-radius: 4px;
+	user-select: none;
+}
+
+#musicToggle.muted {
+	color: #888;
+	border-color: #888;
+	opacity: 0.6;
+	text-decoration: line-through;
+}

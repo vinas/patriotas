@@ -1,5 +1,6 @@
 function Sounds() {
     this.handleSounds = handleSounds;
+    this.toggleMusic = toggleMusic;
 
     return this;
 
@@ -61,13 +62,27 @@ function Sounds() {
         clockSound.currentTime = 0;
         coinSound.currentTime = 0;
 
-        fastTheme.volume = 1;
-        slowTheme.volume = 1;
+        fastTheme.volume = musicMuted ? 0 : 1;
+        slowTheme.volume = musicMuted ? 0 : 1;
         endGameSound.volume = 1;
-        loadingTheme.volume = 1;
+        loadingTheme.volume = musicMuted ? 0 : 1;
         bombSound.volume = 1;
         clockSound.volume = 1;
         coinSound.volume = 1;
+    }
+
+    function toggleMusic() {
+        musicMuted = !musicMuted;
+        var vol = musicMuted ? 0 : 1;
+        fastTheme.volume = vol;
+        slowTheme.volume = vol;
+        loadingTheme.volume = vol;
+        var btn = document.getElementById('musicToggle');
+        if (musicMuted) {
+            btn.classList.add('muted');
+        } else {
+            btn.classList.remove('muted');
+        }
     }
 
 }

@@ -65,6 +65,7 @@ var fastTheme = new Audio('audio/8bit_sparks.mp3'),
 
 // Functional game variables
 var gameOn = false,
+    musicMuted = false,
     pressedKey,
     points,
     isClockVisible,

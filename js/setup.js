@@ -152,9 +152,11 @@ function Setup() {
             window.onfocus = function() {
                 if (gameOn) {
                     slowTheme.play();
+                    slowTheme.volume = musicMuted ? 0 : 1;
                     return;
                 }
                 loadingTheme.play();
+                loadingTheme.volume = musicMuted ? 0 : 1;
             };
         }
 

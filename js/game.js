@@ -26,6 +26,7 @@ function Game()
         endGameSound.play();
         display[reason]();
         display.hideGameValues();
+        display.startButton();
         setup.clearGameValues();
     }
 
