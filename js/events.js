@@ -20,7 +20,7 @@ function Events()
     }
 
     function gotMoney() {
-        if (calc.reached(thiefPosArr, CHARSIZE, moneyPos, ITEMSIZE)) {
+        if (geometry.reached(thiefPosArr, CHARSIZE, moneyPos, ITEMSIZE)) {
             coinSound.play();
             game.scorePoints();
             time = time + BONUSTIME;
@@ -30,7 +30,7 @@ function Events()
     }
 
     function gotClock() {
-        if (calc.reached(thiefPosArr, CHARSIZE, clockPos, ITEMSIZE)) {
+        if (geometry.reached(thiefPosArr, CHARSIZE, clockPos, ITEMSIZE)) {
             time = time + 10;
             display.hideClock();
             display.clockFeedback();
@@ -38,41 +38,34 @@ function Events()
     }
 
     function gotMolotov() {
-        if (calc.reached(thiefPosArr, CHARSIZE, molotovPos, ITEMSIZE)) {
+        if (geometry.reached(thiefPosArr, CHARSIZE, molotovPos, ITEMSIZE)) {
             molotovTime = MOLOTOVPAUSE;
             display.molotovFeedback();
         }
     }
 
     function gotBomb() {
-        if (calc.reached(thiefPosArr, CHARSIZE, bombPos, ITEMSIZE)) {
+        if (geometry.reached(thiefPosArr, CHARSIZE, bombPos, ITEMSIZE)) {
             display.bombFeedback();
             if (currLevel > 1) {
-                currLevel = currLevel - 1;
-                officerMoveRate[0] = SPEEDTABLE[currLevel][0];
-                officerMoveRate[1] = SPEEDTABLE[currLevel][1];
-                if (currLevel < TWOPOLICEMENLEVEL) {
-                    fastTheme.pause();
-                    slowTheme.play();
-                    display.hideOfficer2();
-                }
+                game.changeLevel(-1);
+                CurrLevel.innerHTML = currLevel;
             }
-            CurrLevel.innerHTML = currLevel;
         }
     }
 
     function wasThiefCought() {
-        return (calc.reached(
-                    officerPosArr[0],
+        return (geometry.reached(
+                    officers[0].pos,
                     (CHARSIZE - CATCHTOLERANCE),
                     thiefPosArr,
                     (CHARSIZE - CATCHTOLERANCE)
                 )
             )
             || (
-                (calc.isTwoPolicemenLevel())
-                && (calc.reached(
-                        officerPosArr[1],
+                (officerAI.isTwoPolicemenLevel())
+                && (geometry.reached(
+                        officers[1].pos,
                         (CHARSIZE - CATCHTOLERANCE),
                         thiefPosArr,
                         (CHARSIZE - CATCHTOLERANCE)

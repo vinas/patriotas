@@ -1,7 +1,7 @@
 function Controls()
 {
-    var pos = {},
-    touchUpPos = {};
+    const pos = {};
+    let touchUpPos = {};
 
     this.loadControlsHandlers = loadControlsHandlers;
 
@@ -12,10 +12,7 @@ function Controls()
         handlePressedKey();
         handleResetButton();
         handleMusicToggle();
-        // handleLoginButton();
-        // handleRankingButton();
         handleControlSwipes();
-        handleSwipePresentation();
     }
 
     function preventDblClick() {
@@ -26,13 +23,13 @@ function Controls()
 
     function handlePressedKey() {
         document.addEventListener('keydown', function(e) {
-            pressedKey = e.which;
+            pressedKey = e.key;
         });
     }
 
     function handleResetButton() {
         document.getElementById('resetGame').addEventListener('click', function() {
-            var justOpened = document.getElementById('justOpened');
+            const justOpened = document.getElementById('justOpened');
             if (justOpened.value == 1) {
                 handleSounds();
                 document.getElementById('presentationImage')
@@ -40,7 +37,7 @@ function Controls()
                 justOpened.value = 0;
                 return;
             }
-            display.startPressedTimmer();
+            display.startPressedTimer();
             game.resetGame();
         });
     }
@@ -48,19 +45,6 @@ function Controls()
     function handleMusicToggle() {
         document.getElementById('musicToggle').addEventListener('click', function() {
             sounds.toggleMusic();
-        });
-    }
-
-    function handleLoginButton() {
-        document.getElementById('login').addEventListener('click', function() {
-            login.checkFbLogin();
-        });
-    }
-
-    function handleRankingButton() {
-        document.getElementById('rankingButton').addEventListener('click', function() {
-            document.getElementById('ranking').style.display = 'block';
-            document.getElementById('ranking').innerHTML = 'loading...';
         });
     }
 
@@ -96,52 +80,27 @@ function Controls()
             if (Math.abs(pos.up.x - pos.down.x) > Math.abs(pos.up.y - pos.down.y)) {
                 if (pos.up.x > pos.down.x) {
                     // console.log('identified: right');
-                    pressedKey = 39;
+                    pressedKey = KEY_RIGHT;
                 } else {
                     // console.log('identified: left');
-                    pressedKey = 37;
+                    pressedKey = KEY_LEFT;
                 }
             } else {
                 if (pos.up.y > pos.down.y) {
                     // console.log('identified: down');
-                    pressedKey = 40;
+                    pressedKey = KEY_DOWN;
                 } else {
                     // console.log('identified: up');
-                    pressedKey = 38;
+                    pressedKey = KEY_UP;
                 }
             }
 
         }
     }
 
-    function handleSwipePresentation() {
-        // TO DO
-        // TO DO
-        // TO DO
-        // TO DO
-        // TO DO
-        // TO DO
-        // TO DO
-        // TO DO
-        /*$('#presentation').on('swipeleft', function() {
-            if (document.getElementById('justOpened').value == 0) {
-                var presentation = $(this);
-                presentation.animate({
-                        left: parseInt(presentation.css('left'), 10) == 0 ?
-                        -presentation.outerWidth() :
-                        0
-                    },
-                    1000,
-                    function() { resetGame() }
-                );
-            }
-        });*/
-    }
-
     function fingerHandler(action, obj, callback) {
-        var x, y;
-        x = obj.x;
-        y = obj.y;
+        const x = obj.x;
+        const y = obj.y;
         pos[action] = {
             x: x,
             y: y,

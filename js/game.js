@@ -1,5 +1,8 @@
 function Game()
 {
+    let lastFrameTime;
+
+    this.changeLevel = changeLevel;
     this.endGame = endGame;
     this.init = init;
     this.resetGame = resetGame;
@@ -13,7 +16,7 @@ function Game()
         setup.setAll();
         controls.loadControlsHandlers();
         setup.loadContent();
-        gameLoop();
+        requestAnimationFrame(gameLoop);
         gameClock();
     }
 
@@ -52,15 +55,25 @@ function Game()
         handleLevelChange();
     }
 
+    function changeLevel(delta) {
+        currLevel = currLevel + delta;
+        motion.changePoliceMoveRate();
+        handleTwoPolicemenTransition(delta);
+    }
+
     /**** PRIVATE METHODS ****/
 
-    function gameLoop() {
+    function gameLoop(timestamp) {
+        if (lastFrameTime === undefined) lastFrameTime = timestamp;
+        const elapsed = timestamp - lastFrameTime;
+        lastFrameTime = timestamp;
         if (gameOn) {
-            motion.moveItAll();
+            const scale = Math.min(elapsed / STANDGAMEREFRESHRATE, MAX_FRAME_SCALE);
+            motion.moveItAll(scale);
             events.checkGotItem();
             events.checkGotBusted();
         }
-        setTimeout(gameLoop, STANDGAMEREFRESHRATE);
+        requestAnimationFrame(gameLoop);
     }
 
     function gameClock() {
@@ -96,7 +109,7 @@ function Game()
     }
 
     function handleMolotovDisplay() {
-        if (calc.sortMolotov()) {
+        if (spawnChance.sortMolotov()) {
             if (!isMolotovVisible) {
                 display.molotov();
                 return ;
@@ -117,7 +130,7 @@ function Game()
 
     function handleBombDisplay() {
         if (currLevel > 1) {
-            var action = calc.sortBomb();
+            const action = spawnChance.sortBomb();
             if (action)
                 display[action]();
         }
@@ -126,21 +139,29 @@ function Game()
     function handleLevelChange() {
         if (isLevelChange()) {
             lastChangedLevel = points;
-            currLevel = currLevel + 1;
-            if (currLevel == TWOPOLICEMENLEVEL) {
-                slowTheme.pause();
-                fastTheme.play();
-                display.show2ndPoliceman();
-            }
-            display.updateDificultyDisplay();
+            changeLevel(1);
+            display.updateDifficultyDisplay();
             display.setNewBackground();
-            motion.changePoliceMoveRate();
+        }
+    }
+
+    function handleTwoPolicemenTransition(delta) {
+        if (delta > 0 && currLevel == TWOPOLICEMENLEVEL) {
+            slowTheme.pause();
+            fastTheme.play();
+            display.show2ndPoliceman();
+            return;
+        }
+        if (delta < 0 && currLevel < TWOPOLICEMENLEVEL) {
+            fastTheme.pause();
+            slowTheme.play();
+            display.hideOfficer2();
         }
     }
 
     function saveGameScores() {
         user.lastScore = points;
-        user.lastScoreDateTime = calc.formattedDateTime();
+        user.lastScoreDateTime = dateUtils.formattedDateTime();
         user.gameId = 1;
         //$.post('/api/Games/saveLastScore', user);
     }

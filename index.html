@@ -3,10 +3,8 @@
 <head>
     <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
 	<title>The Chase</title>
-    <meta content='width=100%, user-scalable=no, initial-scale=1.0' name='viewport' />
-    <!-- build:css -->
+    <meta content='width=device-width, user-scalable=no, initial-scale=1.0' name='viewport' />
     <link href="css/styles.css" rel="stylesheet">
-    <!-- endbuild -->
 </head>
 
 <body width="100%" style="width: 100%;" topmargin="0" leftmargin="0">
@@ -32,21 +30,10 @@
 <div id="busted">
     <img id="bustedEndGameImage" src="img/busted_v3.png" alt="You got busted!" />
     <div class="endGameMessage" id="endGameMessage">Foi mal {user}! =(</div>
-    <!-- <div class="rankingButton" id="rankingButton"></div> -->
 </div>
 
 <div id="timeUp">
     <img id="timeUpEndGameImage" src="img/timeisup_01.png" alt="Time is up!" />
-    <!--div id="loginStatus">
-    </div>
-    <div class="facebookLoginButton" id="facebookLoginButton">
-    </div>
-    <div class="rankingButton"></div-->
-</div>
-
-<div id="ranking">loading...</div>
-<div class="rankingFooter" id="rankingFooter">
-    <div id="rankingLinkButton" data-rankingType="alltimes">CHECK ALL TIMES RANKING</div>
 </div>
 
 <div id="barraInfo">
@@ -54,7 +41,6 @@
         <div id="instructionsBar" class="bar">
             <img id="setas" src="img/setas.png" alt="slide to move" />
             <div id="slideLabel">use o dedo para mover</div>
-            <!-- <img id="thiefInstruction" src="img/thief_bar.png" alt="slide to move" /> -->
             <img id="thiefInstruction" src="img/thief_01.gif" alt="slide to move" />
             <div id="collectLabel">
                 apanhe
@@ -67,27 +53,26 @@
         </div>
         <div id="scoreBar" class="bar">
             <div class="barBox" id="timeBox">
-                <div class="tituloMostrador">Tempo:</div>
-                <div id="time" class="mostrador">666</div>
+                <div class="statLabel">Tempo:</div>
+                <div id="time" class="statValue">666</div>
             </div>
             <div class="barBox" id="scoreBox">
-                <div class="tituloMostrador">Validas:</div>
-                <div id="points" class="mostrador">0</div>
+                <div class="statLabel">Validas:</div>
+                <div id="points" class="statValue">0</div>
             </div>
             <div class="barBox" id="scoreBox2">
-                <div class="tituloMostrador">Fraudadas:</div>
-                <div id="points2" class="mostrador">0</div>
+                <div class="statLabel">Fraudadas:</div>
+                <div id="points2" class="statValue">0</div>
             </div>
-            <div class="barBox" id="dificultyBox">
-                <div class="tituloMostrador">Nivel:</div>
-                <div id="fase" class="mostrador">0</div>
+            <div class="barBox" id="difficultyBox">
+                <div class="statLabel">Nivel:</div>
+                <div id="level" class="statValue">0</div>
             </div>
         </div>
     </div>
     <div class="barRight">
         <div id="musicToggle" class="actionButton">&#9835;</div>
         <img id="resetGame" class="actionButton" src="img/start.png" />
-        <!-- <img id="login" class="actionButton" src="img/login.png" /> -->
         <img id="loading" class="actionButton" src="img/loader.gif" />
     </div>
 </div>
@@ -98,19 +83,21 @@
 
 </body>
 
-<!-- build:js -->
 <script type="text/javascript" src="js/globals.js"></script>
 <script type="text/javascript" src="js/setup.js"></script>
 <script type="text/javascript" src="js/resizer.js"></script>
+<script type="text/javascript" src="js/dom.js"></script>
 <script type="text/javascript" src="js/display.js"></script>
 <script type="text/javascript" src="js/motion.js"></script>
 <script type="text/javascript" src="js/sounds.js"></script>
 <script type="text/javascript" src="js/controls.js"></script>
-<script type="text/javascript" src="js/calculator.js"></script>
+<script type="text/javascript" src="js/geometry.js"></script>
+<script type="text/javascript" src="js/officer-ai.js"></script>
+<script type="text/javascript" src="js/projectile-math.js"></script>
+<script type="text/javascript" src="js/spawn-chance.js"></script>
+<script type="text/javascript" src="js/date-utils.js"></script>
 <script type="text/javascript" src="js/events.js"></script>
 <script type="text/javascript" src="js/game.js"></script>
 <script type="text/javascript" src="js/start-app.js"></script>
-<script type="text/javascript" src="js/login.js"></script>
-<!-- endbuild -->
 
 </html>

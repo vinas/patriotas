@@ -73,11 +73,11 @@ function Sounds() {
 
     function toggleMusic() {
         musicMuted = !musicMuted;
-        var vol = musicMuted ? 0 : 1;
+        const vol = musicMuted ? 0 : 1;
         fastTheme.volume = vol;
         slowTheme.volume = vol;
         loadingTheme.volume = vol;
-        var btn = document.getElementById('musicToggle');
+        const btn = document.getElementById('musicToggle');
         if (musicMuted) {
             btn.classList.add('muted');
         } else {

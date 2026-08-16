@@ -6,33 +6,37 @@ function Motion() {
 
     return this;
 
-    function moveItAll() {
-        moveThief();
-        movePolice();
+    function moveItAll(scale) {
+        moveThief(scale);
+        movePolice(scale);
     }
 
     function throwItem(item, itemPos, targetPos, callback) {
-        var shooterPosX = itemPos[0],
+        const shooterPosX = itemPos[0],
             shooterPosY = itemPos[1],
-            inclination = calc.inclination(itemPos, targetPos),
-            variationRate = calc.variationRate(THROWSPEED, inclination);
+            inclination = projectileMath.inclination(itemPos, targetPos),
+            variationRate = projectileMath.variationRate(THROWSPEED, inclination);
+        let lastFrameTime;
 
-        moveItem();
+        requestAnimationFrame(moveItem);
 
-        function moveItem() {
-            if ((!reached(itemPos, ITEMSIZE, targetPos, CHARSIZE)) && (!isNaN(variationRate))) {
-                itemPos = calc.setNewThrowItemPos(
+        function moveItem(timestamp) {
+            if (lastFrameTime === undefined) lastFrameTime = timestamp;
+            const elapsed = timestamp - lastFrameTime;
+            lastFrameTime = timestamp;
+            const scale = Math.min(elapsed / THROWFRAMERATE, MAX_FRAME_SCALE);
+
+            if ((!geometry.reached(itemPos, ITEMSIZE, targetPos, CHARSIZE)) && (!isNaN(variationRate))) {
+                itemPos = projectileMath.setNewThrowItemPos(
                         shooterPosX,
                         shooterPosY,
                         itemPos,
                         targetPos,
                         inclination,
-                        variationRate
+                        variationRate * scale
                     );
                 display.objectAt(item, itemPos);
-                setTimeout(function() {
-                    moveItem();
-                }, 10);
+                requestAnimationFrame(moveItem);
                 return;
             }
             callback();
@@ -40,31 +44,31 @@ function Motion() {
     }
 
     function changePoliceMoveRate() {
-        officerMoveRate[0] = SPEEDTABLE[currLevel][0];
-        officerMoveRate[1] = SPEEDTABLE[currLevel][1];
+        officers[0].moveRate = SPEEDTABLE[currLevel][0];
+        officers[1].moveRate = SPEEDTABLE[currLevel][1];
     }
 
-    function moveThief() {
-        var direction = getDirection();
+    function moveThief(scale) {
+        const direction = getDirection();
         setThiefHorDirection(direction);
-        thiefPosArr = calc.nextThiefPosition(
+        thiefPosArr = geometry.nextThiefPosition(
                 thiefPosArr,
-                thiefMoveRate,
+                thiefMoveRate * scale,
                 direction
             );
         display.objectAt(Thief, thiefPosArr);
     }
 
-    function movePolice() {
+    function movePolice(scale) {
         if (molotovTime <= 0) {
-            moveOfficer(0);
-            if (calc.isTwoPolicemenLevel()) moveOfficer(1);
+            moveOfficer(0, scale);
+            if (officerAI.isTwoPolicemenLevel()) moveOfficer(1, scale);
         }
     }
 
-    function moveOfficer(whichOfficer) {
-        calc.nextOfficerPos(whichOfficer);
-        display.objectAt((whichOfficer == 0) ? Officer1 : Officer2, officerPosArr[whichOfficer]);
+    function moveOfficer(whichOfficer, scale) {
+        officerAI.nextOfficerPos(whichOfficer, scale);
+        display.objectAt(officers[whichOfficer].element, officers[whichOfficer].pos);
     }
 
     function setThiefHorDirection(direction) {
@@ -79,18 +83,18 @@ function Motion() {
     }
 
     function getDirection() {
-        var pressedKeyBump;
+        let pressedKeyBump;
         switch (pressedKey) {
-            case 37:
+            case KEY_LEFT:
                 return 'left';
-            case 38:
+            case KEY_UP:
                 return 'up';
-            case 39:
+            case KEY_RIGHT:
                 return 'right';
-            case 40:
+            case KEY_DOWN:
                 return 'down';
                 break;
-            case 13:
+            case KEY_ENTER:
                 if ((pressedKey != pressedKeyBump)) {
                     game.resetGame();
                     pressedKeyBump = pressedKey;

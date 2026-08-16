@@ -1,46 +1,52 @@
 // App Objects
-var setup,
+let setup,
     events,
-    calc,
+    geometry,
+    officerAI,
+    projectileMath,
+    spawnChance,
+    dateUtils,
     display,
     sounds,
     motion,
     controls,
     resizer,
     game,
-    login;
+    dom;
 
 // Login
-var user = {
+const user = {
     firstName: 'User'
 };
 
 // Characters
-var Thief,
-    Officer1,
-    Officer2;
+let Thief;
+
+// Officers
+const officers = [
+    { element: null, counter: null, pos: [0, 0], moveRate: 0 },
+    { element: null, counter: null, pos: [0, 0], moveRate: 0 }
+];
 
 // Game Items
-var Molotov,
+let Molotov,
     Clock,
     Bomb;
 
 // Display Items
-var Counter1,
-    Counter2,
-    BackgroundImg,
+let BackgroundImg,
     CurrLevel,
     Time;
 
-// Dimentional Constants
-var MAPSIZE = 500,
+// Dimentional Constants (reassigned at runtime by resizer.js once actual screen size is known)
+let MAPSIZE = 500,
     CHARSIZE = 75,
     ITEMSIZE = 55,
     CATCHTOLERANCE = 15,
     CROSSBORDERTOLERANCE = 20;
 
 // Other game constant settings
-var STANDARDTIME = 20,
+const STANDARDTIME = 20,
     PTSTOCHANGELEVEL = 5,
     POINTUNITY = 1,
     BONUSTIME = 3,
@@ -51,20 +57,29 @@ var STANDARDTIME = 20,
     STANDTHIEFMOVRATE = 6,
     STANDGAMEREFRESHRATE = 40,
     SWIPEDISTANCE = 20,
-    THROWSPEED = 40,
+    THROWFRAMERATE = 10,
+    MAX_FRAME_SCALE = 5;
+let THROWSPEED = 40,
     SPEEDTABLE;
 
+// Key codes
+const KEY_LEFT = 'ArrowLeft',
+    KEY_UP = 'ArrowUp',
+    KEY_RIGHT = 'ArrowRight',
+    KEY_DOWN = 'ArrowDown',
+    KEY_ENTER = 'Enter';
+
 // Sounds
-var fastTheme = new Audio('audio/8bit_sparks.mp3'),
-    slowTheme = new Audio('audio/hino_nacional.mp3'),
-    endGameSound = new Audio('audio/endGame.mp3'),
-    loadingTheme = new Audio('audio/hino_independencia.mp3'),
-    bombSound = new Audio('audio/bomb.mp3'),
-    clockSound = new Audio('audio/crank-1.mp3'),
-    coinSound = new Audio('audio/coin1.wav');
+let fastTheme,
+    slowTheme,
+    endGameSound,
+    loadingTheme,
+    bombSound,
+    clockSound,
+    coinSound;
 
 // Functional game variables
-var gameOn = false,
+let gameOn = false,
     musicMuted = false,
     pressedKey,
     points,
@@ -72,16 +87,14 @@ var gameOn = false,
     isMolotovVisible,
     isBombVisible,
     thiefMoveRate,
-    officerMoveRate = new Array(0, 0),
     currLevel,
     time,
     molotovTime,
     lastChangedLevel;
 
 // Game elements' position arrays
-var officerPosArr = new Array(new Array(0, 0), new Array(0, 0)),
-    thiefPosArr = new Array(0, 0),
-    moneyPos = new Array(0, 0),
-    clockPos = new Array(0, 0),
-    molotovPos = new Array(0, 0),
-    bombPos = new Array(0, 0);
+let thiefPosArr = [0, 0],
+    moneyPos = [0, 0],
+    clockPos = [0, 0],
+    molotovPos = [0, 0],
+    bombPos = [0, 0];
