@@ -1,11 +1,13 @@
 @font-face {
-  font-family: BitParty;
-  src: url('../font/8_bit_party.ttf');
+  font-family: Silkscreen;
+  src: url('../font/Silkscreen-Regular.woff2') format('woff2');
+  font-weight: 400;
 }
 
 @font-face {
-  font-family: BitOperator;
-  src: url('../font/8bitoperator.ttf');
+  font-family: Silkscreen;
+  src: url('../font/Silkscreen-Bold.woff2') format('woff2');
+  font-weight: 700;
 }
 
 html, body {
@@ -14,7 +16,7 @@ html, body {
 }
 
 body {
-	font-family: BitParty;
+	font-family: Silkscreen;
 	overflow: hidden;
 	overflow-x: hidden;
 	overflow-y: hidden;
@@ -93,14 +95,15 @@ body {
 }
 
 .statValue {
-	font-family: BitOperator;
-	font-size: 32px;
+	font-family: Silkscreen;
+	font-weight: 700;
+	font-size: 26px;
 	color: #FFF;
 	padding-top: 8px;
 }
 
 .statLabel {
-	font-size: 17px;
+	font-size: 14px;
 	color: #FFD61F;
 }
 
@@ -231,7 +234,7 @@ body {
 
 #musicToggle {
 	display: none;
-	font-family: BitParty;
+	font-family: Silkscreen;
 	font-size: 45px;
 	color: #FFD61F;
 	background-color: #3a3a3a;

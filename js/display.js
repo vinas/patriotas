@@ -354,12 +354,12 @@ function Display()
     function getBustedMessage() {
         const messages = [];
         messages.push("foi mal!");
-        messages.push("terrorismo eh crime");
-        messages.push("vandalismo eh crime");
+        messages.push("terrorismo é crime");
+        messages.push("vandalismo é crime");
         messages.push("olavo estava errado");
         messages.push("*muuuuu*");
         messages.push("sem anistia");
-        messages.push("* perdel*, maneh !");
+        messages.push("* perdel*, mané !");
         messages.push("prisaum terrabolista");
         messages.push("agora vai tomar vacina");
         messages.push("sem mugido, hein !");
@@ -368,8 +368,8 @@ function Display()
         messages.push("micheque ora por vc");
         messages.push("51 aptos no dinheiro !");
         messages.push("e o churrasco no quartel ?");
-        messages.push("cagadas acontecem! veja o flavio");
-        messages.push("mito ? ajuda psiquiatrica !");
+        messages.push("cagadas acontecem! veja o flávio");
+        messages.push("mito ? ajuda psiquiátrica !");
         return messages[Math.floor(Math.random() * messages.length)];
     }
 

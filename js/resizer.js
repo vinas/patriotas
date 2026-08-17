@@ -61,8 +61,8 @@ function Resizer()
 
         document.getElementById('presentation').style.height = MAPSIZE+'px';
         document.getElementById('timeBox').style.paddingLeft = geometry.crossMultiply(10)+'px';
-        document.getElementById('scoreBox').style.paddingLeft = geometry.crossMultiply(95)+'px';
-        document.getElementById('scoreBox2').style.paddingLeft = geometry.crossMultiply(185)+'px';
+        document.getElementById('scoreBox').style.paddingLeft = geometry.crossMultiply(69)+'px';
+        document.getElementById('scoreBox2').style.paddingLeft = geometry.crossMultiply(147)+'px';
         document.getElementById('items').style.paddingTop = geometry.crossMultiply(5)+'px';
         document.getElementById('barLeft').style.fontSize = geometry.crossMultiply(10)+'px';
 
@@ -82,7 +82,7 @@ function Resizer()
         thiefInstruction.style.height = geometry.crossMultiply(86)+'px';
         thiefInstruction.style.paddingLeft = geometry.crossMultiply(135)+'px';
 
-        difficultyBox.style.paddingLeft = geometry.crossMultiply(310)+'px';
+        difficultyBox.style.paddingLeft = geometry.crossMultiply(250)+'px';
         difficultyBox.style.width = geometry.crossMultiply(95)+'px';
 
         barraInfo.style.width = MAPSIZE+'px';
@@ -112,9 +112,9 @@ function Resizer()
         setClassProp('actionButton', 'width', geometry.crossMultiply(100)+'px');
         setClassProp('actionButton', 'height', geometry.crossMultiply(100)+'px');
 
-        setClassProp('statValue', 'font-size', geometry.crossMultiply(32)+'px');
+        setClassProp('statValue', 'font-size', geometry.crossMultiply(26)+'px');
         setClassProp('statValue', 'padding-top', geometry.crossMultiply(8)+'px');
-        setClassProp('statLabel', 'font-size', geometry.crossMultiply(17)+'px');
+        setClassProp('statLabel', 'font-size', geometry.crossMultiply(14)+'px');
 
         setClassProp('action', 'font-size', geometry.crossMultiply(14)+'px');
         setClassProp('action', 'padding-top', geometry.crossMultiply(5)+'px');
