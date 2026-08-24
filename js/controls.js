@@ -1,112 +1,110 @@
-function Controls()
-{
-    const pos = {};
-    let touchUpPos = {};
+import { state } from './state.js';
+import { KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN } from './constants.js';
+import { startPressedTimer } from './display.js';
+import { resetGame } from './game.js';
+import { toggleMusic, handleSounds } from './sounds.js';
 
-    this.loadControlsHandlers = loadControlsHandlers;
+const pos = {};
+let touchUpPos = {};
 
-    return this;
+export function loadControlsHandlers() {
+    preventDblClick();
+    handlePressedKey();
+    handleResetButton();
+    handleMusicToggle();
+    handleControlSwipes();
+}
 
-    function loadControlsHandlers() {
-        preventDblClick();
-        handlePressedKey();
-        handleResetButton();
-        handleMusicToggle();
-        handleControlSwipes();
-    }
+function preventDblClick() {
+    document.addEventListener('dblclick', function() {
+        return false;
+    });
+}
 
-    function preventDblClick() {
-        document.addEventListener('dblclick', function() {
-            return false;
-        });
-    }
+function handlePressedKey() {
+    document.addEventListener('keydown', function(e) {
+        state.pressedKey = e.key;
+    });
+}
 
-    function handlePressedKey() {
-        document.addEventListener('keydown', function(e) {
-            pressedKey = e.key;
-        });
-    }
-
-    function handleResetButton() {
-        document.getElementById('resetGame').addEventListener('click', function() {
-            const justOpened = document.getElementById('justOpened');
-            if (justOpened.value == 1) {
-                handleSounds();
-                document.getElementById('presentationImage')
-                    .setAttribute('src', 'img/detalhes.png');
-                justOpened.value = 0;
-                return;
-            }
-            display.startPressedTimer();
-            game.resetGame();
-        });
-    }
-
-    function handleMusicToggle() {
-        document.getElementById('musicToggle').addEventListener('click', function() {
-            sounds.toggleMusic();
-        });
-    }
-
-    function handleControlSwipes() {
-        document.addEventListener("touchstart", function(obj) {
-            fingerHandler(
-                'down',
-                {
-                    x: obj.touches[0].clientX,
-                    y: obj.touches[0].clientY
-                }
-            );
-        });
-        document.addEventListener("mousedown", function(obj) {
-            fingerHandler('down', obj);
-        });
-        document.addEventListener("touchend", function(obj) {
-            fingerHandler('up', touchUpPos, handleSwipe);
-            touchUpPos = {};
-        });
-        document.addEventListener("touchmove", function(obj) {
-            touchUpPos.x = obj.touches[0].clientX;
-            touchUpPos.y = obj.touches[0].clientY;
-        });
-        document.addEventListener("mouseup", function(obj) {
-            fingerHandler('up', obj, handleSwipe);
-        });
-
-    }
-
-    function handleSwipe() {
-        if (pos.up.time - pos.down.time < 500) {
-            if (Math.abs(pos.up.x - pos.down.x) > Math.abs(pos.up.y - pos.down.y)) {
-                if (pos.up.x > pos.down.x) {
-                    // console.log('identified: right');
-                    pressedKey = KEY_RIGHT;
-                } else {
-                    // console.log('identified: left');
-                    pressedKey = KEY_LEFT;
-                }
-            } else {
-                if (pos.up.y > pos.down.y) {
-                    // console.log('identified: down');
-                    pressedKey = KEY_DOWN;
-                } else {
-                    // console.log('identified: up');
-                    pressedKey = KEY_UP;
-                }
-            }
-
+function handleResetButton() {
+    document.getElementById('resetGame').addEventListener('click', function() {
+        const justOpened = document.getElementById('justOpened');
+        if (justOpened.value == 1) {
+            handleSounds();
+            document.getElementById('presentationImage')
+                .setAttribute('src', 'img/detalhes.png');
+            justOpened.value = 0;
+            return;
         }
-    }
+        startPressedTimer();
+        resetGame();
+    });
+}
 
-    function fingerHandler(action, obj, callback) {
-        const x = obj.x;
-        const y = obj.y;
-        pos[action] = {
-            x: x,
-            y: y,
-            time: Date.now()
-        };
-        if (callback) callback();
-    }
+function handleMusicToggle() {
+    document.getElementById('musicToggle').addEventListener('click', function() {
+        toggleMusic();
+    });
+}
 
+function handleControlSwipes() {
+    document.addEventListener("touchstart", function(obj) {
+        fingerHandler(
+            'down',
+            {
+                x: obj.touches[0].clientX,
+                y: obj.touches[0].clientY
+            }
+        );
+    });
+    document.addEventListener("mousedown", function(obj) {
+        fingerHandler('down', obj);
+    });
+    document.addEventListener("touchend", function(obj) {
+        fingerHandler('up', touchUpPos, handleSwipe);
+        touchUpPos = {};
+    });
+    document.addEventListener("touchmove", function(obj) {
+        touchUpPos.x = obj.touches[0].clientX;
+        touchUpPos.y = obj.touches[0].clientY;
+    });
+    document.addEventListener("mouseup", function(obj) {
+        fingerHandler('up', obj, handleSwipe);
+    });
+
+}
+
+function handleSwipe() {
+    if (pos.up.time - pos.down.time < 500) {
+        if (Math.abs(pos.up.x - pos.down.x) > Math.abs(pos.up.y - pos.down.y)) {
+            if (pos.up.x > pos.down.x) {
+                // console.log('identified: right');
+                state.pressedKey = KEY_RIGHT;
+            } else {
+                // console.log('identified: left');
+                state.pressedKey = KEY_LEFT;
+            }
+        } else {
+            if (pos.up.y > pos.down.y) {
+                // console.log('identified: down');
+                state.pressedKey = KEY_DOWN;
+            } else {
+                // console.log('identified: up');
+                state.pressedKey = KEY_UP;
+            }
+        }
+
+    }
+}
+
+function fingerHandler(action, obj, callback) {
+    const x = obj.x;
+    const y = obj.y;
+    pos[action] = {
+        x: x,
+        y: y,
+        time: Date.now()
+    };
+    if (callback) callback();
 }

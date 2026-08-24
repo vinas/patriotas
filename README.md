@@ -17,31 +17,31 @@ The game deliberately only runs on **mobile devices in portrait orientation** �
 
 ## Running it
 
-There's no build step, no dependencies, no `package.json`. It's a static site:
+There's no build step, no dependencies, no `package.json`. It's a static site — but the JS is loaded as native ES modules (`<script type="module">`), which browsers refuse to load over `file://` (CORS). You need a local static server:
 
 ```bash
 # from the project root, any static file server works, e.g.:
 npx serve .
-# or just open index.html directly in a browser
 ```
 
 Because it gates on mobile + portrait, testing in a desktop browser requires device emulation (e.g. Chrome DevTools' device toolbar, set to a phone in portrait).
 
 ## Project structure
 
-Everything is plain ES2015+ JavaScript loaded via `<script>` tags in `index.html` (no modules/imports) — each file defines one `function SomeName() { ... return this; }` factory, instantiated once in `start-app.js` and exposed as a lowercase global (`display`, `motion`, `geometry`, etc.) that the other modules call into directly. `js/globals.js` holds all shared mutable game state (`let`/`const` declared once, read and written from everywhere) and tuning constants.
+The JS is native ES modules (`import`/`export`, no bundler) loaded via a single `<script type="module" src="js/start-app.js">` tag in `index.html` — the browser resolves the whole import graph itself. Each file exports its public functions directly (no factory wrapper, no manual instantiation); private helpers stay as plain unexported functions in the same file. Shared mutable game state lives in one exported object (`js/state.js`); values that are never reassigned live in `js/constants.js`.
 
 ```
-index.html            Page structure, all <script> tags, asset markup
+index.html            Page structure, single module <script> tag, asset markup
 css/styles.css         All styling, including the pixel-font @font-face declarations
 font/, img/, audio/    Static assets (Silkscreen font, sprites/backgrounds, sound effects)
 
 js/
-  globals.js           Shared game state and constants (single source of truth)
-  start-app.js         Entry point — instantiates every module on DOMContentLoaded, kicks off game.init()
+  state.js             Shared mutable game state (one exported object: officers, positions, DOM refs, audio, level/time/points, etc.)
+  constants.js         Tuning constants that are never reassigned (timings, sizes, key codes)
+  start-app.js         Entry point — on DOMContentLoaded, checks isMobile() and kicks off game.init()
 
   setup.js             Mobile/portrait detection, asset preloading, DOM element binding, reset logic
-  resizer.js           Scales the whole UI to the actual screen size (everything is designed at a 500px baseline and scaled via geometry.crossMultiply)
+  resizer.js           Scales the whole UI to the actual screen size (everything is designed at a 500px baseline and scaled via crossMultiply)
   dom.js               Tiny generic show/hide/getElementById helpers, framework-free
 
   game.js              The core game loop (via requestAnimationFrame) and game clock (1s countdown timer); level-up/level-down orchestration
@@ -59,7 +59,9 @@ js/
   sounds.js            Music/SFX playback and the mute toggle
 ```
 
-The `officers` array (in `globals.js`) models both police officers as `{ element, counter, pos, moveRate }` objects rather than parallel index-based arrays — officer 0 always exists, officer 1 is conditionally shown once the player reaches a high enough level.
+Several module pairs import each other (`display.js`↔`officer-ai.js`, `display.js`↔`motion.js`, `game.js`↔`motion.js`/`events.js`/`controls.js`) — safe in ES modules as long as no module uses another's export at its own top level, only inside functions called later, which holds throughout this codebase.
+
+The `officers` array (in `state.js`) models both police officers as `{ element, counter, pos, moveRate }` objects rather than parallel index-based arrays — officer 0 always exists, officer 1 is conditionally shown once the player reaches a high enough level.
 
 ## Assets & credits
 

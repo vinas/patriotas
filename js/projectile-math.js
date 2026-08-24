@@ -1,33 +1,24 @@
-function ProjectileMath()
-{
-    this.setNewThrowItemPos = setNewThrowItemPos;
-    this.variationRate = variationRate;
-    this.inclination = inclination;
+export function setNewThrowItemPos(shooterX, shooterY, item, target, incline, variation) {
+    if (item[0] != target[0]) {
+        item[0] = setItemNewCoord(item[0], target[0]);
+        item[1] = Math.round(incline * (item[0] - shooterX) + shooterY);
+    } else {
+        item[1] = setItemNewCoord(item[1], target[1]);
+    }
+    return item;
 
-    return this;
-
-    function setNewThrowItemPos(shooterX, shooterY, item, target, incline, variation) {
-        if (item[0] != target[0]) {
-            item[0] = setItemNewCoord(item[0], target[0]);
-            item[1] = Math.round(incline * (item[0] - shooterX) + shooterY);
-        } else {
-            item[1] = setItemNewCoord(item[1], target[1]);
-        }
-        return item;
-
-        function setItemNewCoord(sourceCoord, destCoord) {
-            return (sourceCoord < destCoord) ? sourceCoord + variation : sourceCoord - variation;
-        }
-
+    function setItemNewCoord(sourceCoord, destCoord) {
+        return (sourceCoord < destCoord) ? sourceCoord + variation : sourceCoord - variation;
     }
 
-    function variationRate(speed, incline) {
-        return Math.sqrt(speed / (parseFloat(Math.pow(incline,2)+1)));
-    }
+}
 
-    function inclination(itemPos, targetPos) {
-        const deltaX = targetPos[0] - itemPos[0],
-            deltaY = targetPos[1] - itemPos[1];
-        return (deltaX != 0) ? (deltaY/deltaX).toFixed(4) : 0;
-    }
+export function variationRate(speed, incline) {
+    return Math.sqrt(speed / (parseFloat(Math.pow(incline,2)+1)));
+}
+
+export function inclination(itemPos, targetPos) {
+    const deltaX = targetPos[0] - itemPos[0],
+        deltaY = targetPos[1] - itemPos[1];
+    return (deltaX != 0) ? (deltaY/deltaX).toFixed(4) : 0;
 }

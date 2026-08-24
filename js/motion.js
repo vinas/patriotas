@@ -1,109 +1,107 @@
-function Motion() {
+import { state } from './state.js';
+import { THROWFRAMERATE, MAX_FRAME_SCALE, KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_ENTER } from './constants.js';
+import { inclination, variationRate, setNewThrowItemPos } from './projectile-math.js';
+import { reached, nextThiefPosition } from './geometry.js';
+import { objectAt, mirrorObj } from './display.js';
+import { isTwoPolicemenLevel, nextOfficerPos } from './officer-ai.js';
+import { resetGame } from './game.js';
 
-    this.moveItAll = moveItAll;
-    this.throwItem = throwItem;
-    this.changePoliceMoveRate = changePoliceMoveRate;
+export function moveItAll(scale) {
+    moveThief(scale);
+    movePolice(scale);
+}
 
-    return this;
+export function throwItem(item, itemPos, targetPos, callback) {
+    const shooterPosX = itemPos[0],
+        shooterPosY = itemPos[1],
+        itemInclination = inclination(itemPos, targetPos),
+        itemVariationRate = variationRate(state.THROWSPEED, itemInclination);
+    let lastFrameTime;
 
-    function moveItAll(scale) {
-        moveThief(scale);
-        movePolice(scale);
+    requestAnimationFrame(moveItem);
+
+    function moveItem(timestamp) {
+        if (lastFrameTime === undefined) lastFrameTime = timestamp;
+        const elapsed = timestamp - lastFrameTime;
+        lastFrameTime = timestamp;
+        const scale = Math.min(elapsed / THROWFRAMERATE, MAX_FRAME_SCALE);
+
+        if ((!reached(itemPos, state.ITEMSIZE, targetPos, state.CHARSIZE)) && (!isNaN(itemVariationRate))) {
+            itemPos = setNewThrowItemPos(
+                    shooterPosX,
+                    shooterPosY,
+                    itemPos,
+                    targetPos,
+                    itemInclination,
+                    itemVariationRate * scale
+                );
+            objectAt(item, itemPos);
+            requestAnimationFrame(moveItem);
+            return;
+        }
+        callback();
     }
+}
 
-    function throwItem(item, itemPos, targetPos, callback) {
-        const shooterPosX = itemPos[0],
-            shooterPosY = itemPos[1],
-            inclination = projectileMath.inclination(itemPos, targetPos),
-            variationRate = projectileMath.variationRate(THROWSPEED, inclination);
-        let lastFrameTime;
+export function changePoliceMoveRate() {
+    state.officers[0].moveRate = state.SPEEDTABLE[state.currLevel][0];
+    state.officers[1].moveRate = state.SPEEDTABLE[state.currLevel][1];
+}
 
-        requestAnimationFrame(moveItem);
+function moveThief(scale) {
+    const direction = getDirection();
+    setThiefHorDirection(direction);
+    state.thiefPosArr = nextThiefPosition(
+            state.thiefPosArr,
+            state.thiefMoveRate * scale,
+            direction
+        );
+    objectAt(state.Thief, state.thiefPosArr);
+}
 
-        function moveItem(timestamp) {
-            if (lastFrameTime === undefined) lastFrameTime = timestamp;
-            const elapsed = timestamp - lastFrameTime;
-            lastFrameTime = timestamp;
-            const scale = Math.min(elapsed / THROWFRAMERATE, MAX_FRAME_SCALE);
+function movePolice(scale) {
+    if (state.molotovTime <= 0) {
+        moveOfficer(0, scale);
+        if (isTwoPolicemenLevel()) moveOfficer(1, scale);
+    }
+}
 
-            if ((!geometry.reached(itemPos, ITEMSIZE, targetPos, CHARSIZE)) && (!isNaN(variationRate))) {
-                itemPos = projectileMath.setNewThrowItemPos(
-                        shooterPosX,
-                        shooterPosY,
-                        itemPos,
-                        targetPos,
-                        inclination,
-                        variationRate * scale
-                    );
-                display.objectAt(item, itemPos);
-                requestAnimationFrame(moveItem);
-                return;
+function moveOfficer(whichOfficer, scale) {
+    nextOfficerPos(whichOfficer, scale);
+    objectAt(state.officers[whichOfficer].element, state.officers[whichOfficer].pos);
+}
+
+function setThiefHorDirection(direction) {
+    switch (direction) {
+        case 'left':
+            mirrorObj(state.Thief, '1');
+            break;
+        case 'right':
+            mirrorObj(state.Thief, '-1');
+            break;
+    }
+}
+
+function getDirection() {
+    let pressedKeyBump;
+    switch (state.pressedKey) {
+        case KEY_LEFT:
+            return 'left';
+        case KEY_UP:
+            return 'up';
+        case KEY_RIGHT:
+            return 'right';
+        case KEY_DOWN:
+            return 'down';
+            break;
+        case KEY_ENTER:
+            if ((state.pressedKey != pressedKeyBump)) {
+                resetGame();
+                pressedKeyBump = state.pressedKey;
             }
-            callback();
-        }
+            break;
+        default:
+            pressedKeyBump = false;
+            return false;
     }
-
-    function changePoliceMoveRate() {
-        officers[0].moveRate = SPEEDTABLE[currLevel][0];
-        officers[1].moveRate = SPEEDTABLE[currLevel][1];
-    }
-
-    function moveThief(scale) {
-        const direction = getDirection();
-        setThiefHorDirection(direction);
-        thiefPosArr = geometry.nextThiefPosition(
-                thiefPosArr,
-                thiefMoveRate * scale,
-                direction
-            );
-        display.objectAt(Thief, thiefPosArr);
-    }
-
-    function movePolice(scale) {
-        if (molotovTime <= 0) {
-            moveOfficer(0, scale);
-            if (officerAI.isTwoPolicemenLevel()) moveOfficer(1, scale);
-        }
-    }
-
-    function moveOfficer(whichOfficer, scale) {
-        officerAI.nextOfficerPos(whichOfficer, scale);
-        display.objectAt(officers[whichOfficer].element, officers[whichOfficer].pos);
-    }
-
-    function setThiefHorDirection(direction) {
-        switch (direction) {
-            case 'left':
-                display.mirrorObj(Thief, '1');
-                break;
-            case 'right':
-                display.mirrorObj(Thief, '-1');
-                break;
-        }
-    }
-
-    function getDirection() {
-        let pressedKeyBump;
-        switch (pressedKey) {
-            case KEY_LEFT:
-                return 'left';
-            case KEY_UP:
-                return 'up';
-            case KEY_RIGHT:
-                return 'right';
-            case KEY_DOWN:
-                return 'down';
-                break;
-            case KEY_ENTER:
-                if ((pressedKey != pressedKeyBump)) {
-                    game.resetGame();
-                    pressedKeyBump = pressedKey;
-                }
-                break;
-            default:
-                pressedKeyBump = false;
-                return false;
-        }
-    }
-
 }

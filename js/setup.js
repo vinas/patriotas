@@ -1,158 +1,151 @@
-function Setup() {
-    this.clearGameValues = clearGameValues;
-    this.setAll = setAll;
-    this.resetAllValues = resetAllValues;
-    this.setVisualElements = setVisualElements;
-    this.loadContent = loadContent;
-    this.isMobile = isMobile;
+import { state } from './state.js';
+import { STANDARDTIME, STANDTHIEFMOVRATE } from './constants.js';
+import { crossMultiply } from './geometry.js';
+import { startButton } from './display.js';
 
-    return this;
+export function isMobile() {
+    let check = false;
+    (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
 
-    function isMobile() {
-        let check = false;
-        (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
+    return check && isPortrait();
+}
 
-        return check && isPortrait();
-    };
+function isPortrait() {
+    return window.innerWidth <= window.innerHeight;
+}
 
-    function isPortrait() {
-        return window.innerWidth <= window.innerHeight;
+export function loadContent() {
+ const ImgsToPreload = [
+        'img/detalhes.png',
+        'img/start_over.png',
+        'img/guarda_fogo_02.gif',
+        'img/juiz_fogo.gif',
+        'img/background_v2.jpg',
+        'img/bkg_01.jpg',
+        'img/bkg_02.jpg',
+        'img/bkg_03.jpg',
+        'img/bkg_04.jpg',
+        'img/bkg_05.jpg',
+        'img/bkg_06.jpg',
+        'img/bkg_07.jpg',
+        'img/bkg_08.jpg',
+        'img/bkg_09.jpg',
+        'img/bkg_10.jpg',
+        'img/bkg_11.jpg',
+        'img/bkg_12.jpg',
+        'img/busted.png',
+        'img/timeisup_01.png',
+        'img/start.png',
+        'img/molotov_v2.png',
+        'img/money2.png',
+        'img/bomb_v2.png'
+    ];
+    preloadImages(ImgsToPreload);
+    setSounds(handleLogin);
+}
+
+function handleLogin() {
+    startButton();
+}
+
+function setSounds(callback) {
+    state.fastTheme = new Audio('audio/8bit_sparks.mp3');
+    state.slowTheme = new Audio('audio/hino_nacional.mp3'),
+    state.endGameSound = new Audio('audio/endGame.mp3');
+    state.loadingTheme = new Audio('audio/hino_independencia.mp3');
+    state.bombSound = new Audio('audio/bomb.mp3');
+    state.clockSound = new Audio('audio/crank-1.mp3');
+    state.coinSound = new Audio('audio/coin1.wav');
+
+    callback();
+}
+
+function preloadImages(images) {
+    let img;
+    for (let i = 0; i < images.length; i++) {
+        img = new Image();
+        img.src = images[i];
+    }
+}
+
+export function setVisualElements() {
+    setCharacters();
+    setGameItems();
+    setDisplayItems();
+}
+
+export function clearGameValues() {
+    state.time = 0;
+    state.isClockVisible = false;
+    state.isMolotovVisible = false;
+    state.isBombVisible = false;
+    state.currLevel = 1;
+    state.points = 0;
+    state.molotovTime = 0;
+}
+
+export function resetAllValues() {
+    clearGameValues();
+    setOfficersStartCoords();
+    state.time = STANDARDTIME;
+    state.pressedKey = false;
+    state.thiefMoveRate = crossMultiply(STANDTHIEFMOVRATE);
+    state.officers[0].moveRate = state.SPEEDTABLE[1][0];
+    state.officers[1].moveRate = state.SPEEDTABLE[1][1];
+    state.thiefPosArr[0] = 0;
+    state.thiefPosArr[1] = 0;
+    state.lastChangedLevel = 0;
+}
+
+export function setAll() {
+    focusSettings();
+
+    function focusSettings() {
+        window.onblur = function() {
+            state.fastTheme.pause();
+            state.slowTheme.pause();
+            state.loadingTheme.pause();
+            state.endGameSound.pause();
+        };
+
+        window.onfocus = function() {
+            if (state.gameOn) {
+                state.slowTheme.play().catch(function() {});
+                state.slowTheme.volume = state.musicMuted ? 0 : 1;
+                return;
+            }
+            state.loadingTheme.play().catch(function() {});
+            state.loadingTheme.volume = state.musicMuted ? 0 : 1;
+        };
     }
 
-    function loadContent() {
-     const ImgsToPreload = [
-            'img/detalhes.png',
-            'img/start_over.png',
-            'img/guarda_fogo_02.gif',
-            'img/juiz_fogo.gif',
-            'img/background_v2.jpg',
-            'img/bkg_01.jpg',
-            'img/bkg_02.jpg',
-            'img/bkg_03.jpg',
-            'img/bkg_04.jpg',
-            'img/bkg_05.jpg',
-            'img/bkg_06.jpg',
-            'img/bkg_07.jpg',
-            'img/bkg_08.jpg',
-            'img/bkg_09.jpg',
-            'img/bkg_10.jpg',
-            'img/bkg_11.jpg',
-            'img/bkg_12.jpg',
-            'img/busted.png',
-            'img/timeisup_01.png',
-            'img/start.png',
-            'img/molotov_v2.png',
-            'img/money2.png',
-            'img/bomb_v2.png'
-        ];
-        preloadImages(ImgsToPreload);
-        setSounds(handleLogin);
-    }
+}
 
-    function handleLogin() {
-        display.startButton();
-    }
+function setCharacters() {
+    state.Thief = document.getElementById('thief');
+    state.officers[0].element = document.getElementById('officer1');
+    state.officers[1].element = document.getElementById('officer2');
+}
 
-    function setSounds(callback) {
-        fastTheme = new Audio('audio/8bit_sparks.mp3');
-        slowTheme = new Audio('audio/hino_nacional.mp3'),
-        endGameSound = new Audio('audio/endGame.mp3');
-        loadingTheme = new Audio('audio/hino_independencia.mp3');
-        bombSound = new Audio('audio/bomb.mp3');
-        clockSound = new Audio('audio/crank-1.mp3');
-        coinSound = new Audio('audio/coin1.wav');
+function setGameItems() {
+    state.Molotov = document.getElementById('molotov');
+    state.Clock = document.getElementById('clock');
+    state.Bomb = document.getElementById('bomb');
+    state.officers[0].counter = document.getElementById('counter1');
+    state.officers[1].counter = document.getElementById('counter2');
+}
 
-        callback();
-    }
+function setDisplayItems() {
+    state.BackgroundImg = document.getElementById('backgroundImage');
+    state.CurrLevel = document.getElementById('level');
+    state.Time = document.getElementById('time');
+}
 
-    function preloadImages(images) {
-        let img;
-        for (let i = 0; i < images.length; i++) {
-            img = new Image();
-            img.src = images[i];
-        }
-    }
-
-    function setVisualElements() {
-        setCharacters();
-        setGameItems();
-        setDisplayItems();
-    }
-
-    function clearGameValues() {
-        time = 0;
-        isClockVisible = false;
-        isMolotovVisible = false;
-        isBombVisible = false;
-        currLevel = 1;
-        points = 0;
-        molotovTime = 0;
-    }
-
-    function resetAllValues() {
-        clearGameValues();
-        setOfficersStartCoords();
-        time = STANDARDTIME;
-        pressedKey = false;
-        thiefMoveRate = geometry.crossMultiply(STANDTHIEFMOVRATE);
-        officers[0].moveRate = SPEEDTABLE[1][0];
-        officers[1].moveRate = SPEEDTABLE[1][1];
-        thiefPosArr[0] = 0;
-        thiefPosArr[1] = 0;
-        lastChangedLevel = 0;
-    }
-
-    function setAll() {
-        focusSettings();
-
-        function focusSettings() {
-            window.onblur = function() {
-                fastTheme.pause();
-                slowTheme.pause();
-                loadingTheme.pause();
-                endGameSound.pause();
-            };
-
-            window.onfocus = function() {
-                if (gameOn) {
-                    slowTheme.play().catch(function() {});
-                    slowTheme.volume = musicMuted ? 0 : 1;
-                    return;
-                }
-                loadingTheme.play().catch(function() {});
-                loadingTheme.volume = musicMuted ? 0 : 1;
-            };
-        }
-
-    }
-
-    function setCharacters() {
-        Thief = document.getElementById('thief');
-        officers[0].element = document.getElementById('officer1');
-        officers[1].element = document.getElementById('officer2');
-    }
-
-    function setGameItems() {
-        Molotov = document.getElementById('molotov');
-        Clock = document.getElementById('clock');
-        Bomb = document.getElementById('bomb');
-        officers[0].counter = document.getElementById('counter1');
-        officers[1].counter = document.getElementById('counter2');
-    }
-
-    function setDisplayItems() {
-        BackgroundImg = document.getElementById('backgroundImage');
-        CurrLevel = document.getElementById('level');
-        Time = document.getElementById('time');
-    }
-
-    function setOfficersStartCoords()
-    {
-        const coord = MAPSIZE - CHARSIZE;
-        officers[0].pos[0] = coord;
-        officers[0].pos[1] = coord;
-        officers[1].pos[0] = coord;
-        officers[1].pos[1] = coord;
-    }
-
+function setOfficersStartCoords()
+{
+    const coord = state.MAPSIZE - state.CHARSIZE;
+    state.officers[0].pos[0] = coord;
+    state.officers[0].pos[1] = coord;
+    state.officers[1].pos[0] = coord;
+    state.officers[1].pos[1] = coord;
 }

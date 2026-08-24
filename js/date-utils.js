@@ -1,23 +1,16 @@
-function DateUtils()
-{
-    this.formattedDateTime = formattedDateTime;
+export function formattedDateTime() {
+    const currentdate = new Date();
+    return addZero(currentdate.getDate()) + "/"
+        + addZero(currentdate.getMonth()+1)  + "/"
+        + currentdate.getFullYear() + " @ "
+        + addZero(currentdate.getHours()) + ":"
+        + addZero(currentdate.getMinutes()) + ":"
+        + addZero(currentdate.getSeconds());
+}
 
-    return this;
-
-    function formattedDateTime() {
-        const currentdate = new Date();
-        return addZero(currentdate.getDate()) + "/"
-            + addZero(currentdate.getMonth()+1)  + "/"
-            + currentdate.getFullYear() + " @ "
-            + addZero(currentdate.getHours()) + ":"
-            + addZero(currentdate.getMinutes()) + ":"
-            + addZero(currentdate.getSeconds());
+function addZero(i) {
+    if (i < 10) {
+        i = "0" + i;
     }
-
-    function addZero(i) {
-        if (i < 10) {
-            i = "0" + i;
-        }
-        return i;
-    }
+    return i;
 }

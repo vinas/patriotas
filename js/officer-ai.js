@@ -1,103 +1,98 @@
-function OfficerAI()
-{
-    this.isTwoPolicemenLevel = isTwoPolicemenLevel;
-    this.nextOfficerPos = nextOfficerPos;
-    this.officer2StartPos = officer2StartPos;
+import { state } from './state.js';
+import { TWOPOLICEMENLEVEL } from './constants.js';
+import { mirrorObj } from './display.js';
 
-    return this;
+export function isTwoPolicemenLevel() {
+    return (state.currLevel >= TWOPOLICEMENLEVEL);
+}
 
-    function isTwoPolicemenLevel() {
-        return (currLevel >= TWOPOLICEMENLEVEL);
-    }
-
-    function nextOfficerPos(whichOfficer, scale) {
-        const officer = officers[whichOfficer].element;
-        const relativePositions = getRelativePositions(whichOfficer);
-        const limit = MAPSIZE - CHARSIZE;
-        const moveRate = officers[whichOfficer].moveRate * scale;
-        if (movingAxis(whichOfficer) == 'horizontal') {
-            let nextVal;
-            switch (relativePositions[0]) {
-                case 'right':
-                    display.mirrorObj(officer, '-1');
-                    nextVal = officers[whichOfficer].pos[0] + moveRate;
-                    if (nextVal > limit) nextVal = limit;
-                    officers[whichOfficer].pos[0] = nextVal;
-                    break;
-                case 'left':
-                    display.mirrorObj(officer, '1');
-                    nextVal = officers[whichOfficer].pos[0] - moveRate;
-                    if (nextVal < 0) nextVal = 0;
-                    officers[whichOfficer].pos[0] = nextVal;
-            }
-            return;
-        }
+export function nextOfficerPos(whichOfficer, scale) {
+    const officer = state.officers[whichOfficer].element;
+    const relativePositions = getRelativePositions(whichOfficer);
+    const limit = state.MAPSIZE - state.CHARSIZE;
+    const moveRate = state.officers[whichOfficer].moveRate * scale;
+    if (movingAxis(whichOfficer) == 'horizontal') {
         let nextVal;
-        switch (relativePositions[1]) {
-            case 'up':
-                nextVal = officers[whichOfficer].pos[1] - moveRate;
-                if (nextVal < 0) nextVal = 0;
-                officers[whichOfficer].pos[1] = nextVal;
-                break;
-            case 'down':
-                nextVal = officers[whichOfficer].pos[1] + moveRate;
+        switch (relativePositions[0]) {
+            case 'right':
+                mirrorObj(officer, '-1');
+                nextVal = state.officers[whichOfficer].pos[0] + moveRate;
                 if (nextVal > limit) nextVal = limit;
-                officers[whichOfficer].pos[1] = nextVal;
+                state.officers[whichOfficer].pos[0] = nextVal;
+                break;
+            case 'left':
+                mirrorObj(officer, '1');
+                nextVal = state.officers[whichOfficer].pos[0] - moveRate;
+                if (nextVal < 0) nextVal = 0;
+                state.officers[whichOfficer].pos[0] = nextVal;
         }
-
+        return;
+    }
+    let nextVal;
+    switch (relativePositions[1]) {
+        case 'up':
+            nextVal = state.officers[whichOfficer].pos[1] - moveRate;
+            if (nextVal < 0) nextVal = 0;
+            state.officers[whichOfficer].pos[1] = nextVal;
+            break;
+        case 'down':
+            nextVal = state.officers[whichOfficer].pos[1] + moveRate;
+            if (nextVal > limit) nextVal = limit;
+            state.officers[whichOfficer].pos[1] = nextVal;
     }
 
-    function officer2StartPos() {
-        const midMap = MAPSIZE / 2,
-            tolerance = MAPSIZE - CHARSIZE;
-        officers[1].pos[0] = (thiefPosArr[0] >= midMap) ? 0 : tolerance;
-        officers[1].pos[1] = (thiefPosArr[1] >= midMap) ? 0 : tolerance;
-    }
+}
 
-    function getRelativePositions(officer) {
-        return [
-            getTargetHorRelPos(officer),
-            getTargetVerRelPos(officer)
-        ];
-    }
+export function officer2StartPos() {
+    const midMap = state.MAPSIZE / 2,
+        tolerance = state.MAPSIZE - state.CHARSIZE;
+    state.officers[1].pos[0] = (state.thiefPosArr[0] >= midMap) ? 0 : tolerance;
+    state.officers[1].pos[1] = (state.thiefPosArr[1] >= midMap) ? 0 : tolerance;
+}
 
-    function getTargetHorRelPos(officer) {
-        if (officers[officer].pos[0] > thiefPosArr[0])
-            return 'left';
-        if (officers[officer].pos[0] < thiefPosArr[0])
-            return 'right';
-        return 'same';
-    }
+function getRelativePositions(officer) {
+    return [
+        getTargetHorRelPos(officer),
+        getTargetVerRelPos(officer)
+    ];
+}
 
-    function getTargetVerRelPos(officer) {
-        if (officers[officer].pos[1] > thiefPosArr[1])
-           return 'up';
-        if (officers[officer].pos[1] < thiefPosArr[1])
-            return 'down';
-        return 'same';
-    }
+function getTargetHorRelPos(officer) {
+    if (state.officers[officer].pos[0] > state.thiefPosArr[0])
+        return 'left';
+    if (state.officers[officer].pos[0] < state.thiefPosArr[0])
+        return 'right';
+    return 'same';
+}
 
-    function movingAxis(officer) {
-        const diffX = getAbsoluteDiff(officers[officer].pos[0], thiefPosArr[0]),
-            diffY = getAbsoluteDiff(officers[officer].pos[1], thiefPosArr[1]);
-        if (diffX != diffY) {
-            if (officer == 0) {
-                if (diffX > diffY)
-                    return 'horizontal';
-                if (diffX < diffY)
-                    return 'vertical';
-            }
+function getTargetVerRelPos(officer) {
+    if (state.officers[officer].pos[1] > state.thiefPosArr[1])
+       return 'up';
+    if (state.officers[officer].pos[1] < state.thiefPosArr[1])
+        return 'down';
+    return 'same';
+}
+
+function movingAxis(officer) {
+    const diffX = getAbsoluteDiff(state.officers[officer].pos[0], state.thiefPosArr[0]),
+        diffY = getAbsoluteDiff(state.officers[officer].pos[1], state.thiefPosArr[1]);
+    if (diffX != diffY) {
+        if (officer == 0) {
             if (diffX > diffY)
-                return 'vertical';
-            if (diffX < diffY)
                 return 'horizontal';
+            if (diffX < diffY)
+                return 'vertical';
         }
-        if (Math.floor((Math.random() * 2) + 1) == 1)
+        if (diffX > diffY)
+            return 'vertical';
+        if (diffX < diffY)
             return 'horizontal';
-        return 'vertical';
     }
+    if (Math.floor((Math.random() * 2) + 1) == 1)
+        return 'horizontal';
+    return 'vertical';
+}
 
-    function getAbsoluteDiff(firstObjCoord, secondObjCoord) {
-        return Math.abs(firstObjCoord - secondObjCoord);
-    }
+function getAbsoluteDiff(firstObjCoord, secondObjCoord) {
+    return Math.abs(firstObjCoord - secondObjCoord);
 }

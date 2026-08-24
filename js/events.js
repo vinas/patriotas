@@ -1,77 +1,75 @@
-function Events()
-{
-    this.checkGotItem = checkGotItem;
-    this.checkGotBusted = checkGotBusted;
+import { state } from './state.js';
+import { BONUSTIME, MOLOTOVPAUSE } from './constants.js';
+import { reached } from './geometry.js';
+import { endGame, scorePoints, changeLevel } from './game.js';
+import { flash, money, hideClock, clockFeedback, molotovFeedback, bombFeedback } from './display.js';
+import { isTwoPolicemenLevel } from './officer-ai.js';
 
-    return this;
+export function checkGotBusted() {
+    if (state.molotovTime <= 0 && wasThiefCought()) endGame('busted');
+}
 
-    function checkGotBusted() {
-        if (molotovTime <= 0 && wasThiefCought()) game.endGame('busted');
+export function checkGotItem() {
+    gotMoney();
+    if (state.isClockVisible)
+        gotClock();
+    if (state.isMolotovVisible)
+        gotMolotov();
+    if (state.isBombVisible)
+        gotBomb();
+}
+
+function gotMoney() {
+    if (reached(state.thiefPosArr, state.CHARSIZE, state.moneyPos, state.ITEMSIZE)) {
+        state.coinSound.play();
+        scorePoints();
+        state.time = state.time + BONUSTIME;
+        flash(state.Time);
+        money();
     }
+}
 
-    function checkGotItem() {
-        gotMoney();
-        if (isClockVisible)
-            gotClock();
-        if (isMolotovVisible)
-            gotMolotov();
-        if (isBombVisible)
-            gotBomb();
+function gotClock() {
+    if (reached(state.thiefPosArr, state.CHARSIZE, state.clockPos, state.ITEMSIZE)) {
+        state.time = state.time + 10;
+        hideClock();
+        clockFeedback();
     }
+}
 
-    function gotMoney() {
-        if (geometry.reached(thiefPosArr, CHARSIZE, moneyPos, ITEMSIZE)) {
-            coinSound.play();
-            game.scorePoints();
-            time = time + BONUSTIME;
-            display.flash(Time);
-            display.money();
+function gotMolotov() {
+    if (reached(state.thiefPosArr, state.CHARSIZE, state.molotovPos, state.ITEMSIZE)) {
+        state.molotovTime = MOLOTOVPAUSE;
+        molotovFeedback();
+    }
+}
+
+function gotBomb() {
+    if (reached(state.thiefPosArr, state.CHARSIZE, state.bombPos, state.ITEMSIZE)) {
+        bombFeedback();
+        if (state.currLevel > 1) {
+            changeLevel(-1);
+            state.CurrLevel.innerHTML = state.currLevel;
         }
     }
+}
 
-    function gotClock() {
-        if (geometry.reached(thiefPosArr, CHARSIZE, clockPos, ITEMSIZE)) {
-            time = time + 10;
-            display.hideClock();
-            display.clockFeedback();
-        }
-    }
-
-    function gotMolotov() {
-        if (geometry.reached(thiefPosArr, CHARSIZE, molotovPos, ITEMSIZE)) {
-            molotovTime = MOLOTOVPAUSE;
-            display.molotovFeedback();
-        }
-    }
-
-    function gotBomb() {
-        if (geometry.reached(thiefPosArr, CHARSIZE, bombPos, ITEMSIZE)) {
-            display.bombFeedback();
-            if (currLevel > 1) {
-                game.changeLevel(-1);
-                CurrLevel.innerHTML = currLevel;
-            }
-        }
-    }
-
-    function wasThiefCought() {
-        return (geometry.reached(
-                    officers[0].pos,
-                    (CHARSIZE - CATCHTOLERANCE),
-                    thiefPosArr,
-                    (CHARSIZE - CATCHTOLERANCE)
+function wasThiefCought() {
+    return (reached(
+                state.officers[0].pos,
+                (state.CHARSIZE - state.CATCHTOLERANCE),
+                state.thiefPosArr,
+                (state.CHARSIZE - state.CATCHTOLERANCE)
+            )
+        )
+        || (
+            (isTwoPolicemenLevel())
+            && (reached(
+                    state.officers[1].pos,
+                    (state.CHARSIZE - state.CATCHTOLERANCE),
+                    state.thiefPosArr,
+                    (state.CHARSIZE - state.CATCHTOLERANCE)
                 )
             )
-            || (
-                (officerAI.isTwoPolicemenLevel())
-                && (geometry.reached(
-                        officers[1].pos,
-                        (CHARSIZE - CATCHTOLERANCE),
-                        thiefPosArr,
-                        (CHARSIZE - CATCHTOLERANCE)
-                    )
-                )
-            );
-    }
-
+        );
 }
