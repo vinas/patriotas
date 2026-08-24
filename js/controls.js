@@ -50,6 +50,7 @@ function handleMusicToggle() {
 
 function handleControlSwipes() {
     document.addEventListener("touchstart", function(obj) {
+        if (isControlTarget(obj.target)) return;
         fingerHandler(
             'down',
             {
@@ -59,9 +60,11 @@ function handleControlSwipes() {
         );
     });
     document.addEventListener("mousedown", function(obj) {
+        if (isControlTarget(obj.target)) return;
         fingerHandler('down', obj);
     });
     document.addEventListener("touchend", function(obj) {
+        if (isControlTarget(obj.target)) return;
         fingerHandler('up', touchUpPos, handleSwipe);
         touchUpPos = {};
     });
@@ -70,9 +73,14 @@ function handleControlSwipes() {
         touchUpPos.y = obj.touches[0].clientY;
     });
     document.addEventListener("mouseup", function(obj) {
+        if (isControlTarget(obj.target)) return;
         fingerHandler('up', obj, handleSwipe);
     });
 
+}
+
+function isControlTarget(target) {
+    return target.closest('#musicToggle, #resetGame') !== null;
 }
 
 function handleSwipe() {
