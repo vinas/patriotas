@@ -64,6 +64,10 @@ export async function bootGame() {
     await import('../../js/start-app.js');
     document.dispatchEvent(new Event('DOMContentLoaded'));
 
+    // The game loop's very first frame has no previous timestamp (elapsed = 0);
+    // let it pass so every frame a test advances afterwards is a normal one.
+    frame();
+
     const { state } = await import('../../js/state.js');
     return { state, ...(await loadGameModules()) };
 }
