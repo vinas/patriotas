@@ -256,7 +256,6 @@ export function molotovFeedback() {
 }
 
 function sortBackground() {
-    let rand;
     const backgrounds = [
         'bkg_01.jpg',
         'bkg_02.jpg',
@@ -272,10 +271,11 @@ function sortBackground() {
         'bkg_12.jpg',
         'background_v2.jpg'
     ];
-    do {
-        rand = Math.floor(Math.random() * backgrounds.length);
-    } while (state.BackgroundImg.getAttribute("src") == "url(img/"+backgrounds[rand]+")");
-    return backgrounds[rand];
+    const current = state.BackgroundImg.getAttribute('src');
+    const candidates = backgrounds.filter(function(name) {
+        return 'img/' + name !== current;
+    });
+    return candidates[Math.floor(Math.random() * candidates.length)];
 }
 
 function showFeedback(refObj, subtitleObj, message) {
