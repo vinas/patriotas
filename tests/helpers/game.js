@@ -110,15 +110,15 @@ export function pressKey(key) {
 }
 
 /** Swipes a finger from one point to another (touch events, like a phone). */
-export function swipe(from, to) {
+export function swipe(from, to, target = document.body) {
     const touch = (type, point) => {
         const event = new Event(type, { bubbles: true });
         Object.defineProperty(event, 'touches', { value: [{ clientX: point[0], clientY: point[1] }] });
-        document.body.dispatchEvent(event);
+        target.dispatchEvent(event);
     };
     touch('touchstart', from);
     touch('touchmove', to);
-    document.body.dispatchEvent(new Event('touchend', { bubbles: true }));
+    target.dispatchEvent(new Event('touchend', { bubbles: true }));
 }
 
 const SWIPES = {
