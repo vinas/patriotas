@@ -160,7 +160,7 @@ describe('clock', () => {
         game.state.thiefPos = [0, 0];
 
         // spawn it far from the thief without walking onto it
-        game.display.clock();
+        game.display.spawnClock();
         game.state.clockPos = [300, 300];
         frame();
 

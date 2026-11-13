@@ -2,11 +2,11 @@ import { state } from './state.js';
 import { MONEY_BONUS_TIME, MOLOTOV_FREEZE_TIME, CLOCK_BONUS_TIME } from './constants.js';
 import { reached } from './geometry.js';
 import { endGame, scorePoints, changeLevel } from './game.js';
-import { flash, money, hideClock, clockFeedback, molotovFeedback, bombFeedback, renderLevel, busted } from './display.js';
+import { flash, spawnMoney, hideClock, showClockBonus, throwMolotov, throwBomb, renderLevel, showBustedScreen } from './display.js';
 import { activeOfficers } from './officer-ai.js';
 
 export function checkGotBusted() {
-    if (state.molotovTime <= 0 && wasThiefCought()) endGame(busted);
+    if (state.molotovTime <= 0 && isThiefCaught()) endGame(showBustedScreen);
 }
 
 export function checkGotItem() {
@@ -25,7 +25,7 @@ function gotMoney() {
         scorePoints();
         state.time = state.time + MONEY_BONUS_TIME;
         flash(state.timeEl);
-        money();
+        spawnMoney();
     }
 }
 
@@ -33,7 +33,7 @@ function gotClock() {
     if (reached(state.thiefPos, state.charSize, state.clockPos, state.itemSize)) {
         state.time = state.time + CLOCK_BONUS_TIME;
         hideClock();
-        clockFeedback();
+        showClockBonus();
     }
 }
 
@@ -42,7 +42,7 @@ function gotMolotov() {
     if (reached(state.thiefPos, state.charSize, state.molotovPos, state.itemSize)) {
         state.isMolotovThrown = true;
         state.molotovTime = MOLOTOV_FREEZE_TIME;
-        molotovFeedback();
+        throwMolotov();
     }
 }
 
@@ -50,7 +50,7 @@ function gotBomb() {
     if (state.isBombThrown) return;
     if (reached(state.thiefPos, state.charSize, state.bombPos, state.itemSize)) {
         state.isBombThrown = true;
-        bombFeedback();
+        throwBomb();
         if (state.currLevel > 1) {
             changeLevel(-1);
             renderLevel();
@@ -58,7 +58,7 @@ function gotBomb() {
     }
 }
 
-function wasThiefCought() {
+function isThiefCaught() {
     return activeOfficers().some(function(officer) {
         return reached(
             officer.pos,

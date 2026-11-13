@@ -173,9 +173,9 @@ export function reachLevel(game, level) {
  */
 export function spawnItem(game, kind, pos) {
     const { display, state } = game;
-    display[kind]();
+    display[`spawn${kind[0].toUpperCase() + kind.slice(1)}`]();
     state[`${kind}Pos`] = [...pos];
-    display.objectAt(state[`${kind}El`], pos);
+    display.placeElement(state[`${kind}El`], pos);
 }
 
 /** Spawns the item and walks the thief onto it; returns after the frame that picks it up. */

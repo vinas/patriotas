@@ -1,28 +1,28 @@
 import { state } from './state.js';
 import { BASE_MAP_SIZE } from './constants.js';
 
-export function crossMultiply(actual) {
-    return Math.floor(crossMultiplyExact(actual));
+export function scaleToMap(actual) {
+    return Math.floor(scaleToMapExact(actual));
 }
 
 // Same scaling without rounding, for small steps that would otherwise vanish on narrow maps.
-export function crossMultiplyExact(actual) {
+export function scaleToMapExact(actual) {
     return (actual / BASE_MAP_SIZE) * state.mapSize;
 }
 
 export function messagePos(objPosArr) {
-    const ninety = crossMultiply(90),
-        thirty = crossMultiply(30);
+    const subtitleWidth = scaleToMap(90),
+        subtitleHeight = scaleToMap(30);
     let leftPos = objPosArr[0],
         topPos = objPosArr[1] + state.charSize;
-    if ((leftPos + ninety) >= state.mapSize)
-        leftPos = objPosArr[0] - ((leftPos + ninety) - state.mapSize);
-    if ((topPos + thirty) >= state.mapSize)
-        topPos = objPosArr[1] - thirty;
+    if ((leftPos + subtitleWidth) >= state.mapSize)
+        leftPos = objPosArr[0] - ((leftPos + subtitleWidth) - state.mapSize);
+    if ((topPos + subtitleHeight) >= state.mapSize)
+        topPos = objPosArr[1] - subtitleHeight;
     return [leftPos, topPos];
 }
 
-export function nextThiefPosition(posArr, movRate, direction) {
+export function moveThiefPosition(posArr, movRate, direction) {
     if (!direction) return posArr;
     let level;
     switch (direction) {

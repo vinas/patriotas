@@ -1,8 +1,8 @@
 import { state } from './state.js';
 
-export function handleSounds() {
+export function unlockAudio() {
     loadSoundEvents();
-    prepareSounds();
+    primeSounds();
 }
 
 function loadSoundEvents() {
@@ -18,7 +18,7 @@ function loadSoundEvents() {
 
 // Browsers only let sounds play after a user tap: play and pause every one of
 // them silently during the first tap so they can be started freely later.
-function prepareSounds() {
+function primeSounds() {
     const themes = [state.fastTheme, state.slowTheme, state.loadingTheme];
     const effects = [state.endGameSound, state.bombSound, state.clockSound, state.coinSound];
     const all = themes.concat(effects);

@@ -1,9 +1,9 @@
 import { state } from './state.js';
 import { THROW_BASE_FRAME_MS, MAX_FRAME_SCALE, KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN } from './constants.js';
-import { inclination, variationRate, setNewThrowItemPos } from './projectile-math.js';
-import { reached, nextThiefPosition } from './geometry.js';
-import { objectAt, mirrorObj } from './display.js';
-import { activeOfficers, nextOfficerPos } from './officer-ai.js';
+import { slope, stepAlongX, setNewThrowItemPos } from './projectile-math.js';
+import { reached, moveThiefPosition } from './geometry.js';
+import { placeElement, faceDirection } from './display.js';
+import { activeOfficers, moveOfficerTowardThief } from './officer-ai.js';
 
 export function moveItAll(scale) {
     moveThief(scale);
@@ -11,10 +11,10 @@ export function moveItAll(scale) {
 }
 
 export function throwItem(item, itemPos, targetPos, callback) {
-    const shooterPosX = itemPos[0],
-        shooterPosY = itemPos[1],
-        itemInclination = inclination(itemPos, targetPos),
-        itemVariationRate = variationRate(state.throwSpeed, itemInclination);
+    const startX = itemPos[0],
+        startY = itemPos[1],
+        itemInclination = slope(itemPos, targetPos),
+        itemVariationRate = stepAlongX(state.throwSpeed, itemInclination);
     let lastFrameTime;
 
     requestAnimationFrame(moveItem);
@@ -27,14 +27,14 @@ export function throwItem(item, itemPos, targetPos, callback) {
 
         if (!reached(itemPos, state.itemSize, targetPos, state.charSize)) {
             itemPos = setNewThrowItemPos(
-                    shooterPosX,
-                    shooterPosY,
+                    startX,
+                    startY,
                     itemPos,
                     targetPos,
                     itemInclination,
                     itemVariationRate * scale
                 );
-            objectAt(item, itemPos);
+            placeElement(item, itemPos);
             requestAnimationFrame(moveItem);
             return;
         }
@@ -50,12 +50,12 @@ export function changePoliceMoveRate() {
 function moveThief(scale) {
     const direction = getDirection();
     setThiefHorDirection(direction);
-    state.thiefPos = nextThiefPosition(
+    state.thiefPos = moveThiefPosition(
             state.thiefPos,
             state.thiefMoveRate * scale,
             direction
         );
-    objectAt(state.thiefEl, state.thiefPos);
+    placeElement(state.thiefEl, state.thiefPos);
 }
 
 function movePolice(scale) {
@@ -67,20 +67,20 @@ function movePolice(scale) {
 }
 
 function moveOfficer(whichOfficer, scale) {
-    const facing = nextOfficerPos(whichOfficer, scale);
+    const facing = moveOfficerTowardThief(whichOfficer, scale);
     const element = state.officers[whichOfficer].element;
-    if (facing === 'right') mirrorObj(element, '-1');
-    if (facing === 'left') mirrorObj(element, '1');
-    objectAt(element, state.officers[whichOfficer].pos);
+    if (facing === 'right') faceDirection(element, '-1');
+    if (facing === 'left') faceDirection(element, '1');
+    placeElement(element, state.officers[whichOfficer].pos);
 }
 
 function setThiefHorDirection(direction) {
     switch (direction) {
         case 'left':
-            mirrorObj(state.thiefEl, '1');
+            faceDirection(state.thiefEl, '1');
             break;
         case 'right':
-            mirrorObj(state.thiefEl, '-1');
+            faceDirection(state.thiefEl, '-1');
             break;
     }
 }

@@ -90,7 +90,7 @@ describe('officer speed as the player levels up', () => {
         expect(measuredSpeed(game, 0)).toBeCloseTo(game.state.speedTable[level][0], 5);
     });
 
-    // Currently fails on a 390px-wide phone: the speed table adds crossMultiply(1)
+    // Currently fails on a 390px-wide phone: the speed table adds scaleToMap(1)
     // for level 2, and that rounds down to 0 below 500px, so level 1 and 2 are equally fast.
     it('officer 0 is faster at level 2 than at level 1', () => {
         const level1 = measuredSpeed(game, 0);

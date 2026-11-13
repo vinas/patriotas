@@ -2,30 +2,30 @@ import { state } from './state.js';
 import { KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_ENTER, MIN_SWIPE_DISTANCE } from './constants.js';
 import { startPressedTimer } from './display.js';
 import { resetGame } from './game.js';
-import { toggleMusic, handleSounds } from './sounds.js';
+import { toggleMusic, unlockAudio } from './sounds.js';
 
 const pos = {};
 let touchUpPos = {};
 let introShown = false;
 
-export function loadControlsHandlers() {
-    handlePressedKey();
-    handleResetButton();
+export function registerControls() {
+    trackPressedKey();
+    handleStartButton();
     handleMusicToggle();
-    handleControlSwipes();
+    trackSwipes();
 }
 
-function handlePressedKey() {
+function trackPressedKey() {
     document.addEventListener('keydown', function(e) {
         state.pressedKey = e.key;
         if (e.key === KEY_ENTER && state.gameOn) resetGame();
     });
 }
 
-function handleResetButton() {
+function handleStartButton() {
     document.getElementById('resetGame').addEventListener('click', function() {
         if (!introShown) {
-            handleSounds();
+            unlockAudio();
             document.getElementById('presentationImage')
                 .setAttribute('src', 'img/detalhes.png');
             introShown = true;
@@ -42,10 +42,10 @@ function handleMusicToggle() {
     });
 }
 
-function handleControlSwipes() {
+function trackSwipes() {
     document.addEventListener("touchstart", function(obj) {
         if (isControlTarget(obj.target)) return;
-        fingerHandler(
+        recordPointer(
             'down',
             {
                 x: obj.touches[0].clientX,
@@ -55,11 +55,11 @@ function handleControlSwipes() {
     });
     document.addEventListener("mousedown", function(obj) {
         if (isControlTarget(obj.target)) return;
-        fingerHandler('down', obj);
+        recordPointer('down', obj);
     });
     document.addEventListener("touchend", function(obj) {
         if (isControlTarget(obj.target)) return;
-        fingerHandler('up', touchUpPos, handleSwipe);
+        recordPointer('up', touchUpPos, handleSwipe);
         touchUpPos = {};
     });
     document.addEventListener("touchmove", function(obj) {
@@ -68,7 +68,7 @@ function handleControlSwipes() {
     });
     document.addEventListener("mouseup", function(obj) {
         if (isControlTarget(obj.target)) return;
-        fingerHandler('up', obj, handleSwipe);
+        recordPointer('up', obj, handleSwipe);
     });
 
 }
@@ -102,7 +102,7 @@ function handleSwipe() {
     }
 }
 
-function fingerHandler(action, obj, callback) {
+function recordPointer(action, obj, callback) {
     const x = obj.x;
     const y = obj.y;
     pos[action] = {

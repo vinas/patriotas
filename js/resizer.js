@@ -1,6 +1,6 @@
 import { state } from './state.js';
 import { MIN_OFFICER_MOVE_RATE } from './constants.js';
-import { crossMultiply, crossMultiplyExact } from './geometry.js';
+import { scaleToMap, scaleToMapExact } from './geometry.js';
 
 export function resizeMapAndItems() {
     calculateMeasurements();
@@ -10,16 +10,16 @@ export function resizeMapAndItems() {
 
 function calculateMeasurements() {
     state.mapSize = document.getElementById('background').clientWidth;
-    state.crossBorderTolerance = crossMultiply(state.crossBorderTolerance);
-    state.catchTolerance = crossMultiply(state.catchTolerance);
-    state.charSize = crossMultiply(state.charSize);
-    state.itemSize = crossMultiply(state.itemSize);
-    state.throwSpeed = crossMultiply(state.throwSpeed);
-    state.speedTable = setSpeedTable(crossMultiply(MIN_OFFICER_MOVE_RATE));
+    state.crossBorderTolerance = scaleToMap(state.crossBorderTolerance);
+    state.catchTolerance = scaleToMap(state.catchTolerance);
+    state.charSize = scaleToMap(state.charSize);
+    state.itemSize = scaleToMap(state.itemSize);
+    state.throwSpeed = scaleToMap(state.throwSpeed);
+    state.speedTable = setSpeedTable(scaleToMap(MIN_OFFICER_MOVE_RATE));
 }
 
 function setSpeedTable(minMoveRate) {
-    const step = crossMultiplyExact;
+    const step = scaleToMapExact;
     return [
         [0, 0],
         [minMoveRate, 0],
@@ -59,11 +59,11 @@ function resizeVisualElements() {
         collectLabel = document.getElementById('collectLabel');
 
     document.getElementById('presentation').style.height = state.mapSize+'px';
-    document.getElementById('timeBox').style.paddingLeft = crossMultiply(10)+'px';
-    document.getElementById('scoreBox').style.paddingLeft = crossMultiply(69)+'px';
-    document.getElementById('scoreBox2').style.paddingLeft = crossMultiply(147)+'px';
-    document.getElementById('items').style.paddingTop = crossMultiply(5)+'px';
-    document.getElementById('barLeft').style.fontSize = crossMultiply(10)+'px';
+    document.getElementById('timeBox').style.paddingLeft = scaleToMap(10)+'px';
+    document.getElementById('scoreBox').style.paddingLeft = scaleToMap(69)+'px';
+    document.getElementById('scoreBox2').style.paddingLeft = scaleToMap(147)+'px';
+    document.getElementById('items').style.paddingTop = scaleToMap(5)+'px';
+    document.getElementById('barLeft').style.fontSize = scaleToMap(10)+'px';
 
     presentationImage.style.width = state.mapSize+'px';
     presentationImage.style.height = state.mapSize+'px';
@@ -73,54 +73,54 @@ function resizeVisualElements() {
     timeUpEndGameImage.style.width = state.mapSize+'px';
     timeUpEndGameImage.style.height = state.mapSize+'px';
 
-    setas.style.width = crossMultiply(48)+'px';
-    setas.style.height = crossMultiply(70)+'px';
-    setas.style.paddingLeft = crossMultiply(8)+'px';
+    setas.style.width = scaleToMap(48)+'px';
+    setas.style.height = scaleToMap(70)+'px';
+    setas.style.paddingLeft = scaleToMap(8)+'px';
 
-    thiefInstruction.style.width = crossMultiply(99)+'px';
-    thiefInstruction.style.height = crossMultiply(86)+'px';
-    thiefInstruction.style.paddingLeft = crossMultiply(135)+'px';
+    thiefInstruction.style.width = scaleToMap(99)+'px';
+    thiefInstruction.style.height = scaleToMap(86)+'px';
+    thiefInstruction.style.paddingLeft = scaleToMap(135)+'px';
 
-    difficultyBox.style.paddingLeft = crossMultiply(250)+'px';
-    difficultyBox.style.width = crossMultiply(95)+'px';
+    difficultyBox.style.paddingLeft = scaleToMap(250)+'px';
+    difficultyBox.style.width = scaleToMap(95)+'px';
 
     barraInfo.style.width = state.mapSize+'px';
-    barraInfo.style.height = crossMultiply(100)+'px';
+    barraInfo.style.height = scaleToMap(100)+'px';
     barraInfo.style.top = state.mapSize+'px';
-    barraInfo.style.borderBottomWidth = crossMultiply(5)+'px';
-    barraInfo.style.paddingTop = crossMultiply(5)+'px';
-    barraInfo.style.paddingBottom = crossMultiply(5)+'px';
+    barraInfo.style.borderBottomWidth = scaleToMap(5)+'px';
+    barraInfo.style.paddingTop = scaleToMap(5)+'px';
+    barraInfo.style.paddingBottom = scaleToMap(5)+'px';
 
     busted.style.width = state.mapSize+'px';
     busted.style.height = state.mapSize+'px';
     timeUp.style.width = state.mapSize+'px';
     timeUp.style.height = state.mapSize+'px';
 
-    slideLabel.style.fontSize = crossMultiply(18)+'px';
-    slideLabel.style.paddingLeft = crossMultiply(70)+'px';
+    slideLabel.style.fontSize = scaleToMap(18)+'px';
+    slideLabel.style.paddingLeft = scaleToMap(70)+'px';
 
-    collectLabel.style.paddingLeft = crossMultiply(250)+'px';
-    collectLabel.style.fontSize = crossMultiply(18)+'px';
-    collectLabel.style.width = crossMultiply(115)+'px';
+    collectLabel.style.paddingLeft = scaleToMap(250)+'px';
+    collectLabel.style.fontSize = scaleToMap(18)+'px';
+    collectLabel.style.width = scaleToMap(115)+'px';
 
-    setClassProp('barItem', 'width', crossMultiply(25)+'px');
-    setClassProp('barItem', 'height', crossMultiply(25)+'px');
-    setClassProp('barItem', 'padding-right', crossMultiply(12)+'px');
-    setClassProp('barItem', 'padding-top', crossMultiply(10)+'px');
+    setClassProp('barItem', 'width', scaleToMap(25)+'px');
+    setClassProp('barItem', 'height', scaleToMap(25)+'px');
+    setClassProp('barItem', 'padding-right', scaleToMap(12)+'px');
+    setClassProp('barItem', 'padding-top', scaleToMap(10)+'px');
 
-    setClassProp('actionButton', 'width', crossMultiply(100)+'px');
-    setClassProp('actionButton', 'height', crossMultiply(100)+'px');
+    setClassProp('actionButton', 'width', scaleToMap(100)+'px');
+    setClassProp('actionButton', 'height', scaleToMap(100)+'px');
 
-    setClassProp('statValue', 'font-size', crossMultiply(26)+'px');
-    setClassProp('statValue', 'padding-top', crossMultiply(8)+'px');
-    setClassProp('statLabel', 'font-size', crossMultiply(14)+'px');
+    setClassProp('statValue', 'font-size', scaleToMap(26)+'px');
+    setClassProp('statValue', 'padding-top', scaleToMap(8)+'px');
+    setClassProp('statLabel', 'font-size', scaleToMap(14)+'px');
 
-    setClassProp('action', 'font-size', crossMultiply(14)+'px');
-    setClassProp('action', 'padding-top', crossMultiply(5)+'px');
-    setClassProp('action', 'min-width', crossMultiply(20)+'px');
-    setClassProp('action', 'max-width', crossMultiply(90)+'px');
+    setClassProp('action', 'font-size', scaleToMap(14)+'px');
+    setClassProp('action', 'padding-top', scaleToMap(5)+'px');
+    setClassProp('action', 'min-width', scaleToMap(20)+'px');
+    setClassProp('action', 'max-width', scaleToMap(90)+'px');
 
-    setClassProp('counter1', 'font-size', crossMultiply(14)+'px');
+    setClassProp('counter1', 'font-size', scaleToMap(14)+'px');
 }
 
 function resizeGamePlayElements()

@@ -11,7 +11,7 @@ describe('sprite positions on the page', () => {
     afterEach(shutdown);
 
     it('are written with px units', () => {
-        game.display.objectAt(byId('thief'), [12.5, 30]);
+        game.display.placeElement(byId('thief'), [12.5, 30]);
 
         expect(byId('thief').style.left).toBe('12.5px');
         expect(byId('thief').style.top).toBe('30px');

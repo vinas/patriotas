@@ -1,9 +1,9 @@
-import { isMobile } from './setup.js';
+import { isMobilePortrait } from './setup.js';
 import { init } from './game.js';
 import { errorNotMobile } from './display.js';
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    if (isMobile()) {
+    if (isMobilePortrait()) {
         init();
     } else {
         errorNotMobile();

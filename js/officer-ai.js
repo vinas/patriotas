@@ -12,7 +12,7 @@ export function activeOfficers() {
 
 // Moves the officer one step towards the thief and returns the horizontal
 // direction it moved in ('left' or 'right'), or undefined if it moved vertically.
-export function nextOfficerPos(whichOfficer, scale) {
+export function moveOfficerTowardThief(whichOfficer, scale) {
     const relativePositions = getRelativePositions(whichOfficer);
     const limit = state.mapSize - state.charSize;
     const moveRate = state.officers[whichOfficer].moveRate * scale;

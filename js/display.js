@@ -18,19 +18,19 @@ export function errorNotMobile() {
     element('background').innerHTML = '<br/><br/>&nbsp;&nbsp;&nbsp;Apenas no celular, no modo retrato!<br/><br/>=(';
 }
 
-export function startButton() {
+export function showStartButton() {
     hideElements(['loading', 'musicToggle']);
     showElements('resetGame');
 }
 
-export function bomb() {
+export function spawnBomb() {
     state.bombPos = randomCoords();
     displayItem(state.bombEl, state.bombPos);
     state.isBombVisible = true;
     state.isBombThrown = false;
 }
 
-export function bombFeedback() {
+export function throwBomb() {
     throwItem(state.bombEl, state.bombPos, state.officers[0].pos, endBombFeedback);
     function endBombFeedback() {
         state.bombSound.play();
@@ -44,23 +44,23 @@ export function bombFeedback() {
     }
 }
 
-export function busted() {
+export function showBustedScreen() {
     element('endGameMessage').innerHTML = getBustedMessage();
     showElements(Busted);
 }
 
-export function clock() {
+export function spawnClock() {
     state.clockPos = randomCoords();
     displayItem(state.clockEl, state.clockPos);
     state.isClockVisible = true;
 }
 
-export function clockFeedback() {
+export function showClockBonus() {
     state.clockSound.play();
     showFeedback(state.thiefEl, Subtitle3, 'tempo +' + CLOCK_BONUS_TIME);
 }
 
-export function gameInfo() {
+export function resetHud() {
     PointsCounter.innerHTML = '0';
     state.backgroundEl.setAttribute('src', 'img/background_v2.jpg');
     state.officers[0].element.setAttribute('src', state.officers[0].sprite);
@@ -94,7 +94,7 @@ function flashOfficers() {
 
 
 
-export function money() {
+export function spawnMoney() {
     state.moneyPos = randomCoords();
     displayItem(Money, state.moneyPos);
 }
@@ -104,7 +104,7 @@ export function hideOfficer2() {
     state.officers[1].element.setAttribute('src', state.officers[1].sprite);
 }
 
-export function objectAt(obj, posArr) {
+export function placeElement(obj, posArr) {
     obj.style.left = posArr[0] + 'px';
     obj.style.top = posArr[1] + 'px';
 }
@@ -117,9 +117,9 @@ export function hideClock()
 
 export function relocateCharacters()
 {
-    objectAt(state.thiefEl, state.thiefPos);
-    objectAt(state.officers[0].element, state.officers[0].pos);
-    objectAt(state.officers[1].element, state.officers[1].pos);
+    placeElement(state.thiefEl, state.thiefPos);
+    placeElement(state.officers[0].element, state.officers[0].pos);
+    placeElement(state.officers[1].element, state.officers[1].pos);
 }
 
 export function restorePolicemen() {
@@ -129,9 +129,9 @@ export function restorePolicemen() {
     });
 }
 
-export function molotovCounter() {
+export function showFreezeCounters() {
     activeOfficers().forEach(function(officer) {
-        objectAt(
+        placeElement(
             officer.counter,
             [
                 (officer.pos[0] - 5),
@@ -163,11 +163,11 @@ export function updatePointsDisplay() {
     flash(PointsCounter);
 }
 
-export function timeUp() {
+export function showTimeUpScreen() {
     showElements(TimeUp);
 }
 
-function burnDaPolice() {
+function burnOfficers() {
     const subtitles = [Subtitle1, Subtitle2];
     activeOfficers().forEach(function(officer, index) {
         officer.element.setAttribute('src', officer.fireSprite);
@@ -211,19 +211,19 @@ export function show2ndPoliceman() {
         state.officers[1].element.setAttribute('src', state.officers[1].fireSprite);
     }
     officer2StartPos();
-    objectAt(state.officers[1].element, state.officers[1].pos);
+    placeElement(state.officers[1].element, state.officers[1].pos);
     showElements(state.officers[1].element);
 }
 
 export function setNewBackground() {
     state.backgroundEl.setAttribute(
         "src",
-        "img/"+sortBackground()
+        "img/"+pickBackground()
     );
 }
 
-export function mirrorObj(objeto, escala) {
-    objeto.style.transform = "scaleX("+escala+")";
+export function faceDirection(el, scaleX) {
+    el.style.transform = 'scaleX(' + scaleX + ')';
 }
 
 export function hideBomb() {
@@ -231,25 +231,25 @@ export function hideBomb() {
     state.isBombVisible = false;
 }
 
-export function molotov() {
+export function spawnMolotov() {
     state.molotovPos = randomCoords();
     displayItem(state.molotovEl, state.molotovPos);
     state.isMolotovVisible = true;
     state.isMolotovThrown = false;
 }
 
-export function molotovFeedback() {
+export function throwMolotov() {
     throwItem(state.molotovEl, state.molotovPos, state.officers[0].pos, endMolotovFeedback);
 
     function endMolotovFeedback()
     {
         state.bombSound.play();
         hideMolotov();
-        burnDaPolice();
+        burnOfficers();
     }
 }
 
-function sortBackground() {
+function pickBackground() {
     const backgrounds = [
         'bkg_01.jpg',
         'bkg_02.jpg',
@@ -297,13 +297,13 @@ function showFeedback(refObj, subtitleObj, message) {
     {
         objectPosition = getObjectPosition(refObj);
         messagePosition = messagePos(objectPosition);
-        objectAt(subtitleObj, messagePosition);
+        placeElement(subtitleObj, messagePosition);
     }
 }
 
 function displayItem(obj, arrPosition)
 {
-    objectAt(obj, arrPosition);
+    placeElement(obj, arrPosition);
     showElements(obj);
 }
 
