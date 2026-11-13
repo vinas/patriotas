@@ -31,6 +31,7 @@ export function bomb() {
     state.bombPos = randomCoords();
     displayItem(state.Bomb, state.bombPos);
     state.isBombVisible = true;
+    state.isBombThrown = false;
 }
 
 export function bombFeedback() {

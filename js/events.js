@@ -45,7 +45,9 @@ function gotMolotov() {
 }
 
 function gotBomb() {
+    if (state.isBombThrown) return;
     if (reached(state.thiefPosArr, state.CHARSIZE, state.bombPos, state.ITEMSIZE)) {
+        state.isBombThrown = true;
         bombFeedback();
         if (state.currLevel > 1) {
             changeLevel(-1);
