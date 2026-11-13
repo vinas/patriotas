@@ -13,7 +13,7 @@ A mobile-only, portrait-orientation arcade game built in vanilla JavaScript — 
 
 **Controls:** swipe in a direction on the screen, or use the arrow keys (useful for testing on desktop). Tap Start/Reset to begin or restart. There's also a music mute toggle.
 
-The game deliberately only runs on **mobile devices in portrait orientation** — on anything else it shows an "only on mobile, portrait" message instead of starting. See `setup.js`'s `isMobile()`.
+The game deliberately only runs on **mobile devices in portrait orientation** — on anything else it shows an "only on mobile, portrait" message instead of starting. See `setup.js`'s `isMobilePortrait()`.
 
 ## Running it
 
@@ -39,10 +39,10 @@ font/, img/, audio/    Static assets (Silkscreen font, sprites/backgrounds, soun
 js/
   state.js             Shared mutable game state (one exported object: officers, positions, DOM refs, audio, level/time/points, etc.)
   constants.js         Tuning constants that are never reassigned (timings, sizes, key codes)
-  start-app.js         Entry point — on DOMContentLoaded, checks isMobile() and kicks off game.init()
+  start-app.js         Entry point — on DOMContentLoaded, checks isMobilePortrait() and kicks off game.init()
 
   setup.js             Mobile/portrait detection, asset preloading, DOM element binding, reset logic
-  resizer.js           Scales the whole UI to the actual screen size (everything is designed at a 500px baseline and scaled via crossMultiply)
+  resizer.js           Scales the whole UI to the actual screen size (everything is designed at a 500px baseline and scaled via scaleToMap)
   dom.js               Tiny generic show/hide/getElementById helpers, framework-free
 
   game.js              The core game loop (via requestAnimationFrame) and game clock (1s countdown timer); level-up/level-down orchestration
@@ -51,16 +51,15 @@ js/
   display.js           Everything DOM-rendering related: positioning sprites, showing/hiding UI, flashing/feedback text, busted-screen messages
   controls.js          Input handling: touch/swipe gesture detection, keyboard, buttons
 
-  geometry.js          Generic position/size/collision math (crossMultiply scaling, bounding-box "reached" checks, thief movement)
+  geometry.js          Generic position/size/collision math (scaleToMap scaling, bounding-box "reached" checks, thief movement)
   officer-ai.js         Officer movement AI and the "is there a second officer yet" level check
   projectile-math.js    Trajectory math for thrown items (bomb/molotov arcing toward a target)
   spawn-chance.js       Random-chance rolls for whether a bomb/molotov should appear
-  date-utils.js         Date formatting (used for score timestamps)
 
   sounds.js            Music/SFX playback and the mute toggle
 ```
 
-Several module pairs import each other (`display.js`↔`officer-ai.js`, `display.js`↔`motion.js`, `game.js`↔`motion.js`/`events.js`/`controls.js`) — safe in ES modules as long as no module uses another's export at its own top level, only inside functions called later, which holds throughout this codebase.
+Several module pairs import each other (`display.js`↔`motion.js`, `game.js`↔`events.js`/`controls.js`) — safe in ES modules as long as no module uses another's export at its own top level, only inside functions called later, which holds throughout this codebase.
 
 The `officers` array (in `state.js`) models both police officers as `{ element, counter, pos, moveRate }` objects rather than parallel index-based arrays — officer 0 always exists, officer 1 is conditionally shown once the player reaches a high enough level.
 
@@ -81,19 +80,17 @@ What is covered, one file per area in `tests/`:
 | File | Rules |
 | --- | --- |
 | `game-start.test.js` | the game starts (Start button, instructions, round begins, countdown) |
-| `music.test.js` | music can be muted and unmuted |
-| `thief-movement.test.js` | thief moves up/down/left/right by keyboard and swipe; leaving the map reappears on the opposite side |
+| `music.test.js` | music can be muted and unmuted; the right soundtrack resumes when the tab is refocused or the game restarts |
+| `thief-movement.test.js` | thief moves up/down/left/right by keyboard and swipe (a tap or tiny swipe does nothing); leaving the map reappears on the opposite side |
 | `officer-ai.test.js` | officer 0 chases along the axis with the biggest gap; speed per level, up and down |
 | `second-officer.test.js` | officer 1 appears at level 3 and disappears below it |
-| `pickups.test.js` | bomb lowers the level, molotov burns and freezes the officers for 3s, clock adds time |
+| `pickups.test.js` | bomb lowers the level once, molotov burns and freezes the officers for 3s (thrown once), clock adds time |
 | `game-over.test.js` | caught by officer 0, caught by officer 1, time is up |
+| `background.test.js` | a level-up always shows a different background |
+| `positions.test.js` | sprite positions are written with `px` units and follow the game state |
+| `resizer.test.js` | sizes are scaled once from the 500px baseline, even if measured again |
 
 `tests/helpers/game.js` boots the game and provides the player-like actions (`startGame`, `pressKey`, `swipeDirection`, `collectMoney`, `catchItem`, `advance`...).
-
-Some tests describe rules the game does not currently honour and therefore fail on purpose; they are commented in the test files:
-
-- officer 0 is not faster at level 2 than at level 1 on a 390px-wide phone (`crossMultiply(1)` rounds down to 0);
-- one bomb lowers the level by more than one, because the thrown bomb keeps overlapping the thief for several frames.
 
 ## Assets & credits
 

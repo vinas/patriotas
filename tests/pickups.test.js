@@ -34,8 +34,8 @@ describe('bomb', () => {
         expect(byId('level').innerHTML).toBe(String(game.state.currLevel));
     });
 
-    // Currently fails: the thrown bomb keeps overlapping the thief for several
-    // frames and gotBomb() lowers the level on every one of them (level 3 -> 1).
+    // Regression: the thrown bomb used to keep overlapping the thief for several
+    // frames and gotBomb() lowered the level on every one of them (level 3 -> 1).
     it('lowers the level by exactly one per bomb', () => {
         reachLevel(game, 3);
 
