@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN, SWIPEDISTANCE } from './constants.js';
+import { KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_ENTER, SWIPEDISTANCE } from './constants.js';
 import { startPressedTimer } from './display.js';
 import { resetGame } from './game.js';
 import { toggleMusic, handleSounds } from './sounds.js';
@@ -8,22 +8,16 @@ const pos = {};
 let touchUpPos = {};
 
 export function loadControlsHandlers() {
-    preventDblClick();
     handlePressedKey();
     handleResetButton();
     handleMusicToggle();
     handleControlSwipes();
 }
 
-function preventDblClick() {
-    document.addEventListener('dblclick', function() {
-        return false;
-    });
-}
-
 function handlePressedKey() {
     document.addEventListener('keydown', function(e) {
         state.pressedKey = e.key;
+        if (e.key === KEY_ENTER && state.gameOn) resetGame();
     });
 }
 

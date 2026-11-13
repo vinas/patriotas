@@ -118,12 +118,11 @@ function handleMolotov() {
 
 function handleMolotovDisplay() {
     if (sortMolotov()) {
-        if (!state.isMolotovVisible) {
+        if (state.isMolotovVisible) {
+            hideMolotov();
+        } else {
             molotov();
-            return ;
         }
-        hideMolotov();
-        return;
     }
 }
 
@@ -168,5 +167,5 @@ function handleTwoPolicemenTransition(delta) {
 }
 
 function isLevelChange() {
-    return ((state.points != 0) && (state.points >= (state.lastChangedLevel + PTSTOCHANGELEVEL)));
+    return (state.points >= (state.lastChangedLevel + PTSTOCHANGELEVEL));
 }

@@ -17,11 +17,6 @@ export function errorNotMobile() {
     element('background').innerHTML = '<br/><br/>&nbsp;&nbsp;&nbsp;Apenas no celular, no modo retrato!<br/><br/>=(';
 }
 
-export function loadingButton() {
-    hideElements(['resetGame']);
-    showElements('loading');
-}
-
 export function startButton() {
     hideElements(['loading', 'musicToggle']);
     showElements('resetGame');

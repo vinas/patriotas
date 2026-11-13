@@ -1,10 +1,9 @@
 import { state } from './state.js';
-import { THROWFRAMERATE, MAX_FRAME_SCALE, KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_ENTER } from './constants.js';
+import { THROWFRAMERATE, MAX_FRAME_SCALE, KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN } from './constants.js';
 import { inclination, variationRate, setNewThrowItemPos } from './projectile-math.js';
 import { reached, nextThiefPosition } from './geometry.js';
 import { objectAt, mirrorObj } from './display.js';
 import { isTwoPolicemenLevel, nextOfficerPos } from './officer-ai.js';
-import { resetGame } from './game.js';
 
 export function moveItAll(scale) {
     moveThief(scale);
@@ -26,7 +25,7 @@ export function throwItem(item, itemPos, targetPos, callback) {
         lastFrameTime = timestamp;
         const scale = Math.min(elapsed / THROWFRAMERATE, MAX_FRAME_SCALE);
 
-        if ((!reached(itemPos, state.ITEMSIZE, targetPos, state.CHARSIZE)) && (!isNaN(itemVariationRate))) {
+        if (!reached(itemPos, state.ITEMSIZE, targetPos, state.CHARSIZE)) {
             itemPos = setNewThrowItemPos(
                     shooterPosX,
                     shooterPosY,
@@ -83,7 +82,6 @@ function setThiefHorDirection(direction) {
 }
 
 function getDirection() {
-    let pressedKeyBump;
     switch (state.pressedKey) {
         case KEY_LEFT:
             return 'left';
@@ -93,15 +91,7 @@ function getDirection() {
             return 'right';
         case KEY_DOWN:
             return 'down';
-            break;
-        case KEY_ENTER:
-            if ((state.pressedKey != pressedKeyBump)) {
-                resetGame();
-                pressedKeyBump = state.pressedKey;
-            }
-            break;
         default:
-            pressedKeyBump = false;
             return false;
     }
 }
