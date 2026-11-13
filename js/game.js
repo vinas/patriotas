@@ -51,6 +51,7 @@ export function resetGame() {
     gameInfo();
     state.loadingTheme.pause();
     state.endGameSound.pause();
+    state.fastTheme.pause();
     state.fastTheme.currentTime = 0;
     state.slowTheme.currentTime = 0;
     state.loadingTheme.currentTime = 18;

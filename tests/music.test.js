@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { bootGame, shutdown, startGame, byId, swipe, reachLevel } from './helpers/game.js';
+import { bootGame, shutdown, startGame, byId, swipe, reachLevel, pressKey, frame } from './helpers/game.js';
 
 const themes = (state) => [state.slowTheme, state.fastTheme, state.loadingTheme];
 
@@ -78,5 +78,17 @@ describe('music', () => {
             expect(game.state.fastTheme.paused).toBe(false);
             expect(game.state.slowTheme.paused).toBe(true);
         });
+    });
+
+    it('restarting with Enter at a high level leaves only the slow theme playing', () => {
+        reachLevel(game, 3);
+        expect(game.state.fastTheme.paused).toBe(false);
+
+        pressKey('Enter');
+        frame();
+
+        expect(game.state.currLevel).toBe(1);
+        expect(game.state.fastTheme.paused).toBe(true);
+        expect(game.state.slowTheme.paused).toBe(false);
     });
 });
