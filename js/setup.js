@@ -34,7 +34,7 @@ export function loadContent() {
         'img/bkg_10.jpg',
         'img/bkg_11.jpg',
         'img/bkg_12.jpg',
-        'img/busted.png',
+        'img/busted_v3.png',
         'img/timeisup_01.png',
         'img/start.png',
         'img/molotov_v2.png',
