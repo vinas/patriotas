@@ -49,6 +49,7 @@ export const state = {
     isClockVisible: undefined,
     isMolotovVisible: undefined,
     isBombVisible: undefined,
+    isBombThrown: false,
     thiefMoveRate: undefined,
     currLevel: undefined,
     time: undefined,

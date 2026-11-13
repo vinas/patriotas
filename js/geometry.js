@@ -1,7 +1,12 @@
 import { state } from './state.js';
 
 export function crossMultiply(actual) {
-    return Math.floor((actual / 500) * state.MAPSIZE);
+    return Math.floor(crossMultiplyExact(actual));
+}
+
+// Same scaling without rounding, for small steps that would otherwise vanish on narrow maps.
+export function crossMultiplyExact(actual) {
+    return (actual / 500) * state.MAPSIZE;
 }
 
 export function messagePos(objPosArr) {
