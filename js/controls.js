@@ -6,6 +6,7 @@ import { toggleMusic, handleSounds } from './sounds.js';
 
 const pos = {};
 let touchUpPos = {};
+let introShown = false;
 
 export function loadControlsHandlers() {
     handlePressedKey();
@@ -23,12 +24,11 @@ function handlePressedKey() {
 
 function handleResetButton() {
     document.getElementById('resetGame').addEventListener('click', function() {
-        const justOpened = document.getElementById('justOpened');
-        if (justOpened.value == 1) {
+        if (!introShown) {
             handleSounds();
             document.getElementById('presentationImage')
                 .setAttribute('src', 'img/detalhes.png');
-            justOpened.value = 0;
+            introShown = true;
             return;
         }
         startPressedTimer();
