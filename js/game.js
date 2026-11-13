@@ -12,7 +12,6 @@ import {
 import { moveItAll, changePoliceMoveRate } from './motion.js';
 import { checkGotItem, checkGotBusted } from './events.js';
 import { sortBomb, sortMolotov } from './spawn-chance.js';
-import { formattedDateTime } from './date-utils.js';
 
 let lastFrameTime;
 
@@ -33,7 +32,6 @@ export function endGame(reason) {
     state.gameOn = false;
     state.fastTheme.pause();
     state.slowTheme.pause();
-    saveGameScores();
     state.endGameSound.currentTime = 0;
     state.endGameSound.play();
     endGameActions[reason]();
@@ -167,13 +165,6 @@ function handleTwoPolicemenTransition(delta) {
         state.slowTheme.play();
         hideOfficer2();
     }
-}
-
-function saveGameScores() {
-    state.user.lastScore = state.points;
-    state.user.lastScoreDateTime = formattedDateTime();
-    state.user.gameId = 1;
-    //$.post('/api/Games/saveLastScore', user);
 }
 
 function isLevelChange() {

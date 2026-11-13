@@ -42,23 +42,18 @@ export function loadContent() {
         'img/bomb_v2.png'
     ];
     preloadImages(ImgsToPreload);
-    setSounds(handleLogin);
-}
-
-function handleLogin() {
+    setSounds();
     startButton();
 }
 
-function setSounds(callback) {
+function setSounds() {
     state.fastTheme = new Audio('audio/8bit_sparks.mp3');
-    state.slowTheme = new Audio('audio/hino_nacional.mp3'),
+    state.slowTheme = new Audio('audio/hino_nacional.mp3');
     state.endGameSound = new Audio('audio/endGame.mp3');
     state.loadingTheme = new Audio('audio/hino_independencia.mp3');
     state.bombSound = new Audio('audio/bomb.mp3');
     state.clockSound = new Audio('audio/crank-1.mp3');
     state.coinSound = new Audio('audio/coin1.wav');
-
-    callback();
 }
 
 function preloadImages(images) {

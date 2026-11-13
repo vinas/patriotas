@@ -1,9 +1,4 @@
 export const state = {
-    // Login
-    user: {
-        firstName: 'User'
-    },
-
     // Characters
     Thief: undefined,
 
