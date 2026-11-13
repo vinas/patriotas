@@ -3,7 +3,7 @@ import { BONUSTIME, MOLOTOVPAUSE } from './constants.js';
 import { reached } from './geometry.js';
 import { endGame, scorePoints, changeLevel } from './game.js';
 import { flash, money, hideClock, clockFeedback, molotovFeedback, bombFeedback } from './display.js';
-import { isTwoPolicemenLevel } from './officer-ai.js';
+import { activeOfficers } from './officer-ai.js';
 
 export function checkGotBusted() {
     if (state.molotovTime <= 0 && wasThiefCought()) endGame('busted');
@@ -59,21 +59,12 @@ function gotBomb() {
 }
 
 function wasThiefCought() {
-    return (reached(
-                state.officers[0].pos,
-                (state.CHARSIZE - state.CATCHTOLERANCE),
-                state.thiefPosArr,
-                (state.CHARSIZE - state.CATCHTOLERANCE)
-            )
-        )
-        || (
-            (isTwoPolicemenLevel())
-            && (reached(
-                    state.officers[1].pos,
-                    (state.CHARSIZE - state.CATCHTOLERANCE),
-                    state.thiefPosArr,
-                    (state.CHARSIZE - state.CATCHTOLERANCE)
-                )
-            )
+    return activeOfficers().some(function(officer) {
+        return reached(
+            officer.pos,
+            (state.CHARSIZE - state.CATCHTOLERANCE),
+            state.thiefPosArr,
+            (state.CHARSIZE - state.CATCHTOLERANCE)
         );
+    });
 }

@@ -4,8 +4,8 @@ export const state = {
 
     // Officers
     officers: [
-        { element: null, counter: null, pos: [0, 0], moveRate: 0 },
-        { element: null, counter: null, pos: [0, 0], moveRate: 0 }
+        { element: null, counter: null, pos: [0, 0], moveRate: 0, sprite: 'img/guarda.gif', fireSprite: 'img/guarda_fogo_02.gif' },
+        { element: null, counter: null, pos: [0, 0], moveRate: 0, sprite: 'img/juiz.gif', fireSprite: 'img/juiz_fogo.gif' }
     ],
 
     // Game Items

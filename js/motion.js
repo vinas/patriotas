@@ -3,7 +3,7 @@ import { THROWFRAMERATE, MAX_FRAME_SCALE, KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN 
 import { inclination, variationRate, setNewThrowItemPos } from './projectile-math.js';
 import { reached, nextThiefPosition } from './geometry.js';
 import { objectAt, mirrorObj } from './display.js';
-import { isTwoPolicemenLevel, nextOfficerPos } from './officer-ai.js';
+import { activeOfficers, nextOfficerPos } from './officer-ai.js';
 
 export function moveItAll(scale) {
     moveThief(scale);
@@ -60,14 +60,18 @@ function moveThief(scale) {
 
 function movePolice(scale) {
     if (state.molotovTime <= 0) {
-        moveOfficer(0, scale);
-        if (isTwoPolicemenLevel()) moveOfficer(1, scale);
+        activeOfficers().forEach(function(officer, index) {
+            moveOfficer(index, scale);
+        });
     }
 }
 
 function moveOfficer(whichOfficer, scale) {
-    nextOfficerPos(whichOfficer, scale);
-    objectAt(state.officers[whichOfficer].element, state.officers[whichOfficer].pos);
+    const facing = nextOfficerPos(whichOfficer, scale);
+    const element = state.officers[whichOfficer].element;
+    if (facing === 'right') mirrorObj(element, '-1');
+    if (facing === 'left') mirrorObj(element, '1');
+    objectAt(element, state.officers[whichOfficer].pos);
 }
 
 function setThiefHorDirection(direction) {

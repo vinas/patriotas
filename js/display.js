@@ -2,7 +2,7 @@ import { state } from './state.js';
 import { element, showElements, hideElements } from './dom.js';
 import { randomCoords, messagePos } from './geometry.js';
 import { throwItem } from './motion.js';
-import { isTwoPolicemenLevel, officer2StartPos } from './officer-ai.js';
+import { isTwoPolicemenLevel, activeOfficers, officer2StartPos } from './officer-ai.js';
 
 const Money = element('money'),
     PointsCounter = element('points'),
@@ -62,7 +62,7 @@ export function clockFeedback() {
 export function gameInfo() {
     PointsCounter.innerHTML = '0';
     state.BackgroundImg.setAttribute('src', 'img/background_v2.jpg');
-    state.officers[0].element.setAttribute('src', 'img/guarda.gif');
+    state.officers[0].element.setAttribute('src', state.officers[0].sprite);
     Subtitle1.innerHTML = '';
     state.CurrLevel.innerHTML = state.currLevel;
     state.Time.innerHTML = state.time;
@@ -86,8 +86,7 @@ export function flash(obj, color) {
 }
 
 function flashOfficers() {
-    state.officers.forEach(function(officer, index) {
-        if (index === 1 && !isTwoPolicemenLevel()) return;
+    activeOfficers().forEach(function(officer) {
         flash(officer.element);
     });
 }
@@ -101,7 +100,7 @@ export function money() {
 
 export function hideOfficer2() {
     hideElements([state.officers[1].counter, state.officers[1].element]);
-    state.officers[1].element.setAttribute("src", "img/juiz.gif");
+    state.officers[1].element.setAttribute('src', state.officers[1].sprite);
 }
 
 export function objectAt(obj, posArr) {
@@ -123,17 +122,14 @@ export function relocateCharacters()
 }
 
 export function restorePolicemen() {
-    const sprites = ['img/guarda.gif', 'img/juiz.gif'];
-    state.officers.forEach(function(officer, index) {
-        if (index === 1 && !isTwoPolicemenLevel()) return;
-        officer.element.setAttribute("src", sprites[index]);
+    activeOfficers().forEach(function(officer) {
+        officer.element.setAttribute('src', officer.sprite);
         hideElements(officer.counter);
     });
 }
 
 export function molotovCounter() {
-    state.officers.forEach(function(officer, index) {
-        if (index === 1 && !isTwoPolicemenLevel()) return;
+    activeOfficers().forEach(function(officer) {
         objectAt(
             officer.counter,
             [
@@ -167,11 +163,9 @@ export function timeUp() {
 }
 
 function burnDaPolice() {
-    const fireSprites = ['img/guarda_fogo_02.gif', 'img/juiz_fogo.gif'];
     const subtitles = [Subtitle1, Subtitle2];
-    state.officers.forEach(function(officer, index) {
-        if (index === 1 && !isTwoPolicemenLevel()) return;
-        officer.element.setAttribute('src', fireSprites[index]);
+    activeOfficers().forEach(function(officer, index) {
+        officer.element.setAttribute('src', officer.fireSprite);
         showFeedback(officer.element, subtitles[index], "queimando");
     });
 }
@@ -209,7 +203,7 @@ export function startPressedTimer() {
 
 export function show2ndPoliceman() {
     if (state.molotovTime > 0) {
-        state.officers[1].element.setAttribute('src', 'img/juiz_fogo.gif');
+        state.officers[1].element.setAttribute('src', state.officers[1].fireSprite);
     }
     officer2StartPos();
     objectAt(state.officers[1].element, state.officers[1].pos);

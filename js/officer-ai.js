@@ -1,13 +1,18 @@
 import { state } from './state.js';
 import { TWOPOLICEMENLEVEL } from './constants.js';
-import { mirrorObj } from './display.js';
 
 export function isTwoPolicemenLevel() {
     return (state.currLevel >= TWOPOLICEMENLEVEL);
 }
 
+// Officer 0 always chases; officer 1 only once the second officer level is reached.
+export function activeOfficers() {
+    return state.officers.slice(0, isTwoPolicemenLevel() ? 2 : 1);
+}
+
+// Moves the officer one step towards the thief and returns the horizontal
+// direction it moved in ('left' or 'right'), or undefined if it moved vertically.
 export function nextOfficerPos(whichOfficer, scale) {
-    const officer = state.officers[whichOfficer].element;
     const relativePositions = getRelativePositions(whichOfficer);
     const limit = state.MAPSIZE - state.CHARSIZE;
     const moveRate = state.officers[whichOfficer].moveRate * scale;
@@ -15,16 +20,15 @@ export function nextOfficerPos(whichOfficer, scale) {
         let nextVal;
         switch (relativePositions[0]) {
             case 'right':
-                mirrorObj(officer, '-1');
                 nextVal = state.officers[whichOfficer].pos[0] + moveRate;
                 if (nextVal > limit) nextVal = limit;
                 state.officers[whichOfficer].pos[0] = nextVal;
-                break;
+                return 'right';
             case 'left':
-                mirrorObj(officer, '1');
                 nextVal = state.officers[whichOfficer].pos[0] - moveRate;
                 if (nextVal < 0) nextVal = 0;
                 state.officers[whichOfficer].pos[0] = nextVal;
+                return 'left';
         }
         return;
     }
@@ -73,9 +77,12 @@ function getTargetVerRelPos(officer) {
     return 'same';
 }
 
+// Officer 0 closes the biggest gap first; officer 1 deliberately does the
+// opposite (closes the smallest gap first), so the two flank the thief instead
+// of stacking on the same path. Equal gaps are broken at random.
 function movingAxis(officer) {
-    const diffX = getAbsoluteDiff(state.officers[officer].pos[0], state.thiefPosArr[0]),
-        diffY = getAbsoluteDiff(state.officers[officer].pos[1], state.thiefPosArr[1]);
+    const diffX = Math.abs(state.officers[officer].pos[0] - state.thiefPosArr[0]),
+        diffY = Math.abs(state.officers[officer].pos[1] - state.thiefPosArr[1]);
     if (diffX != diffY) {
         if (officer == 0) {
             if (diffX > diffY)
@@ -91,8 +98,4 @@ function movingAxis(officer) {
     if (Math.floor((Math.random() * 2) + 1) == 1)
         return 'horizontal';
     return 'vertical';
-}
-
-function getAbsoluteDiff(firstObjCoord, secondObjCoord) {
-    return Math.abs(firstObjCoord - secondObjCoord);
 }
