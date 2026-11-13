@@ -38,7 +38,9 @@ function gotClock() {
 }
 
 function gotMolotov() {
+    if (state.isMolotovThrown) return;
     if (reached(state.thiefPosArr, state.CHARSIZE, state.molotovPos, state.ITEMSIZE)) {
+        state.isMolotovThrown = true;
         state.molotovTime = MOLOTOVPAUSE;
         molotovFeedback();
     }

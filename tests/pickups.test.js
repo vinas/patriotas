@@ -79,6 +79,15 @@ describe('molotov', () => {
         expect(game.state.isMolotovVisible).toBe(false);
     });
 
+    it('is thrown only once per catch', () => {
+        const before = game.state.bombSound.playCount;
+
+        catchItem(game, 'molotov');
+        advance(3000);
+
+        expect(game.state.bombSound.playCount - before).toBe(1);
+    });
+
     it('sets both officers on fire when officer 1 is on the map too', () => {
         reachLevel(game, 3);
 

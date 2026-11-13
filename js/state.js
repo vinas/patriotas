@@ -50,6 +50,7 @@ export const state = {
     isMolotovVisible: undefined,
     isBombVisible: undefined,
     isBombThrown: false,
+    isMolotovThrown: false,
     thiefMoveRate: undefined,
     currLevel: undefined,
     time: undefined,

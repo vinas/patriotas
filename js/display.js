@@ -241,6 +241,7 @@ export function molotov() {
     state.molotovPos = randomCoords();
     displayItem(state.Molotov, state.molotovPos);
     state.isMolotovVisible = true;
+    state.isMolotovThrown = false;
 }
 
 export function molotovFeedback() {

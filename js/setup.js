@@ -80,6 +80,7 @@ export function clearGameValues() {
     state.isMolotovVisible = false;
     state.isBombVisible = false;
     state.isBombThrown = false;
+    state.isMolotovThrown = false;
     state.currLevel = 1;
     state.points = 0;
     state.molotovTime = 0;
