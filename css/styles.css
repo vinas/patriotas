@@ -16,6 +16,8 @@ html, body {
 }
 
 body {
+	margin: 0;
+	width: 100%;
 	font-family: Silkscreen;
 	overflow: hidden;
 	overflow-x: hidden;

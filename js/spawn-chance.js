@@ -1,17 +1,17 @@
 import { state } from './state.js';
 
-export function sortBomb() {
-    if ((!state.isBombVisible) && (areChancesAmong(5)))
-        return 'bomb';
-    if ((state.isBombVisible) && (areChancesAmong(10)))
-        return 'hideBomb';
-    return false;
+export function rollBombAppears() {
+    return (!state.isBombVisible) && rollPercent(5);
 }
 
-export function sortMolotov() {
-    return (areChancesAmong(10));
+export function rollBombVanishes() {
+    return state.isBombVisible && rollPercent(10);
 }
 
-function areChancesAmong(percetage) {
-    return (Math.floor((Math.random() * 100) + 1) <= percetage);
+export function rollMolotov() {
+    return (rollPercent(10));
+}
+
+function rollPercent(percentage) {
+    return (Math.floor((Math.random() * 100) + 1) <= percentage);
 }

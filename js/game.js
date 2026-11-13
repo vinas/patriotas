@@ -1,44 +1,40 @@
 import { state } from './state.js';
-import { POINTUNITY, STANDGAMEREFRESHRATE, MAX_FRAME_SCALE, DISPLAYCLOCKAT, TWOPOLICEMENLEVEL, PTSTOCHANGELEVEL } from './constants.js';
-import { setVisualElements, setAll, resetAllValues, loadContent, clearGameValues } from './setup.js';
+import { POINTS_PER_MONEY, BASE_FRAME_MS, MAX_FRAME_SCALE, LOW_TIME_WARNING, CLOCK_APPEARS_AT, SECOND_OFFICER_LEVEL, POINTS_PER_LEVEL } from './constants.js';
+import { cacheDomElements, installFocusHandlers, resetAllValues, loadAssets, clearGameValues } from './setup.js';
 import { resizeMapAndItems } from './resizer.js';
-import { loadControlsHandlers } from './controls.js';
+import { registerControls } from './controls.js';
 import {
-    hideGameValues, startButton, hideInGameElements, relocateCharacters, showInGameElements,
-    money, gameInfo, updatePointsDisplay, flash, clock, restorePolicemen, molotov, hideMolotov,
-    molotovCounter, updateDifficultyDisplay, setNewBackground, show2ndPoliceman, hideOfficer2,
-    busted, timeUp, bomb, hideBomb
+    hideGameValues, showStartButton, hideInGameElements, relocateCharacters, showInGameElements,
+    spawnMoney, resetHud, updatePointsDisplay, flash, spawnClock, restorePolicemen, spawnMolotov, hideMolotov,
+    showFreezeCounters, updateDifficultyDisplay, setNewBackground, show2ndPoliceman, hideOfficer2,
+    showTimeUpScreen, spawnBomb, hideBomb
 } from './display.js';
 import { moveItAll, changePoliceMoveRate } from './motion.js';
 import { checkGotItem, checkGotBusted } from './events.js';
-import { sortBomb, sortMolotov } from './spawn-chance.js';
-import { formattedDateTime } from './date-utils.js';
+import { rollBombAppears, rollBombVanishes, rollMolotov } from './spawn-chance.js';
 
 let lastFrameTime;
 
-const endGameActions = { busted, timeUp };
-const bombActions = { bomb, hideBomb };
-
 export function init() {
-    setVisualElements();
+    cacheDomElements();
     resizeMapAndItems();
-    setAll();
-    loadControlsHandlers();
-    loadContent();
+    installFocusHandlers();
+    registerControls();
+    loadAssets();
     requestAnimationFrame(gameLoop);
     gameClock();
 }
 
-export function endGame(reason) {
+// showEndScreen is the display function for the way the game ended (showBustedScreen or showTimeUpScreen).
+export function endGame(showEndScreen) {
     state.gameOn = false;
     state.fastTheme.pause();
     state.slowTheme.pause();
-    saveGameScores();
     state.endGameSound.currentTime = 0;
     state.endGameSound.play();
-    endGameActions[reason]();
+    showEndScreen();
     hideGameValues();
-    startButton();
+    showStartButton();
     clearGameValues();
 }
 
@@ -47,10 +43,11 @@ export function resetGame() {
     hideInGameElements();
     relocateCharacters();
     showInGameElements();
-    money();
-    gameInfo();
+    spawnMoney();
+    resetHud();
     state.loadingTheme.pause();
     state.endGameSound.pause();
+    state.fastTheme.pause();
     state.fastTheme.currentTime = 0;
     state.slowTheme.currentTime = 0;
     state.loadingTheme.currentTime = 18;
@@ -59,7 +56,7 @@ export function resetGame() {
 }
 
 export function scorePoints() {
-    state.points = state.points + POINTUNITY;
+    state.points = state.points + POINTS_PER_MONEY;
     updatePointsDisplay();
     handleLevelChange();
 }
@@ -67,17 +64,17 @@ export function scorePoints() {
 export function changeLevel(delta) {
     state.currLevel = state.currLevel + delta;
     changePoliceMoveRate();
-    handleTwoPolicemenTransition(delta);
+    syncSecondOfficerAndMusic(delta);
 }
 
-/**** PRIVATE METHODS ****/
+/**** Private helpers ****/
 
 function gameLoop(timestamp) {
     if (lastFrameTime === undefined) lastFrameTime = timestamp;
     const elapsed = timestamp - lastFrameTime;
     lastFrameTime = timestamp;
     if (state.gameOn) {
-        const scale = Math.min(elapsed / STANDGAMEREFRESHRATE, MAX_FRAME_SCALE);
+        const scale = Math.min(elapsed / BASE_FRAME_MS, MAX_FRAME_SCALE);
         moveItAll(scale);
         checkGotItem();
         checkGotBusted();
@@ -88,11 +85,11 @@ function gameLoop(timestamp) {
 function gameClock() {
     if (state.gameOn) {
         if (state.time < 0) {
-            endGame("timeUp");
+            endGame(showTimeUpScreen);
             return;
         }
-        state.Time.innerHTML = state.time
-        if (state.time <= 3) flash(state.Time);
+        state.timeEl.innerHTML = state.time
+        if (state.time <= LOW_TIME_WARNING) flash(state.timeEl);
         handleDisplayableItems();
         state.time = state.time - 1;
     }
@@ -106,8 +103,8 @@ function handleDisplayableItems() {
 }
 
 function handleClock() {
-    if ((state.time == DISPLAYCLOCKAT) && (!state.isClockVisible)) {
-        clock();
+    if ((state.time == CLOCK_APPEARS_AT) && (!state.isClockVisible)) {
+        spawnClock();
     }
 }
 
@@ -118,20 +115,19 @@ function handleMolotov() {
 }
 
 function handleMolotovDisplay() {
-    if (sortMolotov()) {
-        if (!state.isMolotovVisible) {
-            molotov();
-            return ;
+    if (rollMolotov()) {
+        if (state.isMolotovVisible) {
+            hideMolotov();
+        } else {
+            spawnMolotov();
         }
-        hideMolotov();
-        return;
     }
 }
 
 function handleMolotovTime() {
     if (state.molotovTime > 1) {
         state.molotovTime = state.molotovTime - 1;
-        molotovCounter();
+        showFreezeCounters();
         return;
     }
     state.molotovTime = 0;
@@ -139,42 +135,34 @@ function handleMolotovTime() {
 
 function handleBombDisplay() {
     if (state.currLevel > 1) {
-        const action = sortBomb();
-        if (action)
-            bombActions[action]();
+        if (rollBombAppears()) spawnBomb();
+        else if (rollBombVanishes()) hideBomb();
     }
 }
 
 function handleLevelChange() {
-    if (isLevelChange()) {
-        state.lastChangedLevel = state.points;
+    if (shouldLevelUp()) {
+        state.pointsAtLastLevelUp = state.points;
         changeLevel(1);
         updateDifficultyDisplay();
         setNewBackground();
     }
 }
 
-function handleTwoPolicemenTransition(delta) {
-    if (delta > 0 && state.currLevel == TWOPOLICEMENLEVEL) {
+function syncSecondOfficerAndMusic(delta) {
+    if (delta > 0 && state.currLevel == SECOND_OFFICER_LEVEL) {
         state.slowTheme.pause();
         state.fastTheme.play();
         show2ndPoliceman();
         return;
     }
-    if (delta < 0 && state.currLevel < TWOPOLICEMENLEVEL) {
+    if (delta < 0 && state.currLevel < SECOND_OFFICER_LEVEL) {
         state.fastTheme.pause();
         state.slowTheme.play();
         hideOfficer2();
     }
 }
 
-function saveGameScores() {
-    state.user.lastScore = state.points;
-    state.user.lastScoreDateTime = formattedDateTime();
-    state.user.gameId = 1;
-    //$.post('/api/Games/saveLastScore', user);
-}
-
-function isLevelChange() {
-    return ((state.points != 0) && (state.points >= (state.lastChangedLevel + PTSTOCHANGELEVEL)));
+function shouldLevelUp() {
+    return (state.points >= (state.pointsAtLastLevelUp + POINTS_PER_LEVEL));
 }

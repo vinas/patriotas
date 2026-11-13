@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { bootGame, shutdown, startGame, byId, swipe } from './helpers/game.js';
+import { bootGame, shutdown, startGame, byId, swipe, reachLevel, pressKey, frame } from './helpers/game.js';
 
 const themes = (state) => [state.slowTheme, state.fastTheme, state.loadingTheme];
 
@@ -48,5 +48,47 @@ describe('music', () => {
         byId('musicToggle').click();
 
         expect(game.state.pressedKey).toBe(false);
+    });
+
+    describe('when the player leaves the tab and comes back', () => {
+        const leaveAndReturn = () => {
+            window.dispatchEvent(new Event('blur'));
+            window.dispatchEvent(new Event('focus'));
+        };
+
+        it('pauses all music while the tab is not focused', () => {
+            window.dispatchEvent(new Event('blur'));
+
+            themes(game.state).forEach((theme) => expect(theme.paused).toBe(true));
+        });
+
+        it('resumes the slow theme at level 1', () => {
+            leaveAndReturn();
+
+            expect(game.state.slowTheme.paused).toBe(false);
+            expect(game.state.fastTheme.paused).toBe(true);
+        });
+
+        it('resumes the fast theme once the second officer is on the map', () => {
+            reachLevel(game, 3);
+            expect(game.state.fastTheme.paused).toBe(false);
+
+            leaveAndReturn();
+
+            expect(game.state.fastTheme.paused).toBe(false);
+            expect(game.state.slowTheme.paused).toBe(true);
+        });
+    });
+
+    it('restarting with Enter at a high level leaves only the slow theme playing', () => {
+        reachLevel(game, 3);
+        expect(game.state.fastTheme.paused).toBe(false);
+
+        pressKey('Enter');
+        frame();
+
+        expect(game.state.currLevel).toBe(1);
+        expect(game.state.fastTheme.paused).toBe(true);
+        expect(game.state.slowTheme.paused).toBe(false);
     });
 });

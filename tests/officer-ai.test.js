@@ -21,7 +21,7 @@ describe('officer 0 chase behaviour', () => {
         ['up', [200, 300], [190, 40], 1, -1],
         ['down', [200, 50], [190, 300], 1, 1]
     ])('moves %s when the thief is much further away on that axis', (_, officer, thief, axis, sign) => {
-        game.state.thiefPosArr = [...thief];
+        game.state.thiefPos = [...thief];
         placeOfficer(game, 0, officer);
 
         advance(160);
@@ -32,7 +32,7 @@ describe('officer 0 chase behaviour', () => {
     });
 
     it('keeps closing the biggest gap first before touching the smaller one', () => {
-        game.state.thiefPosArr = [100, 250];
+        game.state.thiefPos = [100, 250];
         placeOfficer(game, 0, [300, 300]); // gap: 200 horizontal, 50 vertical
 
         advance(2000);
@@ -44,7 +44,7 @@ describe('officer 0 chase behaviour', () => {
     });
 
     it('moves at the speed given for the current level', () => {
-        game.state.thiefPosArr = [100, 150];
+        game.state.thiefPos = [100, 150];
         placeOfficer(game, 0, [300, 300]);
         const before = [...game.state.officers[0].pos];
 
@@ -63,7 +63,7 @@ function collectToNextLevel(game) {
 // How far an officer travels per unit of game time, measured by watching it move.
 function measuredSpeed(game, index) {
     const { state } = game;
-    state.thiefPosArr = [100, 150];
+    state.thiefPos = [100, 150];
     placeOfficer(game, 0, [300, 300]);
     placeOfficer(game, 1, [300, 300]);
     const before = [...state.officers[index].pos];
@@ -87,11 +87,11 @@ describe('officer speed as the player levels up', () => {
         reachLevel(game, level);
 
         expect(game.state.currLevel).toBe(level);
-        expect(measuredSpeed(game, 0)).toBeCloseTo(game.state.SPEEDTABLE[level][0], 5);
+        expect(measuredSpeed(game, 0)).toBeCloseTo(game.state.speedTable[level][0], 5);
     });
 
-    // Currently fails on a 390px-wide phone: the speed table adds crossMultiply(1)
-    // for level 2, and that rounds down to 0 below 500px, so level 1 and 2 are equally fast.
+    // Regression: on a 390px-wide phone scaleToMap(1) rounds down to 0, which once made
+    // level 1 and 2 equally fast. The speed table now uses unrounded steps.
     it('officer 0 is faster at level 2 than at level 1', () => {
         const level1 = measuredSpeed(game, 0);
         reachLevel(game, 2);
@@ -157,7 +157,7 @@ describe('officer speed when the level goes down', () => {
 
         const level = game.state.currLevel;
         expect(level).toBeLessThan(4);
-        expect(measuredSpeed(game, 0)).toBeCloseTo(game.state.SPEEDTABLE[level][0], 5);
-        expect(measuredSpeed(game, 1)).toBeCloseTo(game.state.SPEEDTABLE[level][1], 5);
+        expect(measuredSpeed(game, 0)).toBeCloseTo(game.state.speedTable[level][0], 5);
+        expect(measuredSpeed(game, 1)).toBeCloseTo(game.state.speedTable[level][1], 5);
     });
 });

@@ -1,36 +1,31 @@
 export const state = {
-    // Login
-    user: {
-        firstName: 'User'
-    },
-
     // Characters
-    Thief: undefined,
+    thiefEl: undefined,
 
     // Officers
     officers: [
-        { element: null, counter: null, pos: [0, 0], moveRate: 0 },
-        { element: null, counter: null, pos: [0, 0], moveRate: 0 }
+        { element: null, counter: null, pos: [0, 0], moveRate: 0, sprite: 'img/guarda.gif', fireSprite: 'img/guarda_fogo_02.gif' },
+        { element: null, counter: null, pos: [0, 0], moveRate: 0, sprite: 'img/juiz.gif', fireSprite: 'img/juiz_fogo.gif' }
     ],
 
     // Game Items
-    Molotov: undefined,
-    Clock: undefined,
-    Bomb: undefined,
+    molotovEl: undefined,
+    clockEl: undefined,
+    bombEl: undefined,
 
     // Display Items
-    BackgroundImg: undefined,
-    CurrLevel: undefined,
-    Time: undefined,
+    backgroundEl: undefined,
+    levelEl: undefined,
+    timeEl: undefined,
 
-    // Dimentional Constants (reassigned at runtime by resizer.js once actual screen size is known)
-    MAPSIZE: 500,
-    CHARSIZE: 75,
-    ITEMSIZE: 55,
-    CATCHTOLERANCE: 15,
-    CROSSBORDERTOLERANCE: 20,
-    THROWSPEED: 40,
-    SPEEDTABLE: undefined,
+    // Dimensional values (set by resizer.js once the actual screen size is known)
+    mapSize: 0,
+    charSize: 0,
+    itemSize: 0,
+    catchTolerance: 0,
+    crossBorderTolerance: 0,
+    throwSpeed: 0,
+    speedTable: undefined,
 
     // Sounds
     fastTheme: undefined,
@@ -50,14 +45,15 @@ export const state = {
     isMolotovVisible: undefined,
     isBombVisible: undefined,
     isBombThrown: false,
+    isMolotovThrown: false,
     thiefMoveRate: undefined,
     currLevel: undefined,
     time: undefined,
     molotovTime: undefined,
-    lastChangedLevel: undefined,
+    pointsAtLastLevelUp: undefined,
 
     // Game elements' position arrays
-    thiefPosArr: [0, 0],
+    thiefPos: [0, 0],
     moneyPos: [0, 0],
     clockPos: [0, 0],
     molotovPos: [0, 0],

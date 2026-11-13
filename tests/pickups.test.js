@@ -34,8 +34,8 @@ describe('bomb', () => {
         expect(byId('level').innerHTML).toBe(String(game.state.currLevel));
     });
 
-    // Currently fails: the thrown bomb keeps overlapping the thief for several
-    // frames and gotBomb() lowers the level on every one of them (level 3 -> 1).
+    // Regression: the thrown bomb used to keep overlapping the thief for several
+    // frames and gotBomb() lowered the level on every one of them (level 3 -> 1).
     it('lowers the level by exactly one per bomb', () => {
         reachLevel(game, 3);
 
@@ -79,6 +79,15 @@ describe('molotov', () => {
         expect(game.state.isMolotovVisible).toBe(false);
     });
 
+    it('is thrown only once per catch', () => {
+        const before = game.state.bombSound.playCount;
+
+        catchItem(game, 'molotov');
+        advance(3000);
+
+        expect(game.state.bombSound.playCount - before).toBe(1);
+    });
+
     it('sets both officers on fire when officer 1 is on the map too', () => {
         reachLevel(game, 3);
 
@@ -91,7 +100,7 @@ describe('molotov', () => {
 
     it('makes the officers stand still for 3 seconds, then they chase again', () => {
         reachLevel(game, 3);
-        game.state.thiefPosArr = [60, 250];
+        game.state.thiefPos = [60, 250];
         catchItem(game, 'molotov');
         const frozenAt = positions();
 
@@ -148,10 +157,10 @@ describe('clock', () => {
 
     it('does nothing when the thief is not on it', () => {
         const before = game.state.time;
-        game.state.thiefPosArr = [0, 0];
+        game.state.thiefPos = [0, 0];
 
         // spawn it far from the thief without walking onto it
-        game.display.clock();
+        game.display.spawnClock();
         game.state.clockPos = [300, 300];
         frame();
 

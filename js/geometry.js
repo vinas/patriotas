@@ -1,27 +1,29 @@
 import { state } from './state.js';
+import { BASE_MAP_SIZE } from './constants.js';
 
-export function crossMultiply(actual) {
-    return Math.floor(crossMultiplyExact(actual));
+export function scaleToMap(actual) {
+    return Math.floor(scaleToMapExact(actual));
 }
 
 // Same scaling without rounding, for small steps that would otherwise vanish on narrow maps.
-export function crossMultiplyExact(actual) {
-    return (actual / 500) * state.MAPSIZE;
+export function scaleToMapExact(actual) {
+    return (actual / BASE_MAP_SIZE) * state.mapSize;
 }
 
 export function messagePos(objPosArr) {
-    const ninety = crossMultiply(90),
-        thirty = crossMultiply(30);
-    let leftPos = parseInt(objPosArr[0]),
-        topPos = parseInt(objPosArr[1]) + state.CHARSIZE;
-    if ((leftPos + ninety) >= state.MAPSIZE)
-        leftPos = parseInt(objPosArr[0]) - ((leftPos + ninety) - state.MAPSIZE);
-    if ((topPos + thirty) >= state.MAPSIZE)
-        topPos = parseInt(objPosArr[1]) - thirty;
+    const subtitleWidth = scaleToMap(90),
+        subtitleHeight = scaleToMap(30);
+    let leftPos = objPosArr[0],
+        topPos = objPosArr[1] + state.charSize;
+    if ((leftPos + subtitleWidth) >= state.mapSize)
+        leftPos = objPosArr[0] - ((leftPos + subtitleWidth) - state.mapSize);
+    if ((topPos + subtitleHeight) >= state.mapSize)
+        topPos = objPosArr[1] - subtitleHeight;
     return [leftPos, topPos];
 }
 
-export function nextThiefPosition(posArr, movRate, direction) {
+export function moveThiefPosition(posArr, movRate, direction) {
+    if (!direction) return posArr;
     let level;
     switch (direction) {
         case 'left':
@@ -46,8 +48,8 @@ export function nextThiefPosition(posArr, movRate, direction) {
 
 export function randomCoords() {
     return [
-            Math.floor((Math.random() * (state.MAPSIZE - state.ITEMSIZE))),
-            Math.floor((Math.random() * (state.MAPSIZE - state.ITEMSIZE)))
+            Math.floor((Math.random() * (state.mapSize - state.itemSize))),
+            Math.floor((Math.random() * (state.mapSize - state.itemSize)))
         ];
 }
 
@@ -65,9 +67,9 @@ export function reached(hunter, hunterSize, prey, preySize) {
 }
 
 function adjustCrossBorder(pos) {
-    if (pos > state.MAPSIZE)
-        return -state.CROSSBORDERTOLERANCE;
-    if (pos <= (-state.CHARSIZE + state.CROSSBORDERTOLERANCE))
-        return state.MAPSIZE - state.CROSSBORDERTOLERANCE;
+    if (pos > state.mapSize)
+        return -state.crossBorderTolerance;
+    if (pos <= (-state.charSize + state.crossBorderTolerance))
+        return state.mapSize - state.crossBorderTolerance;
     return pos;
 }

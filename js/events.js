@@ -1,12 +1,12 @@
 import { state } from './state.js';
-import { BONUSTIME, MOLOTOVPAUSE } from './constants.js';
+import { MONEY_BONUS_TIME, MOLOTOV_FREEZE_TIME, CLOCK_BONUS_TIME } from './constants.js';
 import { reached } from './geometry.js';
 import { endGame, scorePoints, changeLevel } from './game.js';
-import { flash, money, hideClock, clockFeedback, molotovFeedback, bombFeedback } from './display.js';
-import { isTwoPolicemenLevel } from './officer-ai.js';
+import { flash, spawnMoney, hideClock, showClockBonus, throwMolotov, throwBomb, renderLevel, showBustedScreen } from './display.js';
+import { activeOfficers } from './officer-ai.js';
 
 export function checkGotBusted() {
-    if (state.molotovTime <= 0 && wasThiefCought()) endGame('busted');
+    if (state.molotovTime <= 0 && isThiefCaught()) endGame(showBustedScreen);
 }
 
 export function checkGotItem() {
@@ -20,58 +20,51 @@ export function checkGotItem() {
 }
 
 function gotMoney() {
-    if (reached(state.thiefPosArr, state.CHARSIZE, state.moneyPos, state.ITEMSIZE)) {
+    if (reached(state.thiefPos, state.charSize, state.moneyPos, state.itemSize)) {
         state.coinSound.play();
         scorePoints();
-        state.time = state.time + BONUSTIME;
-        flash(state.Time);
-        money();
+        state.time = state.time + MONEY_BONUS_TIME;
+        flash(state.timeEl);
+        spawnMoney();
     }
 }
 
 function gotClock() {
-    if (reached(state.thiefPosArr, state.CHARSIZE, state.clockPos, state.ITEMSIZE)) {
-        state.time = state.time + 10;
+    if (reached(state.thiefPos, state.charSize, state.clockPos, state.itemSize)) {
+        state.time = state.time + CLOCK_BONUS_TIME;
         hideClock();
-        clockFeedback();
+        showClockBonus();
     }
 }
 
 function gotMolotov() {
-    if (reached(state.thiefPosArr, state.CHARSIZE, state.molotovPos, state.ITEMSIZE)) {
-        state.molotovTime = MOLOTOVPAUSE;
-        molotovFeedback();
+    if (state.isMolotovThrown) return;
+    if (reached(state.thiefPos, state.charSize, state.molotovPos, state.itemSize)) {
+        state.isMolotovThrown = true;
+        state.molotovTime = MOLOTOV_FREEZE_TIME;
+        throwMolotov();
     }
 }
 
 function gotBomb() {
     if (state.isBombThrown) return;
-    if (reached(state.thiefPosArr, state.CHARSIZE, state.bombPos, state.ITEMSIZE)) {
+    if (reached(state.thiefPos, state.charSize, state.bombPos, state.itemSize)) {
         state.isBombThrown = true;
-        bombFeedback();
+        throwBomb();
         if (state.currLevel > 1) {
             changeLevel(-1);
-            state.CurrLevel.innerHTML = state.currLevel;
+            renderLevel();
         }
     }
 }
 
-function wasThiefCought() {
-    return (reached(
-                state.officers[0].pos,
-                (state.CHARSIZE - state.CATCHTOLERANCE),
-                state.thiefPosArr,
-                (state.CHARSIZE - state.CATCHTOLERANCE)
-            )
-        )
-        || (
-            (isTwoPolicemenLevel())
-            && (reached(
-                    state.officers[1].pos,
-                    (state.CHARSIZE - state.CATCHTOLERANCE),
-                    state.thiefPosArr,
-                    (state.CHARSIZE - state.CATCHTOLERANCE)
-                )
-            )
+function isThiefCaught() {
+    return activeOfficers().some(function(officer) {
+        return reached(
+            officer.pos,
+            (state.charSize - state.catchTolerance),
+            state.thiefPos,
+            (state.charSize - state.catchTolerance)
         );
+    });
 }

@@ -1,15 +1,15 @@
-
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
+    <meta charset="utf-8">
     <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
 	<title>The Chase</title>
     <meta content='width=device-width, user-scalable=no, initial-scale=1.0' name='viewport' />
     <link href="css/styles.css" rel="stylesheet">
+    <script type="module" src="js/start-app.js"></script>
 </head>
 
-<body width="100%" style="width: 100%;" topmargin="0" leftmargin="0">
-
-<input type="hidden" name="justOpened" id="justOpened" value="1" />
+<body>
 
 <div id="background" class="background"><img src="img/background_v2.jpg" id="backgroundImage" /></div>
 
@@ -29,7 +29,7 @@
 
 <div id="busted">
     <img id="bustedEndGameImage" src="img/busted_v3.png" alt="You got busted!" />
-    <div class="endGameMessage" id="endGameMessage">Foi mal {user}! =(</div>
+    <div class="endGameMessage" id="endGameMessage"></div>
 </div>
 
 <div id="timeUp">
@@ -82,7 +82,5 @@
 <div class="action" id="actionSubtitle3"></div>
 
 </body>
-
-<script type="module" src="js/start-app.js"></script>
 
 </html>

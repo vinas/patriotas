@@ -1,8 +1,9 @@
 import { state } from './state.js';
+import { CLOCK_BONUS_TIME } from './constants.js';
 import { element, showElements, hideElements } from './dom.js';
 import { randomCoords, messagePos } from './geometry.js';
 import { throwItem } from './motion.js';
-import { isTwoPolicemenLevel, officer2StartPos } from './officer-ai.js';
+import { isTwoPolicemenLevel, activeOfficers, officer2StartPos } from './officer-ai.js';
 
 const Money = element('money'),
     PointsCounter = element('points'),
@@ -17,30 +18,25 @@ export function errorNotMobile() {
     element('background').innerHTML = '<br/><br/>&nbsp;&nbsp;&nbsp;Apenas no celular, no modo retrato!<br/><br/>=(';
 }
 
-export function loadingButton() {
-    hideElements(['resetGame']);
-    showElements('loading');
-}
-
-export function startButton() {
+export function showStartButton() {
     hideElements(['loading', 'musicToggle']);
     showElements('resetGame');
 }
 
-export function bomb() {
+export function spawnBomb() {
     state.bombPos = randomCoords();
-    displayItem(state.Bomb, state.bombPos);
+    displayItem(state.bombEl, state.bombPos);
     state.isBombVisible = true;
     state.isBombThrown = false;
 }
 
-export function bombFeedback() {
-    throwItem(state.Bomb, state.bombPos, state.officers[0].pos, endBombFeedback);
+export function throwBomb() {
+    throwItem(state.bombEl, state.bombPos, state.officers[0].pos, endBombFeedback);
     function endBombFeedback() {
         state.bombSound.play();
         hideBomb();
         flashOfficers();
-        flash(state.CurrLevel);
+        flash(state.levelEl);
         showFeedback(state.officers[0].element, Subtitle1, 'devagar');
         if (isTwoPolicemenLevel()) {
             showFeedback(state.officers[1].element, Subtitle1, 'devagar');
@@ -48,29 +44,29 @@ export function bombFeedback() {
     }
 }
 
-export function busted() {
+export function showBustedScreen() {
     element('endGameMessage').innerHTML = getBustedMessage();
     showElements(Busted);
 }
 
-export function clock() {
+export function spawnClock() {
     state.clockPos = randomCoords();
-    displayItem(state.Clock, state.clockPos);
+    displayItem(state.clockEl, state.clockPos);
     state.isClockVisible = true;
 }
 
-export function clockFeedback() {
+export function showClockBonus() {
     state.clockSound.play();
-    showFeedback(state.Thief, Subtitle3, 'tempo +10');
+    showFeedback(state.thiefEl, Subtitle3, 'tempo +' + CLOCK_BONUS_TIME);
 }
 
-export function gameInfo() {
+export function resetHud() {
     PointsCounter.innerHTML = '0';
-    state.BackgroundImg.setAttribute('src', 'img/background_v2.jpg');
-    state.officers[0].element.setAttribute('src', 'img/guarda.gif');
+    state.backgroundEl.setAttribute('src', 'img/background_v2.jpg');
+    state.officers[0].element.setAttribute('src', state.officers[0].sprite);
     Subtitle1.innerHTML = '';
-    state.CurrLevel.innerHTML = state.currLevel;
-    state.Time.innerHTML = state.time;
+    renderLevel();
+    state.timeEl.innerHTML = state.time;
 }
 
 export function flash(obj, color) {
@@ -91,55 +87,51 @@ export function flash(obj, color) {
 }
 
 function flashOfficers() {
-    state.officers.forEach(function(officer, index) {
-        if (index === 1 && !isTwoPolicemenLevel()) return;
+    activeOfficers().forEach(function(officer) {
         flash(officer.element);
     });
 }
 
 
 
-export function money() {
+export function spawnMoney() {
     state.moneyPos = randomCoords();
     displayItem(Money, state.moneyPos);
 }
 
 export function hideOfficer2() {
     hideElements([state.officers[1].counter, state.officers[1].element]);
-    state.officers[1].element.setAttribute("src", "img/juiz.gif");
+    state.officers[1].element.setAttribute('src', state.officers[1].sprite);
 }
 
-export function objectAt(obj, posArr) {
-    obj.style.left = posArr[0];
-    obj.style.top = posArr[1];
+export function placeElement(obj, posArr) {
+    obj.style.left = posArr[0] + 'px';
+    obj.style.top = posArr[1] + 'px';
 }
 
 export function hideClock()
 {
-    hideElements(state.Clock);
+    hideElements(state.clockEl);
     state.isClockVisible = false;
 }
 
 export function relocateCharacters()
 {
-    objectAt(state.Thief, state.thiefPosArr);
-    objectAt(state.officers[0].element, state.officers[0].pos);
-    objectAt(state.officers[1].element, state.officers[1].pos);
+    placeElement(state.thiefEl, state.thiefPos);
+    placeElement(state.officers[0].element, state.officers[0].pos);
+    placeElement(state.officers[1].element, state.officers[1].pos);
 }
 
 export function restorePolicemen() {
-    const sprites = ['img/guarda.gif', 'img/juiz.gif'];
-    state.officers.forEach(function(officer, index) {
-        if (index === 1 && !isTwoPolicemenLevel()) return;
-        officer.element.setAttribute("src", sprites[index]);
+    activeOfficers().forEach(function(officer) {
+        officer.element.setAttribute('src', officer.sprite);
         hideElements(officer.counter);
     });
 }
 
-export function molotovCounter() {
-    state.officers.forEach(function(officer, index) {
-        if (index === 1 && !isTwoPolicemenLevel()) return;
-        objectAt(
+export function showFreezeCounters() {
+    activeOfficers().forEach(function(officer) {
+        placeElement(
             officer.counter,
             [
                 (officer.pos[0] - 5),
@@ -153,13 +145,17 @@ export function molotovCounter() {
 
 export function hideMolotov()
 {
-    hideElements(state.Molotov);
+    hideElements(state.molotovEl);
     state.isMolotovVisible = false;
 }
 
+export function renderLevel() {
+    state.levelEl.innerHTML = state.currLevel;
+}
+
 export function updateDifficultyDisplay() {
-    state.CurrLevel.innerHTML = state.currLevel;
-    flash(state.CurrLevel);
+    renderLevel();
+    flash(state.levelEl);
 }
 
 export function updatePointsDisplay() {
@@ -167,16 +163,14 @@ export function updatePointsDisplay() {
     flash(PointsCounter);
 }
 
-export function timeUp() {
+export function showTimeUpScreen() {
     showElements(TimeUp);
 }
 
-function burnDaPolice() {
-    const fireSprites = ['img/guarda_fogo_02.gif', 'img/juiz_fogo.gif'];
+function burnOfficers() {
     const subtitles = [Subtitle1, Subtitle2];
-    state.officers.forEach(function(officer, index) {
-        if (index === 1 && !isTwoPolicemenLevel()) return;
-        officer.element.setAttribute('src', fireSprites[index]);
+    activeOfficers().forEach(function(officer, index) {
+        officer.element.setAttribute('src', officer.fireSprite);
         showFeedback(officer.element, subtitles[index], "queimando");
     });
 }
@@ -185,8 +179,8 @@ export function hideInGameElements() {
     hideElements([
         'instructionsBar',
         'presentation',
-        state.Clock,
-        state.Molotov,
+        state.clockEl,
+        state.molotovEl,
         state.officers[0].counter,
         state.officers[1].counter,
         Busted,
@@ -196,12 +190,12 @@ export function hideInGameElements() {
 }
 
 export function showInGameElements() {
-    showElements(['scoreBar', state.Thief, state.officers[0].element, Money, 'musicToggle']);
+    showElements(['scoreBar', state.thiefEl, state.officers[0].element, Money, 'musicToggle']);
     hideElements(['resetGame']);
 }
 
 export function hideGameValues() {
-    hideElements([state.Thief, state.officers[0].element, state.officers[1].element, Money, state.Clock, state.Molotov, state.Bomb, 'musicToggle']);
+    hideElements([state.thiefEl, state.officers[0].element, state.officers[1].element, Money, state.clockEl, state.molotovEl, state.bombEl, 'musicToggle']);
 }
 
 export function startPressedTimer() {
@@ -214,48 +208,48 @@ export function startPressedTimer() {
 
 export function show2ndPoliceman() {
     if (state.molotovTime > 0) {
-        state.officers[1].element.setAttribute('src', 'img/juiz_fogo.gif');
+        state.officers[1].element.setAttribute('src', state.officers[1].fireSprite);
     }
     officer2StartPos();
-    objectAt(state.officers[1].element, state.officers[1].pos);
+    placeElement(state.officers[1].element, state.officers[1].pos);
     showElements(state.officers[1].element);
 }
 
 export function setNewBackground() {
-    state.BackgroundImg.setAttribute(
+    state.backgroundEl.setAttribute(
         "src",
-        "img/"+sortBackground()
+        "img/"+pickBackground()
     );
 }
 
-export function mirrorObj(objeto, escala) {
-    objeto.style.transform = "scaleX("+escala+")";
+export function faceDirection(el, scaleX) {
+    el.style.transform = 'scaleX(' + scaleX + ')';
 }
 
 export function hideBomb() {
-    hideElements(state.Bomb);
+    hideElements(state.bombEl);
     state.isBombVisible = false;
 }
 
-export function molotov() {
+export function spawnMolotov() {
     state.molotovPos = randomCoords();
-    displayItem(state.Molotov, state.molotovPos);
+    displayItem(state.molotovEl, state.molotovPos);
     state.isMolotovVisible = true;
+    state.isMolotovThrown = false;
 }
 
-export function molotovFeedback() {
-    throwItem(state.Molotov, state.molotovPos, state.officers[0].pos, endMolotovFeedback);
+export function throwMolotov() {
+    throwItem(state.molotovEl, state.molotovPos, state.officers[0].pos, endMolotovFeedback);
 
     function endMolotovFeedback()
     {
         state.bombSound.play();
         hideMolotov();
-        burnDaPolice();
+        burnOfficers();
     }
 }
 
-function sortBackground() {
-    let rand;
+function pickBackground() {
     const backgrounds = [
         'bkg_01.jpg',
         'bkg_02.jpg',
@@ -271,10 +265,11 @@ function sortBackground() {
         'bkg_12.jpg',
         'background_v2.jpg'
     ];
-    do {
-        rand = Math.floor(Math.random() * backgrounds.length);
-    } while (state.BackgroundImg.getAttribute("src") == "url(img/"+backgrounds[rand]+")");
-    return backgrounds[rand];
+    const current = state.backgroundEl.getAttribute('src');
+    const candidates = backgrounds.filter(function(name) {
+        return 'img/' + name !== current;
+    });
+    return candidates[Math.floor(Math.random() * candidates.length)];
 }
 
 function showFeedback(refObj, subtitleObj, message) {
@@ -302,21 +297,21 @@ function showFeedback(refObj, subtitleObj, message) {
     {
         objectPosition = getObjectPosition(refObj);
         messagePosition = messagePos(objectPosition);
-        objectAt(subtitleObj, messagePosition);
+        placeElement(subtitleObj, messagePosition);
     }
 }
 
 function displayItem(obj, arrPosition)
 {
-    objectAt(obj, arrPosition);
+    placeElement(obj, arrPosition);
     showElements(obj);
 }
 
 function getObjectPosition(obj)
 {
     return [
-            obj.style.left.replace(new RegExp("px", 'g'), ""),
-            obj.style.top.replace(new RegExp("px", 'g'), "")
+            parseFloat(obj.style.left),
+            parseFloat(obj.style.top)
         ];
 }
 

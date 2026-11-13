@@ -4,39 +4,23 @@ export function element(el) {
 }
 
 export function hideElements(el) {
-    if (isString(el)) {
-        element(el).style.display = 'none';
-        return;
-    }
-    if (Array.isArray(el)) {
-        for (let i = 0; i < el.length; i++) {
-            if (isString(el[i])) {
-                element(el[i]).style.display = 'none';
-                continue;
-            }
-            el[i].style.display = 'none';
-        }
-        return;
-    }
-    el.style.display = 'none';
+    setDisplay(el, 'none');
 }
 
 export function showElements(el) {
-    if (isString(el)) {
-        element(el).style.display = 'block';
-        return;
-    }
+    setDisplay(el, 'block');
+}
+
+// Accepts an id, an element, or an array of either.
+function setDisplay(el, value) {
     if (Array.isArray(el)) {
-        for (let i = 0; i < el.length; i++) {
-            if (isString(el[i])) {
-                element(el[i]).style.display = 'block';
-                continue;
-            }
-            el[i].style.display = 'block';
-        }
+        el.forEach(function(item) {
+            setDisplay(item, value);
+        });
         return;
     }
-    el.style.display = 'block';
+    const target = isString(el) ? element(el) : el;
+    target.style.display = value;
 }
 
 function isString(va) {

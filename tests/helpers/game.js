@@ -11,7 +11,7 @@ export const PHONE = {
 };
 
 // Length of one animation frame in the fake clock, and the movement scale the
-// game derives from it (see gameLoop in js/game.js: elapsed / 40).
+// game derives from it (see gameLoop in js/game.js: elapsed / BASE_FRAME_MS).
 export const FRAME_MS = 16;
 export const FRAME_SCALE = FRAME_MS / 40;
 
@@ -24,6 +24,7 @@ const bodyHtml = new DOMParser()
     .body.innerHTML;
 
 let removeDocumentListeners = () => {};
+let removeWindowListeners = () => {};
 
 /**
  * Loads the real game (index.html markup + js/ modules) in the simulated phone
@@ -32,6 +33,7 @@ let removeDocumentListeners = () => {};
  */
 export async function bootGame() {
     removeDocumentListeners();
+    removeWindowListeners();
     FakeAudio.instances.length = 0;
 
     vi.useFakeTimers({
@@ -60,6 +62,18 @@ export async function bootGame() {
         added.length = 0;
     };
 
+    // Same for window-level listeners (tab focus/blur).
+    const addedToWindow = [];
+    const originalWindowAdd = window.addEventListener.bind(window);
+    vi.spyOn(window, 'addEventListener').mockImplementation((type, listener, options) => {
+        addedToWindow.push([type, listener, options]);
+        originalWindowAdd(type, listener, options);
+    });
+    removeWindowListeners = () => {
+        addedToWindow.forEach(([type, listener, options]) => window.removeEventListener(type, listener, options));
+        addedToWindow.length = 0;
+    };
+
     vi.resetModules();
     await import('../../js/start-app.js');
     document.dispatchEvent(new Event('DOMContentLoaded'));
@@ -74,6 +88,7 @@ export async function bootGame() {
 
 export function shutdown() {
     removeDocumentListeners();
+    removeWindowListeners();
     vi.useRealTimers();
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
@@ -142,14 +157,14 @@ export function swipeDirection(direction) {
  */
 export function collectMoney(game, count = 1) {
     for (let i = 0; i < count; i++) {
-        game.state.thiefPosArr = [...game.state.moneyPos];
+        game.state.thiefPos = [...game.state.moneyPos];
         frame();
     }
 }
 
 /** Plays up to the given level the way a player does: 5 money pickups per level. */
 export function reachLevel(game, level) {
-    collectMoney(game, (level - 1) * game.constants.PTSTOCHANGELEVEL - game.state.points);
+    collectMoney(game, (level - 1) * game.constants.POINTS_PER_LEVEL - game.state.points);
 }
 
 /**
@@ -158,15 +173,15 @@ export function reachLevel(game, level) {
  */
 export function spawnItem(game, kind, pos) {
     const { display, state } = game;
-    display[kind]();
+    display[`spawn${kind[0].toUpperCase() + kind.slice(1)}`]();
     state[`${kind}Pos`] = [...pos];
-    display.objectAt(state[kind[0].toUpperCase() + kind.slice(1)], pos);
+    display.placeElement(state[`${kind}El`], pos);
 }
 
 /** Spawns the item and walks the thief onto it; returns after the frame that picks it up. */
 export function catchItem(game, kind, pos = [60, 250]) {
     spawnItem(game, kind, pos);
-    game.state.thiefPosArr = [...pos];
+    game.state.thiefPos = [...pos];
     frame();
 }
 
