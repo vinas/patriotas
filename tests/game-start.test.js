@@ -13,6 +13,7 @@ describe('the game starts', () => {
         expect(isShown('resetGame')).toBe(true);
         expect(isHidden('musicToggle')).toBe(true);
         expect(isHidden('loading')).toBe(true);
+        expect(isHidden('loadingPercent')).toBe(true);
     });
 
     it('first tap on Start only dismisses the instructions', () => {

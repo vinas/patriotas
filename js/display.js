@@ -22,8 +22,12 @@ export function errorNotMobile() {
 }
 
 export function showStartButton() {
-    hideElements(['loading', 'musicToggle']);
+    hideElements(['loading', 'loadingPercent', 'musicToggle']);
     showElements('resetGame');
+}
+
+export function showLoadProgress(percent) {
+    element('loadingPercent').innerHTML = 'carregando ' + percent + '%';
 }
 
 export function spawnBomb() {

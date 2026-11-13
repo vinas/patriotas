@@ -2,7 +2,7 @@ import { state } from './state.js';
 import { preloadAssets, useLoadedImages, assetUrl } from './assets.js';
 import { START_TIME, THIEF_MOVE_RATE } from './constants.js';
 import { scaleToMap } from './geometry.js';
-import { showStartButton } from './display.js';
+import { showStartButton, showLoadProgress } from './display.js';
 import { changePoliceMoveRate } from './motion.js';
 import { isTwoPolicemenLevel } from './officer-ai.js';
 
@@ -19,7 +19,7 @@ function isPortrait() {
 
 // Downloads every image and sound into memory, then shows the Start button.
 export async function loadAssets() {
-    await preloadAssets();
+    await preloadAssets(showLoadProgress);
     useLoadedImages();
     createSounds();
     showStartButton();

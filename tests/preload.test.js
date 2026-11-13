@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import {
-    bootGame, shutdown, assetsLoaded, startGame, advance, frame, byId, isShown,
+    bootGame, shutdown, assetsLoaded, startGame, advance, frame, byId, isShown, isHidden,
     reachLevel, catchItem, placeOfficer
 } from './helpers/game.js';
 import { inMemoryUrl } from './helpers/fake-assets.js';
@@ -17,6 +17,8 @@ describe('preloading the assets', () => {
             const game = await bootGame({ assets: { gate: release.promise }, waitForAssets: false });
 
             expect(isShown('resetGame')).toBe(false);
+            expect(byId('loadingPercent').style.display).not.toBe('none');
+            expect(byId('loadingPercent').innerHTML).toBe('carregando 0%');
             expect(game.state.loadingTheme).toBeUndefined();
             expect(FakeAudio.instances).toHaveLength(0);
 
@@ -24,7 +26,16 @@ describe('preloading the assets', () => {
             await assetsLoaded();
 
             expect(isShown('resetGame')).toBe(true);
+            expect(isHidden('loadingPercent')).toBe(true);
             expect(game.state.loadingTheme).toBeDefined();
+        });
+
+        it('shows the download percentage', async () => {
+            const game = await bootGame();
+
+            game.display.showLoadProgress(42);
+
+            expect(byId('loadingPercent').innerHTML).toBe('carregando 42%');
         });
 
         it('survives the tab losing and regaining focus', async () => {
