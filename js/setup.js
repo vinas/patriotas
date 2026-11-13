@@ -95,29 +95,24 @@ export function resetAllValues() {
     state.lastChangedLevel = 0;
 }
 
-export function setAll() {
-    focusSettings();
+export function installFocusHandlers() {
+    window.addEventListener('blur', function() {
+        state.fastTheme.pause();
+        state.slowTheme.pause();
+        state.loadingTheme.pause();
+        state.endGameSound.pause();
+    });
 
-    function focusSettings() {
-        window.addEventListener('blur', function() {
-            state.fastTheme.pause();
-            state.slowTheme.pause();
-            state.loadingTheme.pause();
-            state.endGameSound.pause();
-        });
-
-        window.addEventListener('focus', function() {
-            if (state.gameOn) {
-                const levelTheme = isTwoPolicemenLevel() ? state.fastTheme : state.slowTheme;
-                levelTheme.play().catch(function() {});
-                levelTheme.volume = state.musicMuted ? 0 : 1;
-                return;
-            }
-            state.loadingTheme.play().catch(function() {});
-            state.loadingTheme.volume = state.musicMuted ? 0 : 1;
-        });
-    }
-
+    window.addEventListener('focus', function() {
+        if (state.gameOn) {
+            const levelTheme = isTwoPolicemenLevel() ? state.fastTheme : state.slowTheme;
+            levelTheme.play().catch(function() {});
+            levelTheme.volume = state.musicMuted ? 0 : 1;
+            return;
+        }
+        state.loadingTheme.play().catch(function() {});
+        state.loadingTheme.volume = state.musicMuted ? 0 : 1;
+    });
 }
 
 function setCharacters() {

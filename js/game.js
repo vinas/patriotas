@@ -1,6 +1,6 @@
 import { state } from './state.js';
 import { POINTUNITY, STANDGAMEREFRESHRATE, MAX_FRAME_SCALE, DISPLAYCLOCKAT, TWOPOLICEMENLEVEL, PTSTOCHANGELEVEL } from './constants.js';
-import { setVisualElements, setAll, resetAllValues, loadContent, clearGameValues } from './setup.js';
+import { setVisualElements, installFocusHandlers, resetAllValues, loadContent, clearGameValues } from './setup.js';
 import { resizeMapAndItems } from './resizer.js';
 import { loadControlsHandlers } from './controls.js';
 import {
@@ -21,7 +21,7 @@ const bombActions = { bomb, hideBomb };
 export function init() {
     setVisualElements();
     resizeMapAndItems();
-    setAll();
+    installFocusHandlers();
     loadControlsHandlers();
     loadContent();
     requestAnimationFrame(gameLoop);
