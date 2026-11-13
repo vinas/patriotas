@@ -113,6 +113,9 @@ function resizeVisualElements() {
 
     setClassProp('actionButton', 'width', scaleToMap(100)+'px');
     setClassProp('actionButton', 'height', scaleToMap(100)+'px');
+    const loadingPercent = document.getElementById('loadingPercent');
+    loadingPercent.style.width = scaleToMap(100)+'px';
+    loadingPercent.style.fontSize = scaleToMap(12)+'px';
 
     setClassProp('statValue', 'font-size', scaleToMap(26)+'px');
     setClassProp('statValue', 'padding-top', scaleToMap(8)+'px');

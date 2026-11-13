@@ -1,7 +1,8 @@
 import { state } from './state.js';
+import { preloadAssets, useLoadedImages, assetUrl } from './assets.js';
 import { START_TIME, THIEF_MOVE_RATE } from './constants.js';
 import { scaleToMap } from './geometry.js';
-import { showStartButton } from './display.js';
+import { showStartButton, showLoadProgress } from './display.js';
 import { changePoliceMoveRate } from './motion.js';
 import { isTwoPolicemenLevel } from './officer-ai.js';
 
@@ -16,53 +17,22 @@ function isPortrait() {
     return window.innerWidth <= window.innerHeight;
 }
 
-export function loadAssets() {
- const ImgsToPreload = [
-        'img/detalhes.png',
-        'img/start_over.png',
-        'img/guarda_fogo_02.gif',
-        'img/juiz_fogo.gif',
-        'img/background_v2.jpg',
-        'img/bkg_01.jpg',
-        'img/bkg_02.jpg',
-        'img/bkg_03.jpg',
-        'img/bkg_04.jpg',
-        'img/bkg_05.jpg',
-        'img/bkg_06.jpg',
-        'img/bkg_07.jpg',
-        'img/bkg_08.jpg',
-        'img/bkg_09.jpg',
-        'img/bkg_10.jpg',
-        'img/bkg_11.jpg',
-        'img/bkg_12.jpg',
-        'img/busted_v3.png',
-        'img/timeisup_01.png',
-        'img/start.png',
-        'img/molotov_v2.png',
-        'img/money2.png',
-        'img/bomb_v2.png'
-    ];
-    preloadImages(ImgsToPreload);
+// Downloads every image and sound into memory, then shows the Start button.
+export async function loadAssets() {
+    await preloadAssets(showLoadProgress);
+    useLoadedImages();
     createSounds();
     showStartButton();
 }
 
 function createSounds() {
-    state.fastTheme = new Audio('audio/8bit_sparks.mp3');
-    state.slowTheme = new Audio('audio/hino_nacional.mp3');
-    state.endGameSound = new Audio('audio/endGame.mp3');
-    state.loadingTheme = new Audio('audio/hino_independencia.mp3');
-    state.bombSound = new Audio('audio/bomb.mp3');
-    state.clockSound = new Audio('audio/crank-1.mp3');
-    state.coinSound = new Audio('audio/coin1.wav');
-}
-
-function preloadImages(images) {
-    let img;
-    for (let i = 0; i < images.length; i++) {
-        img = new Image();
-        img.src = images[i];
-    }
+    state.fastTheme = new Audio(assetUrl('audio/8bit_sparks.mp3'));
+    state.slowTheme = new Audio(assetUrl('audio/hino_nacional.mp3'));
+    state.endGameSound = new Audio(assetUrl('audio/endGame.mp3'));
+    state.loadingTheme = new Audio(assetUrl('audio/hino_independencia.mp3'));
+    state.bombSound = new Audio(assetUrl('audio/bomb.mp3'));
+    state.clockSound = new Audio(assetUrl('audio/crank-1.mp3'));
+    state.coinSound = new Audio(assetUrl('audio/coin1.wav'));
 }
 
 export function cacheDomElements() {

@@ -212,6 +212,12 @@ body {
 	display: none;
 }
 
+#loadingPercent {
+	font-family: Silkscreen;
+	color: #FFD61F;
+	text-align: center;
+}
+
 #barLeft {
 	float: left;
 	padding-top: 10px;

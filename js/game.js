@@ -15,14 +15,15 @@ import { rollBombAppears, rollBombVanishes, rollMolotov } from './spawn-chance.j
 
 let lastFrameTime;
 
-export function init() {
+export async function init() {
     cacheDomElements();
     resizeMapAndItems();
-    installFocusHandlers();
     registerControls();
-    loadAssets();
     requestAnimationFrame(gameLoop);
     gameClock();
+    // The sounds only exist once everything is downloaded, and the focus handlers use them.
+    await loadAssets();
+    installFocusHandlers();
 }
 
 // showEndScreen is the display function for the way the game ended (showBustedScreen or showTimeUpScreen).

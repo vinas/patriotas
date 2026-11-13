@@ -41,7 +41,8 @@ js/
   constants.js         Tuning constants that are never reassigned (timings, sizes, key codes)
   start-app.js         Entry point — on DOMContentLoaded, checks isMobilePortrait() and kicks off game.init()
 
-  setup.js             Mobile/portrait detection, asset preloading, DOM element binding, reset logic
+  setup.js             Mobile/portrait detection, startup asset loading, DOM element binding, reset logic
+  assets.js            Downloads every image and sound into memory once, up front, and hands out in-memory (blob:) URLs
   resizer.js           Scales the whole UI to the actual screen size (everything is designed at a 500px baseline and scaled via scaleToMap)
   dom.js               Tiny generic show/hide/getElementById helpers, framework-free
 
@@ -62,6 +63,16 @@ js/
 Several module pairs import each other (`display.js`↔`motion.js`, `game.js`↔`events.js`/`controls.js`) — safe in ES modules as long as no module uses another's export at its own top level, only inside functions called later, which holds throughout this codebase.
 
 The `officers` array (in `state.js`) models both police officers as `{ element, counter, pos, moveRate }` objects rather than parallel index-based arrays — officer 0 always exists, officer 1 is conditionally shown once the player reaches a high enough level.
+
+## Asset preloading
+
+Browsers don't reliably keep images and sounds around: audio is streamed in pieces and re-requested when the game rewinds or replays it, and whether a swapped image comes from the cache depends on the server's caching headers. So the game doesn't leave this to the browser. On startup `assets.js` downloads every image and sound once (`fetch`), keeps the files in memory and turns each into a `blob:` URL. The loader and a "carregando NN%" label stay up until everything has arrived, then the Start button appears. From then on the game only uses those in-memory URLs, so it never asks the server for an image or sound again, whatever the caching headers are.
+
+- Every `<img>` already in `index.html` is repointed to its in-memory copy (`useLoadedImages`), and the sounds are created from `assetUrl(...)`.
+- Any code that changes an image's `src` goes through `assetUrl(path)`, which returns the in-memory URL, or the plain path for a file that couldn't be preloaded (that file then loads from the server when needed, and the game still starts).
+- **Adding an image or sound:** add its path to the lists at the top of `js/assets.js`. A test fails if the page or the scripts refer to an `img/` or `audio/` file that isn't in the lists.
+- `img/loader.gif` and the favicon are deliberately not preloaded: they're needed before the preload can start.
+- The first visit downloads about 9 MB (mostly the two anthem MP3s) before Start appears, and that memory is held for the whole session.
 
 ## Testing
 
@@ -87,10 +98,12 @@ What is covered, one file per area in `tests/`:
 | `pickups.test.js` | bomb lowers the level once, molotov burns and freezes the officers for 3s (thrown once), clock adds time |
 | `game-over.test.js` | caught by officer 0, caught by officer 1, time is up |
 | `background.test.js` | a level-up always shows a different background |
+| `assets.test.js` | every image and sound is downloaded once and served from memory; progress; failed downloads fall back to the server URL; the asset list covers everything the game refers to |
+| `preload.test.js` | Start waits for the downloads; sounds and images use the in-memory copies; a whole round (levels, items, game over, restart) makes no new requests |
 | `positions.test.js` | sprite positions are written with `px` units and follow the game state |
 | `resizer.test.js` | sizes are scaled once from the 500px baseline, even if measured again |
 
-`tests/helpers/game.js` boots the game and provides the player-like actions (`startGame`, `pressKey`, `swipeDirection`, `collectMoney`, `catchItem`, `advance`...).
+`tests/helpers/game.js` boots the game and provides the player-like actions (`startGame`, `pressKey`, `swipeDirection`, `collectMoney`, `catchItem`, `advance`...). `tests/helpers/fake-assets.js` replaces `fetch`, `Blob` and `URL.createObjectURL` so the asset preload runs without a network (a file's in-memory URL is just `blob:<its path>`).
 
 ## Assets & credits
 

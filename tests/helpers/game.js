@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { vi } from 'vitest';
 import { FakeAudio } from './fake-audio.js';
+import { installFakeAssets, removeFakeAssets } from './fake-assets.js';
 
 // Phone used for every test: portrait, 390x844, iPhone user agent.
 export const PHONE = {
@@ -30,8 +31,13 @@ let removeWindowListeners = () => {};
  * Loads the real game (index.html markup + js/ modules) in the simulated phone
  * and runs its start-up exactly as a browser would on DOMContentLoaded.
  * Call it from beforeEach; call `shutdown()` from afterEach.
+ *
+ * The asset downloads are faked (see fake-assets.js) and, unless `waitForAssets`
+ * is false, finished before this returns. `assets` tunes the fake network
+ * (failing files, a gate to hold the downloads); the fake fetch is returned as
+ * `fakeFetch` so tests can see what was requested.
  */
-export async function bootGame() {
+export async function bootGame({ assets, waitForAssets = true } = {}) {
     removeDocumentListeners();
     removeWindowListeners();
     FakeAudio.instances.length = 0;
@@ -41,6 +47,7 @@ export async function bootGame() {
     });
     vi.spyOn(Math, 'random').mockReturnValue(NEUTRAL_RANDOM);
     vi.stubGlobal('Audio', FakeAudio);
+    const fakeFetch = installFakeAssets(vi, assets);
 
     Object.defineProperty(window.navigator, 'userAgent', { value: PHONE.userAgent, configurable: true });
     window.innerWidth = PHONE.width;
@@ -77,16 +84,23 @@ export async function bootGame() {
     vi.resetModules();
     await import('../../js/start-app.js');
     document.dispatchEvent(new Event('DOMContentLoaded'));
+    if (waitForAssets) await assetsLoaded();
 
     // The game loop's very first frame has no previous timestamp (elapsed = 0);
     // let it pass so every frame a test advances afterwards is a normal one.
     frame();
 
     const { state } = await import('../../js/state.js');
-    return { state, ...(await loadGameModules()) };
+    return { state, fakeFetch, ...(await loadGameModules()) };
+}
+
+/** Lets the pending (fake) downloads finish. setImmediate is not faked, so it runs after all queued promises. */
+export function assetsLoaded() {
+    return new Promise((resolve) => setImmediate(resolve));
 }
 
 export function shutdown() {
+    removeFakeAssets();
     removeDocumentListeners();
     removeWindowListeners();
     vi.useRealTimers();

@@ -15,12 +15,14 @@ describe('background', () => {
     // Math.random is pinned to 0.5 by the test harness, which would pick bkg_07.jpg
     // out of the 13 backgrounds. Make that the one already on screen.
     it('changes to a different image on level up', () => {
-        byId('backgroundImage').setAttribute('src', 'img/bkg_07.jpg');
+        game.state.currentBackground = 'img/bkg_07.jpg';
 
         reachLevel(game, 2);
 
+        const shown = game.state.currentBackground;
         expect(game.state.currLevel).toBe(2);
-        expect(background()).not.toBe('img/bkg_07.jpg');
-        expect(background()).toMatch(/^img\/(bkg_\d\d|background_v2)\.jpg$/);
+        expect(shown).not.toBe('img/bkg_07.jpg');
+        expect(shown).toMatch(/^img\/(bkg_\d\d|background_v2)\.jpg$/);
+        expect(background()).toContain(shown);
     });
 });
