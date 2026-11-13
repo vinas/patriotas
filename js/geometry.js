@@ -12,12 +12,12 @@ export function crossMultiplyExact(actual) {
 export function messagePos(objPosArr) {
     const ninety = crossMultiply(90),
         thirty = crossMultiply(30);
-    let leftPos = parseInt(objPosArr[0]),
-        topPos = parseInt(objPosArr[1]) + state.CHARSIZE;
+    let leftPos = objPosArr[0],
+        topPos = objPosArr[1] + state.CHARSIZE;
     if ((leftPos + ninety) >= state.MAPSIZE)
-        leftPos = parseInt(objPosArr[0]) - ((leftPos + ninety) - state.MAPSIZE);
+        leftPos = objPosArr[0] - ((leftPos + ninety) - state.MAPSIZE);
     if ((topPos + thirty) >= state.MAPSIZE)
-        topPos = parseInt(objPosArr[1]) - thirty;
+        topPos = objPosArr[1] - thirty;
     return [leftPos, topPos];
 }
 

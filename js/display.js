@@ -110,8 +110,8 @@ export function hideOfficer2() {
 }
 
 export function objectAt(obj, posArr) {
-    obj.style.left = posArr[0];
-    obj.style.top = posArr[1];
+    obj.style.left = posArr[0] + 'px';
+    obj.style.top = posArr[1] + 'px';
 }
 
 export function hideClock()
@@ -316,8 +316,8 @@ function displayItem(obj, arrPosition)
 function getObjectPosition(obj)
 {
     return [
-            obj.style.left.replace(new RegExp("px", 'g'), ""),
-            obj.style.top.replace(new RegExp("px", 'g'), "")
+            parseFloat(obj.style.left),
+            parseFloat(obj.style.top)
         ];
 }
 
