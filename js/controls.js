@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN } from './constants.js';
+import { KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN, SWIPEDISTANCE } from './constants.js';
 import { startPressedTimer } from './display.js';
 import { resetGame } from './game.js';
 import { toggleMusic, handleSounds } from './sounds.js';
@@ -84,6 +84,8 @@ function isControlTarget(target) {
 }
 
 function handleSwipe() {
+    if (pos.up.x === undefined || pos.up.y === undefined) return;
+    if (Math.max(Math.abs(pos.up.x - pos.down.x), Math.abs(pos.up.y - pos.down.y)) < SWIPEDISTANCE) return;
     if (pos.up.time - pos.down.time < 500) {
         if (Math.abs(pos.up.x - pos.down.x) > Math.abs(pos.up.y - pos.down.y)) {
             if (pos.up.x > pos.down.x) {

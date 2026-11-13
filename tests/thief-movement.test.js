@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { bootGame, shutdown, startGame, pressKey, swipeDirection, advance, frame, FRAME_SCALE } from './helpers/game.js';
+import { bootGame, shutdown, startGame, pressKey, swipe, swipeDirection, advance, frame, FRAME_SCALE } from './helpers/game.js';
 
 const START = [200, 200];
 
@@ -23,6 +23,26 @@ describe('playable character movement', () => {
 
     it('stands still until a command is given', () => {
         advance(500);
+
+        expect(game.state.thiefPosArr).toEqual(START);
+    });
+
+    it('a tap without movement does not start the thief moving', () => {
+        const tap = (type) => {
+            const event = new Event(type, { bubbles: true });
+            Object.defineProperty(event, 'touches', { value: [{ clientX: 200, clientY: 300 }] });
+            document.body.dispatchEvent(event);
+        };
+        tap('touchstart');
+        document.body.dispatchEvent(new Event('touchend', { bubbles: true }));
+        advance(200);
+
+        expect(game.state.thiefPosArr).toEqual(START);
+    });
+
+    it('a tiny swipe does not start the thief moving', () => {
+        swipe([200, 300], [203, 302]);
+        advance(200);
 
         expect(game.state.thiefPosArr).toEqual(START);
     });
