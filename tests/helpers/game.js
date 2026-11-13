@@ -135,3 +135,45 @@ const SWIPES = {
 export function swipeDirection(direction) {
     swipe(...SWIPES[direction]);
 }
+
+/**
+ * Makes the thief grab the money `count` times, one animation frame each
+ * (the money reappears at the same spot because Math.random is pinned).
+ */
+export function collectMoney(game, count = 1) {
+    for (let i = 0; i < count; i++) {
+        game.state.thiefPosArr = [...game.state.moneyPos];
+        frame();
+    }
+}
+
+/** Plays up to the given level the way a player does: 5 money pickups per level. */
+export function reachLevel(game, level) {
+    collectMoney(game, (level - 1) * game.constants.PTSTOCHANGELEVEL - game.state.points);
+}
+
+/**
+ * Shows a bomb, molotov or clock on the map at `pos`, using the game's own
+ * spawn function (which normally places it at a random spot).
+ */
+export function spawnItem(game, kind, pos) {
+    const { display, state } = game;
+    display[kind]();
+    state[`${kind}Pos`] = [...pos];
+    display.objectAt(state[kind[0].toUpperCase() + kind.slice(1)], pos);
+}
+
+/** Spawns the item and walks the thief onto it; returns after the frame that picks it up. */
+export function catchItem(game, kind, pos = [60, 250]) {
+    spawnItem(game, kind, pos);
+    game.state.thiefPosArr = [...pos];
+    frame();
+}
+
+/**
+ * Puts an officer where a test needs it. Position arrays are mutated in place by
+ * the game, so always hand it a fresh one.
+ */
+export function placeOfficer(game, index, pos) {
+    game.state.officers[index].pos = [...pos];
+}
