@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { STANDARDTIME, STANDTHIEFMOVRATE } from './constants.js';
+import { START_TIME, THIEF_MOVE_RATE } from './constants.js';
 import { crossMultiply } from './geometry.js';
 import { startButton } from './display.js';
 import { changePoliceMoveRate } from './motion.js';
@@ -86,9 +86,9 @@ export function clearGameValues() {
 export function resetAllValues() {
     clearGameValues();
     setOfficersStartCoords();
-    state.time = STANDARDTIME;
+    state.time = START_TIME;
     state.pressedKey = false;
-    state.thiefMoveRate = crossMultiply(STANDTHIEFMOVRATE);
+    state.thiefMoveRate = crossMultiply(THIEF_MOVE_RATE);
     changePoliceMoveRate();
     state.thiefPosArr[0] = 0;
     state.thiefPosArr[1] = 0;

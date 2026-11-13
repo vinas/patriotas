@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { THROWFRAMERATE, MAX_FRAME_SCALE, KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN } from './constants.js';
+import { THROW_BASE_FRAME_MS, MAX_FRAME_SCALE, KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN } from './constants.js';
 import { inclination, variationRate, setNewThrowItemPos } from './projectile-math.js';
 import { reached, nextThiefPosition } from './geometry.js';
 import { objectAt, mirrorObj } from './display.js';
@@ -23,7 +23,7 @@ export function throwItem(item, itemPos, targetPos, callback) {
         if (lastFrameTime === undefined) lastFrameTime = timestamp;
         const elapsed = timestamp - lastFrameTime;
         lastFrameTime = timestamp;
-        const scale = Math.min(elapsed / THROWFRAMERATE, MAX_FRAME_SCALE);
+        const scale = Math.min(elapsed / THROW_BASE_FRAME_MS, MAX_FRAME_SCALE);
 
         if (!reached(itemPos, state.ITEMSIZE, targetPos, state.CHARSIZE)) {
             itemPos = setNewThrowItemPos(

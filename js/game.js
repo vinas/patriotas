@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { POINTUNITY, STANDGAMEREFRESHRATE, MAX_FRAME_SCALE, LOW_TIME_WARNING, DISPLAYCLOCKAT, TWOPOLICEMENLEVEL, PTSTOCHANGELEVEL } from './constants.js';
+import { POINTS_PER_MONEY, BASE_FRAME_MS, MAX_FRAME_SCALE, LOW_TIME_WARNING, CLOCK_APPEARS_AT, SECOND_OFFICER_LEVEL, POINTS_PER_LEVEL } from './constants.js';
 import { setVisualElements, installFocusHandlers, resetAllValues, loadContent, clearGameValues } from './setup.js';
 import { resizeMapAndItems } from './resizer.js';
 import { loadControlsHandlers } from './controls.js';
@@ -56,7 +56,7 @@ export function resetGame() {
 }
 
 export function scorePoints() {
-    state.points = state.points + POINTUNITY;
+    state.points = state.points + POINTS_PER_MONEY;
     updatePointsDisplay();
     handleLevelChange();
 }
@@ -74,7 +74,7 @@ function gameLoop(timestamp) {
     const elapsed = timestamp - lastFrameTime;
     lastFrameTime = timestamp;
     if (state.gameOn) {
-        const scale = Math.min(elapsed / STANDGAMEREFRESHRATE, MAX_FRAME_SCALE);
+        const scale = Math.min(elapsed / BASE_FRAME_MS, MAX_FRAME_SCALE);
         moveItAll(scale);
         checkGotItem();
         checkGotBusted();
@@ -103,7 +103,7 @@ function handleDisplayableItems() {
 }
 
 function handleClock() {
-    if ((state.time == DISPLAYCLOCKAT) && (!state.isClockVisible)) {
+    if ((state.time == CLOCK_APPEARS_AT) && (!state.isClockVisible)) {
         clock();
     }
 }
@@ -150,13 +150,13 @@ function handleLevelChange() {
 }
 
 function handleTwoPolicemenTransition(delta) {
-    if (delta > 0 && state.currLevel == TWOPOLICEMENLEVEL) {
+    if (delta > 0 && state.currLevel == SECOND_OFFICER_LEVEL) {
         state.slowTheme.pause();
         state.fastTheme.play();
         show2ndPoliceman();
         return;
     }
-    if (delta < 0 && state.currLevel < TWOPOLICEMENLEVEL) {
+    if (delta < 0 && state.currLevel < SECOND_OFFICER_LEVEL) {
         state.fastTheme.pause();
         state.slowTheme.play();
         hideOfficer2();
@@ -164,5 +164,5 @@ function handleTwoPolicemenTransition(delta) {
 }
 
 function isLevelChange() {
-    return (state.points >= (state.lastChangedLevel + PTSTOCHANGELEVEL));
+    return (state.points >= (state.lastChangedLevel + POINTS_PER_LEVEL));
 }

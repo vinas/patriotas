@@ -1,8 +1,8 @@
 import { state } from './state.js';
-import { TWOPOLICEMENLEVEL } from './constants.js';
+import { SECOND_OFFICER_LEVEL } from './constants.js';
 
 export function isTwoPolicemenLevel() {
-    return (state.currLevel >= TWOPOLICEMENLEVEL);
+    return (state.currLevel >= SECOND_OFFICER_LEVEL);
 }
 
 // Officer 0 always chases; officer 1 only once the second officer level is reached.

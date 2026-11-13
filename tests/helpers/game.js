@@ -11,7 +11,7 @@ export const PHONE = {
 };
 
 // Length of one animation frame in the fake clock, and the movement scale the
-// game derives from it (see gameLoop in js/game.js: elapsed / 40).
+// game derives from it (see gameLoop in js/game.js: elapsed / BASE_FRAME_MS).
 export const FRAME_MS = 16;
 export const FRAME_SCALE = FRAME_MS / 40;
 
@@ -164,7 +164,7 @@ export function collectMoney(game, count = 1) {
 
 /** Plays up to the given level the way a player does: 5 money pickups per level. */
 export function reachLevel(game, level) {
-    collectMoney(game, (level - 1) * game.constants.PTSTOCHANGELEVEL - game.state.points);
+    collectMoney(game, (level - 1) * game.constants.POINTS_PER_LEVEL - game.state.points);
 }
 
 /**

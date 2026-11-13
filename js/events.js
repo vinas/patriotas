@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { BONUSTIME, MOLOTOVPAUSE, CLOCK_BONUS_TIME } from './constants.js';
+import { MONEY_BONUS_TIME, MOLOTOV_FREEZE_TIME, CLOCK_BONUS_TIME } from './constants.js';
 import { reached } from './geometry.js';
 import { endGame, scorePoints, changeLevel } from './game.js';
 import { flash, money, hideClock, clockFeedback, molotovFeedback, bombFeedback, renderLevel, busted } from './display.js';
@@ -23,7 +23,7 @@ function gotMoney() {
     if (reached(state.thiefPosArr, state.CHARSIZE, state.moneyPos, state.ITEMSIZE)) {
         state.coinSound.play();
         scorePoints();
-        state.time = state.time + BONUSTIME;
+        state.time = state.time + MONEY_BONUS_TIME;
         flash(state.Time);
         money();
     }
@@ -41,7 +41,7 @@ function gotMolotov() {
     if (state.isMolotovThrown) return;
     if (reached(state.thiefPosArr, state.CHARSIZE, state.molotovPos, state.ITEMSIZE)) {
         state.isMolotovThrown = true;
-        state.molotovTime = MOLOTOVPAUSE;
+        state.molotovTime = MOLOTOV_FREEZE_TIME;
         molotovFeedback();
     }
 }

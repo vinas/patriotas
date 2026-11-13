@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { MINMOVINGRATE } from './constants.js';
+import { MIN_OFFICER_MOVE_RATE } from './constants.js';
 import { crossMultiply, crossMultiplyExact } from './geometry.js';
 
 export function resizeMapAndItems() {
@@ -15,7 +15,7 @@ function calculateMeasurements() {
     state.CHARSIZE = crossMultiply(state.CHARSIZE);
     state.ITEMSIZE = crossMultiply(state.ITEMSIZE);
     state.THROWSPEED = crossMultiply(state.THROWSPEED);
-    state.SPEEDTABLE = setSpeedTable(crossMultiply(MINMOVINGRATE));
+    state.SPEEDTABLE = setSpeedTable(crossMultiply(MIN_OFFICER_MOVE_RATE));
 }
 
 function setSpeedTable(minMoveRate) {
