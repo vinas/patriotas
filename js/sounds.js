@@ -1,25 +1,14 @@
 import { state } from './state.js';
 
 export function handleSounds() {
-    loadSounEvents();
+    loadSoundEvents();
     prepareSounds();
 }
 
-function loadSounEvents() {
-    state.loadingTheme.addEventListener('ended', function() {
-        this.currentTime = 0;
-        this.play();
-    }, false);
-
-    state.fastTheme.addEventListener('ended', function() {
-        this.currentTime = 0;
-        this.play();
-    }, false);
-
-    state.slowTheme.addEventListener('ended', function() {
-        this.currentTime = 0;
-        this.play();
-    }, false);
+function loadSoundEvents() {
+    [state.loadingTheme, state.fastTheme, state.slowTheme].forEach(function(theme) {
+        theme.loop = true;
+    });
 
     state.endGameSound.addEventListener('ended', function() {
         state.loadingTheme.currentTime = Math.floor(Math.random() * 2) == 1 ? 18 : 49;
@@ -27,44 +16,38 @@ function loadSounEvents() {
     });
 }
 
+// Browsers only let sounds play after a user tap: play and pause every one of
+// them silently during the first tap so they can be started freely later.
 function prepareSounds() {
-    state.fastTheme.volume = 0;
-    state.slowTheme.volume = 0;
-    state.endGameSound.volume = 0;
-    state.loadingTheme.volume = 0;
-    state.bombSound.volume = 0;
-    state.clockSound.volume = 0;
-    state.coinSound.volume = 0;
+    const themes = [state.fastTheme, state.slowTheme, state.loadingTheme];
+    const effects = [state.endGameSound, state.bombSound, state.clockSound, state.coinSound];
+    const all = themes.concat(effects);
 
+    all.forEach(function(sound) {
+        sound.volume = 0;
+    });
+
+    // The loading theme keeps playing; everything else is paused again right away.
     state.loadingTheme.play();
-    state.fastTheme.play();
-    state.fastTheme.pause();
-    state.slowTheme.play();
-    state.slowTheme.pause();
-    state.endGameSound.play();
-    state.endGameSound.pause();
-    state.bombSound.play();
-    state.bombSound.pause();
-    state.clockSound.play();
-    state.clockSound.pause();
-    state.coinSound.play();
-    state.coinSound.pause();
+    all.filter(function(sound) {
+        return sound !== state.loadingTheme;
+    }).forEach(function(sound) {
+        sound.play();
+        sound.pause();
+    });
 
-    state.fastTheme.currentTime = 0;
-    state.slowTheme.currentTime = 0;
-    state.endGameSound.currentTime = 0;
+    all.forEach(function(sound) {
+        sound.currentTime = 0;
+    });
     state.loadingTheme.currentTime = 18;
-    state.bombSound.currentTime = 0;
-    state.clockSound.currentTime = 0;
-    state.coinSound.currentTime = 0;
 
-    state.fastTheme.volume = state.musicMuted ? 0 : 1;
-    state.slowTheme.volume = state.musicMuted ? 0 : 1;
-    state.endGameSound.volume = 1;
-    state.loadingTheme.volume = state.musicMuted ? 0 : 1;
-    state.bombSound.volume = 1;
-    state.clockSound.volume = 1;
-    state.coinSound.volume = 1;
+    const themeVolume = state.musicMuted ? 0 : 1;
+    themes.forEach(function(theme) {
+        theme.volume = themeVolume;
+    });
+    effects.forEach(function(effect) {
+        effect.volume = 1;
+    });
 }
 
 export function toggleMusic() {
