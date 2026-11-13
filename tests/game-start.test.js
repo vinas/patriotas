@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { bootGame, shutdown, startGame, advance, byId, isShown, isHidden } from './helpers/game.js';
+import { inMemoryUrl } from './helpers/fake-assets.js';
 
 describe('the game starts', () => {
     let game;
@@ -18,7 +19,7 @@ describe('the game starts', () => {
         byId('resetGame').click();
 
         expect(game.state.gameOn).toBe(false);
-        expect(byId('presentationImage').getAttribute('src')).toBe('img/detalhes.png');
+        expect(byId('presentationImage').getAttribute('src')).toBe(inMemoryUrl('img/detalhes.png'));
     });
 
     it('second tap on Start begins a round: level 1, 0 points, thief and officer 0 on the map', () => {
