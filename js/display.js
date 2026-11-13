@@ -13,6 +13,8 @@ const Money = element('money'),
     Busted = element('busted'),
     TimeUp = element('timeUp');
 
+const DEFAULT_BACKGROUND = 'img/background_v2.jpg';
+
 export function errorNotMobile() {
     hideElements(['barraInfo', 'presentation']);
     element('background').innerHTML = '<br/><br/>&nbsp;&nbsp;&nbsp;Apenas no celular, no modo retrato!<br/><br/>=(';
@@ -62,7 +64,7 @@ export function showClockBonus() {
 
 export function resetHud() {
     PointsCounter.innerHTML = '0';
-    state.backgroundEl.setAttribute('src', 'img/background_v2.jpg');
+    showBackground(DEFAULT_BACKGROUND);
     state.officers[0].element.setAttribute('src', state.officers[0].sprite);
     Subtitle1.innerHTML = '';
     renderLevel();
@@ -216,10 +218,7 @@ export function show2ndPoliceman() {
 }
 
 export function setNewBackground() {
-    state.backgroundEl.setAttribute(
-        "src",
-        "img/"+pickBackground()
-    );
+    showBackground('img/' + pickBackground());
 }
 
 export function faceDirection(el, scaleX) {
@@ -249,6 +248,11 @@ export function throwMolotov() {
     }
 }
 
+function showBackground(path) {
+    state.currentBackground = path;
+    state.backgroundEl.setAttribute('src', path);
+}
+
 function pickBackground() {
     const backgrounds = [
         'bkg_01.jpg',
@@ -265,9 +269,8 @@ function pickBackground() {
         'bkg_12.jpg',
         'background_v2.jpg'
     ];
-    const current = state.backgroundEl.getAttribute('src');
     const candidates = backgrounds.filter(function(name) {
-        return 'img/' + name !== current;
+        return 'img/' + name !== state.currentBackground;
     });
     return candidates[Math.floor(Math.random() * candidates.length)];
 }
