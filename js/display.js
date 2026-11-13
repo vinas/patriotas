@@ -1,4 +1,5 @@
 import { state } from './state.js';
+import { assetUrl } from './assets.js';
 import { CLOCK_BONUS_TIME } from './constants.js';
 import { element, showElements, hideElements } from './dom.js';
 import { randomCoords, messagePos } from './geometry.js';
@@ -65,7 +66,7 @@ export function showClockBonus() {
 export function resetHud() {
     PointsCounter.innerHTML = '0';
     showBackground(DEFAULT_BACKGROUND);
-    state.officers[0].element.setAttribute('src', state.officers[0].sprite);
+    state.officers[0].element.setAttribute('src', assetUrl(state.officers[0].sprite));
     Subtitle1.innerHTML = '';
     renderLevel();
     state.timeEl.innerHTML = state.time;
@@ -103,7 +104,7 @@ export function spawnMoney() {
 
 export function hideOfficer2() {
     hideElements([state.officers[1].counter, state.officers[1].element]);
-    state.officers[1].element.setAttribute('src', state.officers[1].sprite);
+    state.officers[1].element.setAttribute('src', assetUrl(state.officers[1].sprite));
 }
 
 export function placeElement(obj, posArr) {
@@ -126,7 +127,7 @@ export function relocateCharacters()
 
 export function restorePolicemen() {
     activeOfficers().forEach(function(officer) {
-        officer.element.setAttribute('src', officer.sprite);
+        officer.element.setAttribute('src', assetUrl(officer.sprite));
         hideElements(officer.counter);
     });
 }
@@ -172,7 +173,7 @@ export function showTimeUpScreen() {
 function burnOfficers() {
     const subtitles = [Subtitle1, Subtitle2];
     activeOfficers().forEach(function(officer, index) {
-        officer.element.setAttribute('src', officer.fireSprite);
+        officer.element.setAttribute('src', assetUrl(officer.fireSprite));
         showFeedback(officer.element, subtitles[index], "queimando");
     });
 }
@@ -202,15 +203,15 @@ export function hideGameValues() {
 
 export function startPressedTimer() {
     const button = element('resetGame');
-    button.setAttribute('src', 'img/start_over.png');
+    button.setAttribute('src', assetUrl('img/start_over.png'));
     setTimeout(function() {
-       button.setAttribute('src', 'img/start.png');
+       button.setAttribute('src', assetUrl('img/start.png'));
     }, 300);
 }
 
 export function show2ndPoliceman() {
     if (state.molotovTime > 0) {
-        state.officers[1].element.setAttribute('src', state.officers[1].fireSprite);
+        state.officers[1].element.setAttribute('src', assetUrl(state.officers[1].fireSprite));
     }
     officer2StartPos();
     placeElement(state.officers[1].element, state.officers[1].pos);
@@ -250,7 +251,7 @@ export function throwMolotov() {
 
 function showBackground(path) {
     state.currentBackground = path;
-    state.backgroundEl.setAttribute('src', path);
+    state.backgroundEl.setAttribute('src', assetUrl(path));
 }
 
 function pickBackground() {

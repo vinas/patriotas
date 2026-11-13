@@ -1,4 +1,5 @@
 import { state } from './state.js';
+import { assetUrl } from './assets.js';
 import { KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_ENTER, MIN_SWIPE_DISTANCE } from './constants.js';
 import { startPressedTimer } from './display.js';
 import { resetGame } from './game.js';
@@ -27,7 +28,7 @@ function handleStartButton() {
         if (!introShown) {
             unlockAudio();
             document.getElementById('presentationImage')
-                .setAttribute('src', 'img/detalhes.png');
+                .setAttribute('src', assetUrl('img/detalhes.png'));
             introShown = true;
             return;
         }
