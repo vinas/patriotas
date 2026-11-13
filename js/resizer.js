@@ -1,6 +1,6 @@
 import { state } from './state.js';
 import { MINMOVINGRATE } from './constants.js';
-import { crossMultiply } from './geometry.js';
+import { crossMultiply, crossMultiplyExact } from './geometry.js';
 
 export function resizeMapAndItems() {
     calculateMeasurements();
@@ -19,26 +19,27 @@ function calculateMeasurements() {
 }
 
 function setSpeedTable(minMoveRate) {
+    const step = crossMultiplyExact;
     return [
         [0, 0],
         [minMoveRate, 0],
-        [minMoveRate + crossMultiply(1), 0],
-        [minMoveRate + crossMultiply(2), minMoveRate],
-        [minMoveRate + crossMultiply(3), minMoveRate],
-        [minMoveRate + crossMultiply(3), minMoveRate + crossMultiply(1)],
-        [minMoveRate + crossMultiply(3), minMoveRate + crossMultiply(2)],
-        [minMoveRate + crossMultiply(3), minMoveRate + crossMultiply(3)],
-        [minMoveRate + crossMultiply(4), minMoveRate + crossMultiply(3)],
-        [minMoveRate + crossMultiply(4), minMoveRate + crossMultiply(4)],
-        [minMoveRate + crossMultiply(5), minMoveRate + crossMultiply(4)],
-        [minMoveRate + crossMultiply(5), minMoveRate + crossMultiply(5)],
-        [minMoveRate + crossMultiply(6), minMoveRate + crossMultiply(5)],
-        [minMoveRate + crossMultiply(6), minMoveRate + crossMultiply(6)],
-        [minMoveRate + crossMultiply(7), minMoveRate + crossMultiply(6)],
-        [minMoveRate + crossMultiply(7), minMoveRate + crossMultiply(7)],
-        [minMoveRate + crossMultiply(8), minMoveRate + crossMultiply(7)],
-        [minMoveRate + crossMultiply(8), minMoveRate + crossMultiply(8)],
-        [minMoveRate + crossMultiply(9), minMoveRate + crossMultiply(8)]
+        [minMoveRate + step(1), 0],
+        [minMoveRate + step(2), minMoveRate],
+        [minMoveRate + step(3), minMoveRate],
+        [minMoveRate + step(3), minMoveRate + step(1)],
+        [minMoveRate + step(3), minMoveRate + step(2)],
+        [minMoveRate + step(3), minMoveRate + step(3)],
+        [minMoveRate + step(4), minMoveRate + step(3)],
+        [minMoveRate + step(4), minMoveRate + step(4)],
+        [minMoveRate + step(5), minMoveRate + step(4)],
+        [minMoveRate + step(5), minMoveRate + step(5)],
+        [minMoveRate + step(6), minMoveRate + step(5)],
+        [minMoveRate + step(6), minMoveRate + step(6)],
+        [minMoveRate + step(7), minMoveRate + step(6)],
+        [minMoveRate + step(7), minMoveRate + step(7)],
+        [minMoveRate + step(8), minMoveRate + step(7)],
+        [minMoveRate + step(8), minMoveRate + step(8)],
+        [minMoveRate + step(9), minMoveRate + step(8)]
     ];
 }
 
