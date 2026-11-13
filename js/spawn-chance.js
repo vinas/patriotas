@@ -1,11 +1,11 @@
 import { state } from './state.js';
 
-export function sortBomb() {
-    if ((!state.isBombVisible) && (areChancesAmong(5)))
-        return 'bomb';
-    if ((state.isBombVisible) && (areChancesAmong(10)))
-        return 'hideBomb';
-    return false;
+export function sortBombAppears() {
+    return (!state.isBombVisible) && areChancesAmong(5);
+}
+
+export function sortBombVanishes() {
+    return state.isBombVisible && areChancesAmong(10);
 }
 
 export function sortMolotov() {

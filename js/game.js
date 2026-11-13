@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { POINTUNITY, STANDGAMEREFRESHRATE, MAX_FRAME_SCALE, DISPLAYCLOCKAT, TWOPOLICEMENLEVEL, PTSTOCHANGELEVEL } from './constants.js';
+import { POINTUNITY, STANDGAMEREFRESHRATE, MAX_FRAME_SCALE, LOW_TIME_WARNING, DISPLAYCLOCKAT, TWOPOLICEMENLEVEL, PTSTOCHANGELEVEL } from './constants.js';
 import { setVisualElements, installFocusHandlers, resetAllValues, loadContent, clearGameValues } from './setup.js';
 import { resizeMapAndItems } from './resizer.js';
 import { loadControlsHandlers } from './controls.js';
@@ -7,16 +7,13 @@ import {
     hideGameValues, startButton, hideInGameElements, relocateCharacters, showInGameElements,
     money, gameInfo, updatePointsDisplay, flash, clock, restorePolicemen, molotov, hideMolotov,
     molotovCounter, updateDifficultyDisplay, setNewBackground, show2ndPoliceman, hideOfficer2,
-    busted, timeUp, bomb, hideBomb
+    timeUp, bomb, hideBomb
 } from './display.js';
 import { moveItAll, changePoliceMoveRate } from './motion.js';
 import { checkGotItem, checkGotBusted } from './events.js';
-import { sortBomb, sortMolotov } from './spawn-chance.js';
+import { sortBombAppears, sortBombVanishes, sortMolotov } from './spawn-chance.js';
 
 let lastFrameTime;
-
-const endGameActions = { busted, timeUp };
-const bombActions = { bomb, hideBomb };
 
 export function init() {
     setVisualElements();
@@ -28,13 +25,14 @@ export function init() {
     gameClock();
 }
 
-export function endGame(reason) {
+// showEndScreen is the display function for the way the game ended (busted or timeUp).
+export function endGame(showEndScreen) {
     state.gameOn = false;
     state.fastTheme.pause();
     state.slowTheme.pause();
     state.endGameSound.currentTime = 0;
     state.endGameSound.play();
-    endGameActions[reason]();
+    showEndScreen();
     hideGameValues();
     startButton();
     clearGameValues();
@@ -87,11 +85,11 @@ function gameLoop(timestamp) {
 function gameClock() {
     if (state.gameOn) {
         if (state.time < 0) {
-            endGame("timeUp");
+            endGame(timeUp);
             return;
         }
         state.Time.innerHTML = state.time
-        if (state.time <= 3) flash(state.Time);
+        if (state.time <= LOW_TIME_WARNING) flash(state.Time);
         handleDisplayableItems();
         state.time = state.time - 1;
     }
@@ -137,9 +135,8 @@ function handleMolotovTime() {
 
 function handleBombDisplay() {
     if (state.currLevel > 1) {
-        const action = sortBomb();
-        if (action)
-            bombActions[action]();
+        if (sortBombAppears()) bomb();
+        else if (sortBombVanishes()) hideBomb();
     }
 }
 

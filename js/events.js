@@ -1,12 +1,12 @@
 import { state } from './state.js';
-import { BONUSTIME, MOLOTOVPAUSE } from './constants.js';
+import { BONUSTIME, MOLOTOVPAUSE, CLOCK_BONUS_TIME } from './constants.js';
 import { reached } from './geometry.js';
 import { endGame, scorePoints, changeLevel } from './game.js';
-import { flash, money, hideClock, clockFeedback, molotovFeedback, bombFeedback } from './display.js';
+import { flash, money, hideClock, clockFeedback, molotovFeedback, bombFeedback, renderLevel, busted } from './display.js';
 import { activeOfficers } from './officer-ai.js';
 
 export function checkGotBusted() {
-    if (state.molotovTime <= 0 && wasThiefCought()) endGame('busted');
+    if (state.molotovTime <= 0 && wasThiefCought()) endGame(busted);
 }
 
 export function checkGotItem() {
@@ -31,7 +31,7 @@ function gotMoney() {
 
 function gotClock() {
     if (reached(state.thiefPosArr, state.CHARSIZE, state.clockPos, state.ITEMSIZE)) {
-        state.time = state.time + 10;
+        state.time = state.time + CLOCK_BONUS_TIME;
         hideClock();
         clockFeedback();
     }
@@ -53,7 +53,7 @@ function gotBomb() {
         bombFeedback();
         if (state.currLevel > 1) {
             changeLevel(-1);
-            state.CurrLevel.innerHTML = state.currLevel;
+            renderLevel();
         }
     }
 }

@@ -1,4 +1,5 @@
 import { state } from './state.js';
+import { CLOCK_BONUS_TIME } from './constants.js';
 import { element, showElements, hideElements } from './dom.js';
 import { randomCoords, messagePos } from './geometry.js';
 import { throwItem } from './motion.js';
@@ -56,7 +57,7 @@ export function clock() {
 
 export function clockFeedback() {
     state.clockSound.play();
-    showFeedback(state.Thief, Subtitle3, 'tempo +10');
+    showFeedback(state.Thief, Subtitle3, 'tempo +' + CLOCK_BONUS_TIME);
 }
 
 export function gameInfo() {
@@ -64,7 +65,7 @@ export function gameInfo() {
     state.BackgroundImg.setAttribute('src', 'img/background_v2.jpg');
     state.officers[0].element.setAttribute('src', state.officers[0].sprite);
     Subtitle1.innerHTML = '';
-    state.CurrLevel.innerHTML = state.currLevel;
+    renderLevel();
     state.Time.innerHTML = state.time;
 }
 
@@ -148,8 +149,12 @@ export function hideMolotov()
     state.isMolotovVisible = false;
 }
 
-export function updateDifficultyDisplay() {
+export function renderLevel() {
     state.CurrLevel.innerHTML = state.currLevel;
+}
+
+export function updateDifficultyDisplay() {
+    renderLevel();
     flash(state.CurrLevel);
 }
 

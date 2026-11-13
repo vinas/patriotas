@@ -11,7 +11,10 @@ export const STANDARDTIME = 20,
     STANDGAMEREFRESHRATE = 40,
     SWIPEDISTANCE = 20,
     THROWFRAMERATE = 10,
-    MAX_FRAME_SCALE = 5;
+    MAX_FRAME_SCALE = 5,
+    CLOCK_BONUS_TIME = 10,
+    LOW_TIME_WARNING = 3,
+    BASE_MAP_SIZE = 500;
 
 // Key codes
 export const KEY_LEFT = 'ArrowLeft',

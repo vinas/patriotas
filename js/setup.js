@@ -2,6 +2,7 @@ import { state } from './state.js';
 import { STANDARDTIME, STANDTHIEFMOVRATE } from './constants.js';
 import { crossMultiply } from './geometry.js';
 import { startButton } from './display.js';
+import { changePoliceMoveRate } from './motion.js';
 import { isTwoPolicemenLevel } from './officer-ai.js';
 
 export function isMobile() {
@@ -88,8 +89,7 @@ export function resetAllValues() {
     state.time = STANDARDTIME;
     state.pressedKey = false;
     state.thiefMoveRate = crossMultiply(STANDTHIEFMOVRATE);
-    state.officers[0].moveRate = state.SPEEDTABLE[1][0];
-    state.officers[1].moveRate = state.SPEEDTABLE[1][1];
+    changePoliceMoveRate();
     state.thiefPosArr[0] = 0;
     state.thiefPosArr[1] = 0;
     state.lastChangedLevel = 0;
