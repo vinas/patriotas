@@ -17,7 +17,7 @@ The game deliberately only runs on **mobile devices in portrait orientation** �
 
 ## Running it
 
-There's no build step, no dependencies, no `package.json`. It's a static site — but the JS is loaded as native ES modules (`<script type="module">`), which browsers refuse to load over `file://` (CORS). You need a local static server:
+There's no build step and the game has no runtime dependencies (the `package.json` only exists for the test tooling, see [Testing](#testing)). It's a static site — but the JS is loaded as native ES modules (`<script type="module">`), which browsers refuse to load over `file://` (CORS). You need a local static server:
 
 ```bash
 # from the project root, any static file server works, e.g.:
@@ -33,6 +33,7 @@ The JS is native ES modules (`import`/`export`, no bundler) loaded via a single 
 ```
 index.html            Page structure, single module <script> tag, asset markup
 css/styles.css         All styling, including the pixel-font @font-face declarations
+tests/                 Automated tests (Vitest + jsdom) and their helpers
 font/, img/, audio/    Static assets (Silkscreen font, sprites/backgrounds, sound effects)
 
 js/
@@ -62,6 +63,37 @@ js/
 Several module pairs import each other (`display.js`↔`officer-ai.js`, `display.js`↔`motion.js`, `game.js`↔`motion.js`/`events.js`/`controls.js`) — safe in ES modules as long as no module uses another's export at its own top level, only inside functions called later, which holds throughout this codebase.
 
 The `officers` array (in `state.js`) models both police officers as `{ element, counter, pos, moveRate }` objects rather than parallel index-based arrays — officer 0 always exists, officer 1 is conditionally shown once the player reaches a high enough level.
+
+## Testing
+
+The main game rules are covered by automated tests that run the real `js/` modules and `index.html` markup in a simulated phone (390x844, portrait, iPhone user agent) using [Vitest](https://vitest.dev) and jsdom. Audio is replaced by a recorder and time is faked, so the whole suite runs in a couple of seconds and never needs a browser or a server.
+
+```bash
+npm install     # once, installs the dev-only test tooling
+npm test        # run the suite once
+npm run test:watch
+```
+
+Requires Node 20 or newer (jsdom is pinned to 26 because 27 needs Node 22.12+).
+
+What is covered, one file per area in `tests/`:
+
+| File | Rules |
+| --- | --- |
+| `game-start.test.js` | the game starts (Start button, instructions, round begins, countdown) |
+| `music.test.js` | music can be muted and unmuted |
+| `thief-movement.test.js` | thief moves up/down/left/right by keyboard and swipe; leaving the map reappears on the opposite side |
+| `officer-ai.test.js` | officer 0 chases along the axis with the biggest gap; speed per level, up and down |
+| `second-officer.test.js` | officer 1 appears at level 3 and disappears below it |
+| `pickups.test.js` | bomb lowers the level, molotov burns and freezes the officers for 3s, clock adds time |
+| `game-over.test.js` | caught by officer 0, caught by officer 1, time is up |
+
+`tests/helpers/game.js` boots the game and provides the player-like actions (`startGame`, `pressKey`, `swipeDirection`, `collectMoney`, `catchItem`, `advance`...).
+
+Some tests describe rules the game does not currently honour and therefore fail on purpose; they are commented in the test files:
+
+- officer 0 is not faster at level 2 than at level 1 on a 390px-wide phone (`crossMultiply(1)` rounds down to 0);
+- one bomb lowers the level by more than one, because the thrown bomb keeps overlapping the thief for several frames.
 
 ## Assets & credits
 
