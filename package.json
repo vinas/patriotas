@@ -1,0 +1,14 @@
+{
+  "name": "patriotas",
+  "private": true,
+  "type": "module",
+  "description": "Patriotas (The Chase) - a mobile arcade game. package.json exists only for the test tooling; the game itself has no build step.",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0",
+    "vitest": "^4.1.12"
+  }
+}
