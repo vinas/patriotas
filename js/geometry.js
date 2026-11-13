@@ -22,6 +22,7 @@ export function messagePos(objPosArr) {
 }
 
 export function nextThiefPosition(posArr, movRate, direction) {
+    if (!direction) return posArr;
     let level;
     switch (direction) {
         case 'left':

@@ -27,6 +27,12 @@ describe('playable character movement', () => {
         expect(game.state.thiefPosArr).toEqual(START);
     });
 
+    it('keeps its position array clean while idle', () => {
+        advance(200);
+
+        expect(Object.keys(game.state.thiefPosArr)).toEqual(['0', '1']);
+    });
+
     it('a tap without movement does not start the thief moving', () => {
         const tap = (type) => {
             const event = new Event(type, { bubbles: true });
