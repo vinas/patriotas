@@ -18,12 +18,12 @@ describe('sprite positions on the page', () => {
     });
 
     it('the thief on the page follows the thief in the game', () => {
-        game.state.thiefPosArr = [100, 100];
+        game.state.thiefPos = [100, 100];
         pressKey('ArrowRight');
         advance(200);
 
-        expect(game.state.thiefPosArr[0]).toBeGreaterThan(100);
-        expect(parseFloat(byId('thief').style.left)).toBeCloseTo(game.state.thiefPosArr[0], 5);
-        expect(parseFloat(byId('thief').style.top)).toBeCloseTo(game.state.thiefPosArr[1], 5);
+        expect(game.state.thiefPos[0]).toBeGreaterThan(100);
+        expect(parseFloat(byId('thief').style.left)).toBeCloseTo(game.state.thiefPos[0], 5);
+        expect(parseFloat(byId('thief').style.top)).toBeCloseTo(game.state.thiefPos[1], 5);
     });
 });

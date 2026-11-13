@@ -90,9 +90,9 @@ export function resetAllValues() {
     state.pressedKey = false;
     state.thiefMoveRate = crossMultiply(THIEF_MOVE_RATE);
     changePoliceMoveRate();
-    state.thiefPosArr[0] = 0;
-    state.thiefPosArr[1] = 0;
-    state.lastChangedLevel = 0;
+    state.thiefPos[0] = 0;
+    state.thiefPos[1] = 0;
+    state.pointsAtLastLevelUp = 0;
 }
 
 export function installFocusHandlers() {
@@ -116,28 +116,28 @@ export function installFocusHandlers() {
 }
 
 function setCharacters() {
-    state.Thief = document.getElementById('thief');
+    state.thiefEl = document.getElementById('thief');
     state.officers[0].element = document.getElementById('officer1');
     state.officers[1].element = document.getElementById('officer2');
 }
 
 function setGameItems() {
-    state.Molotov = document.getElementById('molotov');
-    state.Clock = document.getElementById('clock');
-    state.Bomb = document.getElementById('bomb');
+    state.molotovEl = document.getElementById('molotov');
+    state.clockEl = document.getElementById('clock');
+    state.bombEl = document.getElementById('bomb');
     state.officers[0].counter = document.getElementById('counter1');
     state.officers[1].counter = document.getElementById('counter2');
 }
 
 function setDisplayItems() {
-    state.BackgroundImg = document.getElementById('backgroundImage');
-    state.CurrLevel = document.getElementById('level');
-    state.Time = document.getElementById('time');
+    state.backgroundEl = document.getElementById('backgroundImage');
+    state.levelEl = document.getElementById('level');
+    state.timeEl = document.getElementById('time');
 }
 
 function setOfficersStartCoords()
 {
-    const coord = state.MAPSIZE - state.CHARSIZE;
+    const coord = state.mapSize - state.charSize;
     state.officers[0].pos[0] = coord;
     state.officers[0].pos[1] = coord;
     state.officers[1].pos[0] = coord;

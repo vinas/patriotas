@@ -7,17 +7,17 @@ export function crossMultiply(actual) {
 
 // Same scaling without rounding, for small steps that would otherwise vanish on narrow maps.
 export function crossMultiplyExact(actual) {
-    return (actual / BASE_MAP_SIZE) * state.MAPSIZE;
+    return (actual / BASE_MAP_SIZE) * state.mapSize;
 }
 
 export function messagePos(objPosArr) {
     const ninety = crossMultiply(90),
         thirty = crossMultiply(30);
     let leftPos = objPosArr[0],
-        topPos = objPosArr[1] + state.CHARSIZE;
-    if ((leftPos + ninety) >= state.MAPSIZE)
-        leftPos = objPosArr[0] - ((leftPos + ninety) - state.MAPSIZE);
-    if ((topPos + thirty) >= state.MAPSIZE)
+        topPos = objPosArr[1] + state.charSize;
+    if ((leftPos + ninety) >= state.mapSize)
+        leftPos = objPosArr[0] - ((leftPos + ninety) - state.mapSize);
+    if ((topPos + thirty) >= state.mapSize)
         topPos = objPosArr[1] - thirty;
     return [leftPos, topPos];
 }
@@ -48,8 +48,8 @@ export function nextThiefPosition(posArr, movRate, direction) {
 
 export function randomCoords() {
     return [
-            Math.floor((Math.random() * (state.MAPSIZE - state.ITEMSIZE))),
-            Math.floor((Math.random() * (state.MAPSIZE - state.ITEMSIZE)))
+            Math.floor((Math.random() * (state.mapSize - state.itemSize))),
+            Math.floor((Math.random() * (state.mapSize - state.itemSize)))
         ];
 }
 
@@ -67,9 +67,9 @@ export function reached(hunter, hunterSize, prey, preySize) {
 }
 
 function adjustCrossBorder(pos) {
-    if (pos > state.MAPSIZE)
-        return -state.CROSSBORDERTOLERANCE;
-    if (pos <= (-state.CHARSIZE + state.CROSSBORDERTOLERANCE))
-        return state.MAPSIZE - state.CROSSBORDERTOLERANCE;
+    if (pos > state.mapSize)
+        return -state.crossBorderTolerance;
+    if (pos <= (-state.charSize + state.crossBorderTolerance))
+        return state.mapSize - state.crossBorderTolerance;
     return pos;
 }

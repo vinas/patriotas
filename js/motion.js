@@ -14,7 +14,7 @@ export function throwItem(item, itemPos, targetPos, callback) {
     const shooterPosX = itemPos[0],
         shooterPosY = itemPos[1],
         itemInclination = inclination(itemPos, targetPos),
-        itemVariationRate = variationRate(state.THROWSPEED, itemInclination);
+        itemVariationRate = variationRate(state.throwSpeed, itemInclination);
     let lastFrameTime;
 
     requestAnimationFrame(moveItem);
@@ -25,7 +25,7 @@ export function throwItem(item, itemPos, targetPos, callback) {
         lastFrameTime = timestamp;
         const scale = Math.min(elapsed / THROW_BASE_FRAME_MS, MAX_FRAME_SCALE);
 
-        if (!reached(itemPos, state.ITEMSIZE, targetPos, state.CHARSIZE)) {
+        if (!reached(itemPos, state.itemSize, targetPos, state.charSize)) {
             itemPos = setNewThrowItemPos(
                     shooterPosX,
                     shooterPosY,
@@ -43,19 +43,19 @@ export function throwItem(item, itemPos, targetPos, callback) {
 }
 
 export function changePoliceMoveRate() {
-    state.officers[0].moveRate = state.SPEEDTABLE[state.currLevel][0];
-    state.officers[1].moveRate = state.SPEEDTABLE[state.currLevel][1];
+    state.officers[0].moveRate = state.speedTable[state.currLevel][0];
+    state.officers[1].moveRate = state.speedTable[state.currLevel][1];
 }
 
 function moveThief(scale) {
     const direction = getDirection();
     setThiefHorDirection(direction);
-    state.thiefPosArr = nextThiefPosition(
-            state.thiefPosArr,
+    state.thiefPos = nextThiefPosition(
+            state.thiefPos,
             state.thiefMoveRate * scale,
             direction
         );
-    objectAt(state.Thief, state.thiefPosArr);
+    objectAt(state.thiefEl, state.thiefPos);
 }
 
 function movePolice(scale) {
@@ -77,10 +77,10 @@ function moveOfficer(whichOfficer, scale) {
 function setThiefHorDirection(direction) {
     switch (direction) {
         case 'left':
-            mirrorObj(state.Thief, '1');
+            mirrorObj(state.thiefEl, '1');
             break;
         case 'right':
-            mirrorObj(state.Thief, '-1');
+            mirrorObj(state.thiefEl, '-1');
             break;
     }
 }

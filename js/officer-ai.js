@@ -14,7 +14,7 @@ export function activeOfficers() {
 // direction it moved in ('left' or 'right'), or undefined if it moved vertically.
 export function nextOfficerPos(whichOfficer, scale) {
     const relativePositions = getRelativePositions(whichOfficer);
-    const limit = state.MAPSIZE - state.CHARSIZE;
+    const limit = state.mapSize - state.charSize;
     const moveRate = state.officers[whichOfficer].moveRate * scale;
     if (movingAxis(whichOfficer) == 'horizontal') {
         let nextVal;
@@ -48,10 +48,10 @@ export function nextOfficerPos(whichOfficer, scale) {
 }
 
 export function officer2StartPos() {
-    const midMap = state.MAPSIZE / 2,
-        tolerance = state.MAPSIZE - state.CHARSIZE;
-    state.officers[1].pos[0] = (state.thiefPosArr[0] >= midMap) ? 0 : tolerance;
-    state.officers[1].pos[1] = (state.thiefPosArr[1] >= midMap) ? 0 : tolerance;
+    const midMap = state.mapSize / 2,
+        tolerance = state.mapSize - state.charSize;
+    state.officers[1].pos[0] = (state.thiefPos[0] >= midMap) ? 0 : tolerance;
+    state.officers[1].pos[1] = (state.thiefPos[1] >= midMap) ? 0 : tolerance;
 }
 
 function getRelativePositions(officer) {
@@ -62,17 +62,17 @@ function getRelativePositions(officer) {
 }
 
 function getTargetHorRelPos(officer) {
-    if (state.officers[officer].pos[0] > state.thiefPosArr[0])
+    if (state.officers[officer].pos[0] > state.thiefPos[0])
         return 'left';
-    if (state.officers[officer].pos[0] < state.thiefPosArr[0])
+    if (state.officers[officer].pos[0] < state.thiefPos[0])
         return 'right';
     return 'same';
 }
 
 function getTargetVerRelPos(officer) {
-    if (state.officers[officer].pos[1] > state.thiefPosArr[1])
+    if (state.officers[officer].pos[1] > state.thiefPos[1])
        return 'up';
-    if (state.officers[officer].pos[1] < state.thiefPosArr[1])
+    if (state.officers[officer].pos[1] < state.thiefPos[1])
         return 'down';
     return 'same';
 }
@@ -81,8 +81,8 @@ function getTargetVerRelPos(officer) {
 // opposite (closes the smallest gap first), so the two flank the thief instead
 // of stacking on the same path. Equal gaps are broken at random.
 function movingAxis(officer) {
-    const diffX = Math.abs(state.officers[officer].pos[0] - state.thiefPosArr[0]),
-        diffY = Math.abs(state.officers[officer].pos[1] - state.thiefPosArr[1]);
+    const diffX = Math.abs(state.officers[officer].pos[0] - state.thiefPos[0]),
+        diffY = Math.abs(state.officers[officer].pos[1] - state.thiefPos[1]);
     if (diffX != diffY) {
         if (officer == 0) {
             if (diffX > diffY)

@@ -25,18 +25,18 @@ export function startButton() {
 
 export function bomb() {
     state.bombPos = randomCoords();
-    displayItem(state.Bomb, state.bombPos);
+    displayItem(state.bombEl, state.bombPos);
     state.isBombVisible = true;
     state.isBombThrown = false;
 }
 
 export function bombFeedback() {
-    throwItem(state.Bomb, state.bombPos, state.officers[0].pos, endBombFeedback);
+    throwItem(state.bombEl, state.bombPos, state.officers[0].pos, endBombFeedback);
     function endBombFeedback() {
         state.bombSound.play();
         hideBomb();
         flashOfficers();
-        flash(state.CurrLevel);
+        flash(state.levelEl);
         showFeedback(state.officers[0].element, Subtitle1, 'devagar');
         if (isTwoPolicemenLevel()) {
             showFeedback(state.officers[1].element, Subtitle1, 'devagar');
@@ -51,22 +51,22 @@ export function busted() {
 
 export function clock() {
     state.clockPos = randomCoords();
-    displayItem(state.Clock, state.clockPos);
+    displayItem(state.clockEl, state.clockPos);
     state.isClockVisible = true;
 }
 
 export function clockFeedback() {
     state.clockSound.play();
-    showFeedback(state.Thief, Subtitle3, 'tempo +' + CLOCK_BONUS_TIME);
+    showFeedback(state.thiefEl, Subtitle3, 'tempo +' + CLOCK_BONUS_TIME);
 }
 
 export function gameInfo() {
     PointsCounter.innerHTML = '0';
-    state.BackgroundImg.setAttribute('src', 'img/background_v2.jpg');
+    state.backgroundEl.setAttribute('src', 'img/background_v2.jpg');
     state.officers[0].element.setAttribute('src', state.officers[0].sprite);
     Subtitle1.innerHTML = '';
     renderLevel();
-    state.Time.innerHTML = state.time;
+    state.timeEl.innerHTML = state.time;
 }
 
 export function flash(obj, color) {
@@ -111,13 +111,13 @@ export function objectAt(obj, posArr) {
 
 export function hideClock()
 {
-    hideElements(state.Clock);
+    hideElements(state.clockEl);
     state.isClockVisible = false;
 }
 
 export function relocateCharacters()
 {
-    objectAt(state.Thief, state.thiefPosArr);
+    objectAt(state.thiefEl, state.thiefPos);
     objectAt(state.officers[0].element, state.officers[0].pos);
     objectAt(state.officers[1].element, state.officers[1].pos);
 }
@@ -145,17 +145,17 @@ export function molotovCounter() {
 
 export function hideMolotov()
 {
-    hideElements(state.Molotov);
+    hideElements(state.molotovEl);
     state.isMolotovVisible = false;
 }
 
 export function renderLevel() {
-    state.CurrLevel.innerHTML = state.currLevel;
+    state.levelEl.innerHTML = state.currLevel;
 }
 
 export function updateDifficultyDisplay() {
     renderLevel();
-    flash(state.CurrLevel);
+    flash(state.levelEl);
 }
 
 export function updatePointsDisplay() {
@@ -179,8 +179,8 @@ export function hideInGameElements() {
     hideElements([
         'instructionsBar',
         'presentation',
-        state.Clock,
-        state.Molotov,
+        state.clockEl,
+        state.molotovEl,
         state.officers[0].counter,
         state.officers[1].counter,
         Busted,
@@ -190,12 +190,12 @@ export function hideInGameElements() {
 }
 
 export function showInGameElements() {
-    showElements(['scoreBar', state.Thief, state.officers[0].element, Money, 'musicToggle']);
+    showElements(['scoreBar', state.thiefEl, state.officers[0].element, Money, 'musicToggle']);
     hideElements(['resetGame']);
 }
 
 export function hideGameValues() {
-    hideElements([state.Thief, state.officers[0].element, state.officers[1].element, Money, state.Clock, state.Molotov, state.Bomb, 'musicToggle']);
+    hideElements([state.thiefEl, state.officers[0].element, state.officers[1].element, Money, state.clockEl, state.molotovEl, state.bombEl, 'musicToggle']);
 }
 
 export function startPressedTimer() {
@@ -216,7 +216,7 @@ export function show2ndPoliceman() {
 }
 
 export function setNewBackground() {
-    state.BackgroundImg.setAttribute(
+    state.backgroundEl.setAttribute(
         "src",
         "img/"+sortBackground()
     );
@@ -227,19 +227,19 @@ export function mirrorObj(objeto, escala) {
 }
 
 export function hideBomb() {
-    hideElements(state.Bomb);
+    hideElements(state.bombEl);
     state.isBombVisible = false;
 }
 
 export function molotov() {
     state.molotovPos = randomCoords();
-    displayItem(state.Molotov, state.molotovPos);
+    displayItem(state.molotovEl, state.molotovPos);
     state.isMolotovVisible = true;
     state.isMolotovThrown = false;
 }
 
 export function molotovFeedback() {
-    throwItem(state.Molotov, state.molotovPos, state.officers[0].pos, endMolotovFeedback);
+    throwItem(state.molotovEl, state.molotovPos, state.officers[0].pos, endMolotovFeedback);
 
     function endMolotovFeedback()
     {
@@ -265,7 +265,7 @@ function sortBackground() {
         'bkg_12.jpg',
         'background_v2.jpg'
     ];
-    const current = state.BackgroundImg.getAttribute('src');
+    const current = state.backgroundEl.getAttribute('src');
     const candidates = backgrounds.filter(function(name) {
         return 'img/' + name !== current;
     });

@@ -88,8 +88,8 @@ function gameClock() {
             endGame(timeUp);
             return;
         }
-        state.Time.innerHTML = state.time
-        if (state.time <= LOW_TIME_WARNING) flash(state.Time);
+        state.timeEl.innerHTML = state.time
+        if (state.time <= LOW_TIME_WARNING) flash(state.timeEl);
         handleDisplayableItems();
         state.time = state.time - 1;
     }
@@ -142,7 +142,7 @@ function handleBombDisplay() {
 
 function handleLevelChange() {
     if (isLevelChange()) {
-        state.lastChangedLevel = state.points;
+        state.pointsAtLastLevelUp = state.points;
         changeLevel(1);
         updateDifficultyDisplay();
         setNewBackground();
@@ -164,5 +164,5 @@ function handleTwoPolicemenTransition(delta) {
 }
 
 function isLevelChange() {
-    return (state.points >= (state.lastChangedLevel + POINTS_PER_LEVEL));
+    return (state.points >= (state.pointsAtLastLevelUp + POINTS_PER_LEVEL));
 }

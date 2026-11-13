@@ -1,6 +1,6 @@
 export const state = {
     // Characters
-    Thief: undefined,
+    thiefEl: undefined,
 
     // Officers
     officers: [
@@ -9,23 +9,23 @@ export const state = {
     ],
 
     // Game Items
-    Molotov: undefined,
-    Clock: undefined,
-    Bomb: undefined,
+    molotovEl: undefined,
+    clockEl: undefined,
+    bombEl: undefined,
 
     // Display Items
-    BackgroundImg: undefined,
-    CurrLevel: undefined,
-    Time: undefined,
+    backgroundEl: undefined,
+    levelEl: undefined,
+    timeEl: undefined,
 
-    // Dimentional Constants (reassigned at runtime by resizer.js once actual screen size is known)
-    MAPSIZE: 500,
-    CHARSIZE: 75,
-    ITEMSIZE: 55,
-    CATCHTOLERANCE: 15,
-    CROSSBORDERTOLERANCE: 20,
-    THROWSPEED: 40,
-    SPEEDTABLE: undefined,
+    // Dimensional values (reassigned at runtime by resizer.js once actual screen size is known)
+    mapSize: 500,
+    charSize: 75,
+    itemSize: 55,
+    catchTolerance: 15,
+    crossBorderTolerance: 20,
+    throwSpeed: 40,
+    speedTable: undefined,
 
     // Sounds
     fastTheme: undefined,
@@ -50,10 +50,10 @@ export const state = {
     currLevel: undefined,
     time: undefined,
     molotovTime: undefined,
-    lastChangedLevel: undefined,
+    pointsAtLastLevelUp: undefined,
 
     // Game elements' position arrays
-    thiefPosArr: [0, 0],
+    thiefPos: [0, 0],
     moneyPos: [0, 0],
     clockPos: [0, 0],
     molotovPos: [0, 0],

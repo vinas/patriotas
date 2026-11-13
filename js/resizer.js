@@ -9,13 +9,13 @@ export function resizeMapAndItems() {
 
 
 function calculateMeasurements() {
-    state.MAPSIZE = document.getElementById('background').clientWidth;
-    state.CROSSBORDERTOLERANCE = crossMultiply(state.CROSSBORDERTOLERANCE);
-    state.CATCHTOLERANCE = crossMultiply(state.CATCHTOLERANCE);
-    state.CHARSIZE = crossMultiply(state.CHARSIZE);
-    state.ITEMSIZE = crossMultiply(state.ITEMSIZE);
-    state.THROWSPEED = crossMultiply(state.THROWSPEED);
-    state.SPEEDTABLE = setSpeedTable(crossMultiply(MIN_OFFICER_MOVE_RATE));
+    state.mapSize = document.getElementById('background').clientWidth;
+    state.crossBorderTolerance = crossMultiply(state.crossBorderTolerance);
+    state.catchTolerance = crossMultiply(state.catchTolerance);
+    state.charSize = crossMultiply(state.charSize);
+    state.itemSize = crossMultiply(state.itemSize);
+    state.throwSpeed = crossMultiply(state.throwSpeed);
+    state.speedTable = setSpeedTable(crossMultiply(MIN_OFFICER_MOVE_RATE));
 }
 
 function setSpeedTable(minMoveRate) {
@@ -58,20 +58,20 @@ function resizeVisualElements() {
         slideLabel = document.getElementById('slideLabel'),
         collectLabel = document.getElementById('collectLabel');
 
-    document.getElementById('presentation').style.height = state.MAPSIZE+'px';
+    document.getElementById('presentation').style.height = state.mapSize+'px';
     document.getElementById('timeBox').style.paddingLeft = crossMultiply(10)+'px';
     document.getElementById('scoreBox').style.paddingLeft = crossMultiply(69)+'px';
     document.getElementById('scoreBox2').style.paddingLeft = crossMultiply(147)+'px';
     document.getElementById('items').style.paddingTop = crossMultiply(5)+'px';
     document.getElementById('barLeft').style.fontSize = crossMultiply(10)+'px';
 
-    presentationImage.style.width = state.MAPSIZE+'px';
-    presentationImage.style.height = state.MAPSIZE+'px';
+    presentationImage.style.width = state.mapSize+'px';
+    presentationImage.style.height = state.mapSize+'px';
 
-    bustedEndGameImage.style.width = state.MAPSIZE+'px';
-    bustedEndGameImage.style.height = state.MAPSIZE+'px';
-    timeUpEndGameImage.style.width = state.MAPSIZE+'px';
-    timeUpEndGameImage.style.height = state.MAPSIZE+'px';
+    bustedEndGameImage.style.width = state.mapSize+'px';
+    bustedEndGameImage.style.height = state.mapSize+'px';
+    timeUpEndGameImage.style.width = state.mapSize+'px';
+    timeUpEndGameImage.style.height = state.mapSize+'px';
 
     setas.style.width = crossMultiply(48)+'px';
     setas.style.height = crossMultiply(70)+'px';
@@ -84,17 +84,17 @@ function resizeVisualElements() {
     difficultyBox.style.paddingLeft = crossMultiply(250)+'px';
     difficultyBox.style.width = crossMultiply(95)+'px';
 
-    barraInfo.style.width = state.MAPSIZE+'px';
+    barraInfo.style.width = state.mapSize+'px';
     barraInfo.style.height = crossMultiply(100)+'px';
-    barraInfo.style.top = state.MAPSIZE+'px';
+    barraInfo.style.top = state.mapSize+'px';
     barraInfo.style.borderBottomWidth = crossMultiply(5)+'px';
     barraInfo.style.paddingTop = crossMultiply(5)+'px';
     barraInfo.style.paddingBottom = crossMultiply(5)+'px';
 
-    busted.style.width = state.MAPSIZE+'px';
-    busted.style.height = state.MAPSIZE+'px';
-    timeUp.style.width = state.MAPSIZE+'px';
-    timeUp.style.height = state.MAPSIZE+'px';
+    busted.style.width = state.mapSize+'px';
+    busted.style.height = state.mapSize+'px';
+    timeUp.style.width = state.mapSize+'px';
+    timeUp.style.height = state.mapSize+'px';
 
     slideLabel.style.fontSize = crossMultiply(18)+'px';
     slideLabel.style.paddingLeft = crossMultiply(70)+'px';
@@ -125,16 +125,16 @@ function resizeVisualElements() {
 
 function resizeGamePlayElements()
 {
-    document.getElementById('background').style.height = state.MAPSIZE+'px';
-    state.BackgroundImg.style.width = state.MAPSIZE+"px";
-    state.BackgroundImg.style.height = state.MAPSIZE+"px";
-    state.BackgroundImg.style.opacity = '0.6';
+    document.getElementById('background').style.height = state.mapSize+'px';
+    state.backgroundEl.style.width = state.mapSize+"px";
+    state.backgroundEl.style.height = state.mapSize+"px";
+    state.backgroundEl.style.opacity = '0.6';
 
-    setClassProp('personagem', 'width', state.CHARSIZE+'px');
-    setClassProp('personagem', 'height', state.CHARSIZE+'px');
+    setClassProp('personagem', 'width', state.charSize+'px');
+    setClassProp('personagem', 'height', state.charSize+'px');
 
-    setClassProp('item', 'width', state.ITEMSIZE+'px');
-    setClassProp('item', 'height', state.ITEMSIZE+'px');
+    setClassProp('item', 'width', state.itemSize+'px');
+    setClassProp('item', 'height', state.itemSize+'px');
 }
 
 function setClassProp(className, prop, value)

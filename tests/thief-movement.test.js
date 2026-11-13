@@ -17,20 +17,20 @@ describe('playable character movement', () => {
     beforeEach(async () => {
         game = await bootGame();
         startGame();
-        game.state.thiefPosArr = [...START];
+        game.state.thiefPos = [...START];
     });
     afterEach(shutdown);
 
     it('stands still until a command is given', () => {
         advance(500);
 
-        expect(game.state.thiefPosArr).toEqual(START);
+        expect(game.state.thiefPos).toEqual(START);
     });
 
     it('keeps its position array clean while idle', () => {
         advance(200);
 
-        expect(Object.keys(game.state.thiefPosArr)).toEqual(['0', '1']);
+        expect(Object.keys(game.state.thiefPos)).toEqual(['0', '1']);
     });
 
     it('a tap without movement does not start the thief moving', () => {
@@ -43,19 +43,19 @@ describe('playable character movement', () => {
         document.body.dispatchEvent(new Event('touchend', { bubbles: true }));
         advance(200);
 
-        expect(game.state.thiefPosArr).toEqual(START);
+        expect(game.state.thiefPos).toEqual(START);
     });
 
     it('a tiny swipe does not start the thief moving', () => {
         swipe([200, 300], [203, 302]);
         advance(200);
 
-        expect(game.state.thiefPosArr).toEqual(START);
+        expect(game.state.thiefPos).toEqual(START);
     });
 
     describe.each(Object.entries(DIRECTIONS))('%s', (name, { key, axis, sign }) => {
         const expectMovedOnlyAlongAxis = () => {
-            const pos = game.state.thiefPosArr;
+            const pos = game.state.thiefPos;
             expect((pos[axis] - START[axis]) * sign).toBeGreaterThan(0);
             expect(pos[1 - axis]).toBe(START[1 - axis]);
         };
@@ -79,23 +79,23 @@ describe('playable character movement', () => {
             frame();
 
             const expected = game.state.thiefMoveRate * FRAME_SCALE;
-            expect((game.state.thiefPosArr[axis] - START[axis]) * sign).toBeCloseTo(expected, 5);
+            expect((game.state.thiefPos[axis] - START[axis]) * sign).toBeCloseTo(expected, 5);
         });
     });
 
     it('keeps going in the last direction commanded until a new one is given', () => {
         pressKey('ArrowRight');
         advance(200);
-        const afterRight = [...game.state.thiefPosArr];
+        const afterRight = [...game.state.thiefPos];
         advance(200);
-        expect(game.state.thiefPosArr[0]).toBeGreaterThan(afterRight[0]);
+        expect(game.state.thiefPos[0]).toBeGreaterThan(afterRight[0]);
 
         pressKey('ArrowDown');
         advance(200);
-        const afterDown = [...game.state.thiefPosArr];
+        const afterDown = [...game.state.thiefPos];
         advance(200);
-        expect(game.state.thiefPosArr[1]).toBeGreaterThan(afterDown[1]);
-        expect(game.state.thiefPosArr[0]).toBe(afterDown[0]);
+        expect(game.state.thiefPos[1]).toBeGreaterThan(afterDown[1]);
+        expect(game.state.thiefPos[0]).toBe(afterDown[0]);
     });
 });
 
@@ -106,16 +106,16 @@ describe('playable character crossing the map limits', () => {
     beforeEach(async () => {
         game = await bootGame();
         startGame();
-        map = game.state.MAPSIZE;
+        map = game.state.mapSize;
     });
     afterEach(shutdown);
 
     // Places the thief just inside one edge, away from the officers' corner, and walks it out.
     const walkOutOf = (key, from) => {
-        game.state.thiefPosArr = from;
+        game.state.thiefPos = from;
         pressKey(key);
         advance(1000);
-        return game.state.thiefPosArr;
+        return game.state.thiefPos;
     };
 
     it('leaving through the left edge reappears on the right side', () => {
@@ -147,10 +147,10 @@ describe('playable character crossing the map limits', () => {
     });
 
     it('is not blocked at the edge: it goes past the limit before it wraps', () => {
-        game.state.thiefPosArr = [5, 100];
+        game.state.thiefPos = [5, 100];
         pressKey('ArrowLeft');
         advance(200);
 
-        expect(game.state.thiefPosArr[0]).toBeLessThan(0);
+        expect(game.state.thiefPos[0]).toBeLessThan(0);
     });
 });

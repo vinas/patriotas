@@ -18,7 +18,7 @@ describe('game over: caught by an officer', () => {
     beforeEach(async () => {
         game = await bootGame();
         startGame();
-        game.state.thiefPosArr = [...THIEF];
+        game.state.thiefPos = [...THIEF];
     });
     afterEach(shutdown);
 
@@ -47,7 +47,7 @@ describe('game over: caught by an officer', () => {
 
     it('is over when officer 1 reaches the thief', () => {
         reachLevel(game, 3);
-        game.state.thiefPosArr = [...THIEF];
+        game.state.thiefPos = [...THIEF];
         placeOfficer(game, 0, [330, 330]); // officer 0 far away: only officer 1 can have caught the thief
         placeOfficer(game, 1, [THIEF[0] + 10, THIEF[1] + 10]);
 
@@ -59,7 +59,7 @@ describe('game over: caught by an officer', () => {
 
     it('is not over for an officer 1 that is not on the map yet (level below 3)', () => {
         reachLevel(game, 2);
-        game.state.thiefPosArr = [...THIEF];
+        game.state.thiefPos = [...THIEF];
         placeOfficer(game, 0, [330, 330]);
         placeOfficer(game, 1, [THIEF[0] + 10, THIEF[1] + 10]);
 

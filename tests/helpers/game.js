@@ -157,7 +157,7 @@ export function swipeDirection(direction) {
  */
 export function collectMoney(game, count = 1) {
     for (let i = 0; i < count; i++) {
-        game.state.thiefPosArr = [...game.state.moneyPos];
+        game.state.thiefPos = [...game.state.moneyPos];
         frame();
     }
 }
@@ -175,13 +175,13 @@ export function spawnItem(game, kind, pos) {
     const { display, state } = game;
     display[kind]();
     state[`${kind}Pos`] = [...pos];
-    display.objectAt(state[kind[0].toUpperCase() + kind.slice(1)], pos);
+    display.objectAt(state[`${kind}El`], pos);
 }
 
 /** Spawns the item and walks the thief onto it; returns after the frame that picks it up. */
 export function catchItem(game, kind, pos = [60, 250]) {
     spawnItem(game, kind, pos);
-    game.state.thiefPosArr = [...pos];
+    game.state.thiefPos = [...pos];
     frame();
 }
 

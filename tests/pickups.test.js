@@ -100,7 +100,7 @@ describe('molotov', () => {
 
     it('makes the officers stand still for 3 seconds, then they chase again', () => {
         reachLevel(game, 3);
-        game.state.thiefPosArr = [60, 250];
+        game.state.thiefPos = [60, 250];
         catchItem(game, 'molotov');
         const frozenAt = positions();
 
@@ -157,7 +157,7 @@ describe('clock', () => {
 
     it('does nothing when the thief is not on it', () => {
         const before = game.state.time;
-        game.state.thiefPosArr = [0, 0];
+        game.state.thiefPos = [0, 0];
 
         // spawn it far from the thief without walking onto it
         game.display.clock();
