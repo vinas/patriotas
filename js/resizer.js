@@ -1,5 +1,8 @@
 import { state } from './state.js';
-import { MIN_OFFICER_MOVE_RATE } from './constants.js';
+import {
+    MIN_OFFICER_MOVE_RATE, BASE_CHAR_SIZE, BASE_ITEM_SIZE, BASE_CATCH_TOLERANCE,
+    BASE_CROSS_BORDER_TOLERANCE, BASE_THROW_SPEED
+} from './constants.js';
 import { scaleToMap, scaleToMapExact } from './geometry.js';
 
 export function resizeMapAndItems() {
@@ -10,11 +13,11 @@ export function resizeMapAndItems() {
 
 function calculateMeasurements() {
     state.mapSize = document.getElementById('background').clientWidth;
-    state.crossBorderTolerance = scaleToMap(state.crossBorderTolerance);
-    state.catchTolerance = scaleToMap(state.catchTolerance);
-    state.charSize = scaleToMap(state.charSize);
-    state.itemSize = scaleToMap(state.itemSize);
-    state.throwSpeed = scaleToMap(state.throwSpeed);
+    state.crossBorderTolerance = scaleToMap(BASE_CROSS_BORDER_TOLERANCE);
+    state.catchTolerance = scaleToMap(BASE_CATCH_TOLERANCE);
+    state.charSize = scaleToMap(BASE_CHAR_SIZE);
+    state.itemSize = scaleToMap(BASE_ITEM_SIZE);
+    state.throwSpeed = scaleToMap(BASE_THROW_SPEED);
     state.speedTable = setSpeedTable(scaleToMap(MIN_OFFICER_MOVE_RATE));
 }
 

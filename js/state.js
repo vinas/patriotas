@@ -18,13 +18,13 @@ export const state = {
     levelEl: undefined,
     timeEl: undefined,
 
-    // Dimensional values (reassigned at runtime by resizer.js once actual screen size is known)
-    mapSize: 500,
-    charSize: 75,
-    itemSize: 55,
-    catchTolerance: 15,
-    crossBorderTolerance: 20,
-    throwSpeed: 40,
+    // Dimensional values (set by resizer.js once the actual screen size is known)
+    mapSize: 0,
+    charSize: 0,
+    itemSize: 0,
+    catchTolerance: 0,
+    crossBorderTolerance: 0,
+    throwSpeed: 0,
     speedTable: undefined,
 
     // Sounds

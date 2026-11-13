@@ -14,7 +14,13 @@ export const START_TIME = 20,
     MAX_FRAME_SCALE = 5,
     CLOCK_BONUS_TIME = 10,
     LOW_TIME_WARNING = 3,
-    BASE_MAP_SIZE = 500;
+    BASE_MAP_SIZE = 500,
+    // Sizes designed for a BASE_MAP_SIZE wide map; resizer.js scales them to the real screen.
+    BASE_CHAR_SIZE = 75,
+    BASE_ITEM_SIZE = 55,
+    BASE_CATCH_TOLERANCE = 15,
+    BASE_CROSS_BORDER_TOLERANCE = 20,
+    BASE_THROW_SPEED = 40;
 
 // Key codes
 export const KEY_LEFT = 'ArrowLeft',
