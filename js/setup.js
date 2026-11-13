@@ -2,6 +2,7 @@ import { state } from './state.js';
 import { STANDARDTIME, STANDTHIEFMOVRATE } from './constants.js';
 import { crossMultiply } from './geometry.js';
 import { startButton } from './display.js';
+import { isTwoPolicemenLevel } from './officer-ai.js';
 
 export function isMobile() {
     let check = false;
@@ -103,22 +104,23 @@ export function setAll() {
     focusSettings();
 
     function focusSettings() {
-        window.onblur = function() {
+        window.addEventListener('blur', function() {
             state.fastTheme.pause();
             state.slowTheme.pause();
             state.loadingTheme.pause();
             state.endGameSound.pause();
-        };
+        });
 
-        window.onfocus = function() {
+        window.addEventListener('focus', function() {
             if (state.gameOn) {
-                state.slowTheme.play().catch(function() {});
-                state.slowTheme.volume = state.musicMuted ? 0 : 1;
+                const levelTheme = isTwoPolicemenLevel() ? state.fastTheme : state.slowTheme;
+                levelTheme.play().catch(function() {});
+                levelTheme.volume = state.musicMuted ? 0 : 1;
                 return;
             }
             state.loadingTheme.play().catch(function() {});
             state.loadingTheme.volume = state.musicMuted ? 0 : 1;
-        };
+        });
     }
 
 }

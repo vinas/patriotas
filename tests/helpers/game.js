@@ -24,6 +24,7 @@ const bodyHtml = new DOMParser()
     .body.innerHTML;
 
 let removeDocumentListeners = () => {};
+let removeWindowListeners = () => {};
 
 /**
  * Loads the real game (index.html markup + js/ modules) in the simulated phone
@@ -32,6 +33,7 @@ let removeDocumentListeners = () => {};
  */
 export async function bootGame() {
     removeDocumentListeners();
+    removeWindowListeners();
     FakeAudio.instances.length = 0;
 
     vi.useFakeTimers({
@@ -60,6 +62,18 @@ export async function bootGame() {
         added.length = 0;
     };
 
+    // Same for window-level listeners (tab focus/blur).
+    const addedToWindow = [];
+    const originalWindowAdd = window.addEventListener.bind(window);
+    vi.spyOn(window, 'addEventListener').mockImplementation((type, listener, options) => {
+        addedToWindow.push([type, listener, options]);
+        originalWindowAdd(type, listener, options);
+    });
+    removeWindowListeners = () => {
+        addedToWindow.forEach(([type, listener, options]) => window.removeEventListener(type, listener, options));
+        addedToWindow.length = 0;
+    };
+
     vi.resetModules();
     await import('../../js/start-app.js');
     document.dispatchEvent(new Event('DOMContentLoaded'));
@@ -74,6 +88,7 @@ export async function bootGame() {
 
 export function shutdown() {
     removeDocumentListeners();
+    removeWindowListeners();
     vi.useRealTimers();
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
