@@ -323,24 +323,27 @@ function getObjectPosition(obj)
         ];
 }
 
+// A non-breaking space (\u00a0) before ? and ! keeps them from wrapping onto a line of their own.
+export const BUSTED_MESSAGES = [
+    "foi mal!",
+    "terrorismo é crime",
+    "vandalismo é crime",
+    "olavo estava errado",
+    "*muuuuu*",
+    "sem anistia",
+    "* perdel*, mané\u00a0!",
+    "prisaum terrabolista",
+    "agora vai tomar vacina",
+    "sem mugido, hein\u00a0!",
+    "quem pagou seu hotel, fio\u00a0?",
+    "e o bozo na disney?",
+    "micheque ora por vc",
+    "51 aptos no dinheiro\u00a0!",
+    "e o churrasco no quartel\u00a0?",
+    "cagadas acontecem! veja o flávio",
+    "mito\u00a0? ajuda psiquiátrica\u00a0!",
+];
+
 function getBustedMessage() {
-    const messages = [];
-    messages.push("foi mal!");
-    messages.push("terrorismo é crime");
-    messages.push("vandalismo é crime");
-    messages.push("olavo estava errado");
-    messages.push("*muuuuu*");
-    messages.push("sem anistia");
-    messages.push("* perdel*, mané !");
-    messages.push("prisaum terrabolista");
-    messages.push("agora vai tomar vacina");
-    messages.push("sem mugido, hein !");
-    messages.push("quem pagou seu hotel, fio ?");
-    messages.push("e o bozo na disney?");
-    messages.push("micheque ora por vc");
-    messages.push("51 aptos no dinheiro !");
-    messages.push("e o churrasco no quartel ?");
-    messages.push("cagadas acontecem! veja o flávio");
-    messages.push("mito ? ajuda psiquiátrica !");
-    return messages[Math.floor(Math.random() * messages.length)];
+    return BUSTED_MESSAGES[Math.floor(Math.random() * BUSTED_MESSAGES.length)];
 }
