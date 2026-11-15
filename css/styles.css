@@ -44,17 +44,22 @@ body {
 }
 
 .endGameMessage {
-	width: 68%;
-	height: 6%;
+	/* Matches the yellow box in busted_v3.png (x 12.6%-86.6%, y 68.4%-80%) */
 	position: absolute;
-	left: 13%;
-	top: 69%;
+	box-sizing: border-box;
+	left: 12.6%;
+	top: 68.4%;
+	width: 73.8%;
+	height: 11.6%;
+	padding: 0 1.5%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	color: #000;
-	padding: 2.5%;
 	text-align: center;
 	font-weight: bold;
-	font-size: large;
-
+	line-height: 1.25;
+	text-wrap: balance;
 }
 
 .presentation {
