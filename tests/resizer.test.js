@@ -15,6 +15,10 @@ describe('map scaling', () => {
         expect(game.state.itemSize).toBe(42); // floor(55 * 390 / 500)
     });
 
+    it('scales the busted message font with the map', () => {
+        expect(document.getElementById('endGameMessage').style.fontSize).toBe('14px'); // floor(18 * 390 / 500)
+    });
+
     it('measuring again does not scale the sizes a second time', async () => {
         const { resizeMapAndItems } = await import('../js/resizer.js');
         const before = {

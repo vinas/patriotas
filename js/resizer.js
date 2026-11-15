@@ -52,6 +52,7 @@ function resizeVisualElements() {
     const presentationImage = document.getElementById('presentationImage'),
         bustedEndGameImage = document.getElementById('bustedEndGameImage'),
         timeUpEndGameImage = document.getElementById('timeUpEndGameImage'),
+        endGameMessage = document.getElementById('endGameMessage'),
         setas = document.getElementById('setas'),
         thiefInstruction = document.getElementById('thiefInstruction'),
         difficultyBox = document.getElementById('difficultyBox'),
@@ -75,6 +76,8 @@ function resizeVisualElements() {
     bustedEndGameImage.style.height = state.mapSize+'px';
     timeUpEndGameImage.style.width = state.mapSize+'px';
     timeUpEndGameImage.style.height = state.mapSize+'px';
+
+    endGameMessage.style.fontSize = scaleToMap(18)+'px';
 
     setas.style.width = scaleToMap(48)+'px';
     setas.style.height = scaleToMap(70)+'px';
