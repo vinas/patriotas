@@ -77,6 +77,14 @@ describe('game over: caught by an officer', () => {
         expect(byId('endGameMessage').innerHTML).not.toContain('{user}');
     });
 
+    it('never lets a ? or ! wrap onto a line of its own', async () => {
+        const { BUSTED_MESSAGES } = await import('../js/display.js');
+
+        for (const message of BUSTED_MESSAGES) {
+            expect(message).not.toMatch(/ [?!]/);
+        }
+    });
+
     it('lets the player start a new round afterwards', () => {
         placeOfficer(game, 0, [THIEF[0] + 10, THIEF[1] + 10]);
         frame();

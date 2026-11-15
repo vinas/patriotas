@@ -323,6 +323,7 @@ function getObjectPosition(obj)
         ];
 }
 
+// A non-breaking space (\u00a0) before ? and ! keeps them from wrapping onto a line of their own.
 export const BUSTED_MESSAGES = [
     "foi mal!",
     "terrorismo é crime",
@@ -330,17 +331,17 @@ export const BUSTED_MESSAGES = [
     "olavo estava errado",
     "*muuuuu*",
     "sem anistia",
-    "* perdel*, mané !",
+    "* perdel*, mané\u00a0!",
     "prisaum terrabolista",
     "agora vai tomar vacina",
-    "sem mugido, hein !",
-    "quem pagou seu hotel, fio ?",
+    "sem mugido, hein\u00a0!",
+    "quem pagou seu hotel, fio\u00a0?",
     "e o bozo na disney?",
     "micheque ora por vc",
-    "51 aptos no dinheiro !",
-    "e o churrasco no quartel ?",
+    "51 aptos no dinheiro\u00a0!",
+    "e o churrasco no quartel\u00a0?",
     "cagadas acontecem! veja o flávio",
-    "mito ? ajuda psiquiátrica !",
+    "mito\u00a0? ajuda psiquiátrica\u00a0!",
 ];
 
 function getBustedMessage() {
