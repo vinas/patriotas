@@ -101,7 +101,6 @@ body {
 #barraInfo {
 	background-color: #575757;
 	position: absolute;
-	float: left;
 	top: var(--map);
 	width: var(--map);
 	height: calc(var(--map) * 100 / 500);
@@ -133,14 +132,12 @@ body {
 	font-weight: bold;
 	min-width: calc(var(--map) * 20 / 500);
 	max-width: calc(var(--map) * 90 / 500);
-	float: left;
 	position: absolute;
 
 }
 
 .counter1 {
 	position: absolute;
-	float: left;
 	font-size: calc(var(--map) * 14 / 500);
 	color: #FFFF00;
 	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
@@ -149,7 +146,6 @@ body {
 
 #busted {
 	position: absolute;
-	float: left;
 	color: #FFFFFF;
 	display: none;
 	left: 0px;
@@ -160,7 +156,6 @@ body {
 
 #timeUp {
 	position: absolute;
-	float: left;
 	color: #FFFFFF;
 	display: none;
 	left: 0px;
@@ -170,7 +165,6 @@ body {
 }
 
 #setas {
-	float: left;
 	position: absolute;
 	width: calc(var(--map) * 48 / 500);
 	height: calc(var(--map) * 70 / 500);
@@ -178,7 +172,6 @@ body {
 }
 
 #slideLabel {
-	float: left;
 	position: absolute;
 	padding-left: calc(var(--map) * 70 / 500);
 	font-size: calc(var(--map) * 18 / 500);
@@ -186,7 +179,6 @@ body {
 }
 
 #thiefInstruction {
-	float: left;
 	position: absolute;
 	width: calc(var(--map) * 99 / 500);
 	height: calc(var(--map) * 86 / 500);
@@ -194,7 +186,6 @@ body {
 }
 
 #collectLabel {
-	float: left;
 	position: absolute;
 	padding-left: calc(var(--map) * 250 / 500);
 	font-size: calc(var(--map) * 18 / 500);
@@ -203,13 +194,11 @@ body {
 }
 
 .bar {
-	float: left;
 	position: absolute;
 	color: #FFD61F;
 }
 
 .barBox {
-	float: left;
 	position: absolute;
 }
 
@@ -251,7 +240,6 @@ body {
 }
 
 #barLeft {
-	float: left;
 	font-size: calc(var(--map) * 10 / 500);
 	padding-top: 10px;
 	position: absolute;
@@ -259,7 +247,6 @@ body {
 }
 
 .barRight {
-	float: left;
 	padding-left: 78%;
 	position: absolute;
 }
