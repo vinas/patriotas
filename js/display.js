@@ -70,9 +70,8 @@ export function resetHud() {
     state.timeEl.innerHTML = state.time;
 }
 
-export function flash(obj, color) {
+export function flash(obj, color = '#FFD61F') {
     let flashCount = 0;
-    color = (!color) ? '#FFD61F' : color;
 
     flashThis();
 
@@ -80,9 +79,7 @@ export function flash(obj, color) {
         obj.style.backgroundColor = (flashCount % 2 == 0) ? color : '';
         flashCount++;
         if (flashCount < 6) {
-            setTimeout(function() {
-                flashThis();
-            }, 100);
+            setTimeout(flashThis, 100);
         }
     }
 }
@@ -92,8 +89,6 @@ function flashOfficers() {
         flash(officer.element);
     });
 }
-
-
 
 export function spawnMoney() {
     state.moneyPos = randomCoords();
@@ -266,9 +261,7 @@ function showFeedback(refObj, subtitleObj, message) {
         subtitleObj.innerHTML = (counter % 2 == 0) ? message : '';
         counter++;
         if (counter < 6) {
-            setTimeout(function() {
-                blinkMsg();
-            }, interval);
+            setTimeout(blinkMsg, interval);
         }
     }
 
