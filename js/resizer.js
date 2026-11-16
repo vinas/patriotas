@@ -7,7 +7,7 @@ import { scaleToMap, scaleToMapExact } from './geometry.js';
 
 export function resizeMapAndItems() {
     calculateMeasurements();
-    resizeVisualElements();
+    publishSizes();
 }
 
 function calculateMeasurements() {
@@ -45,17 +45,10 @@ function setSpeedTable(minMoveRate) {
     ];
 }
 
-function resizeVisualElements() {
+// The stylesheet derives every on-screen size from these three variables.
+function publishSizes() {
     const root = document.documentElement.style;
     root.setProperty('--map', state.mapSize + 'px');
     root.setProperty('--char', state.charSize + 'px');
     root.setProperty('--item', state.itemSize + 'px');
-}
-
-function setClassProp(className, prop, value)
-{
-    const els = document.getElementsByClassName(className);
-    for (let i = 0; i < els.length; i++) {
-        els[i].style[prop] = value;
-    }
 }
