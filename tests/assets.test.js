@@ -34,7 +34,7 @@ describe('asset preloading', () => {
         it('hands out the in-memory URL for a downloaded file', async () => {
             await assets.preloadAssets();
 
-            expect(assets.assetUrl('img/bkg_03.jpg')).toBe(inMemoryUrl('img/bkg_03.jpg'));
+            expect(assets.assetUrl('img/bkg_03.webp')).toBe(inMemoryUrl('img/bkg_03.webp'));
             expect(assets.assetUrl('audio/coin1.wav')).toBe(inMemoryUrl('audio/coin1.wav'));
         });
 
@@ -67,7 +67,7 @@ describe('asset preloading', () => {
     });
 
     describe('when a download fails', () => {
-        beforeEach(() => loadAssetsModule({ failing: ['img/bkg_05.jpg', 'audio/bomb.mp3'] }));
+        beforeEach(() => loadAssetsModule({ failing: ['img/bkg_05.webp', 'audio/bomb.mp3'] }));
 
         it('still finishes, and the failed files fall back to the server URL', async () => {
             vi.spyOn(console, 'warn').mockImplementation(() => {});
@@ -76,9 +76,9 @@ describe('asset preloading', () => {
             await assets.preloadAssets((percent) => reported.push(percent));
 
             expect(reported.at(-1)).toBe(100);
-            expect(assets.assetUrl('img/bkg_05.jpg')).toBe('img/bkg_05.jpg');
+            expect(assets.assetUrl('img/bkg_05.webp')).toBe('img/bkg_05.webp');
             expect(assets.assetUrl('audio/bomb.mp3')).toBe('audio/bomb.mp3');
-            expect(assets.assetUrl('img/bkg_06.jpg')).toBe(inMemoryUrl('img/bkg_06.jpg'));
+            expect(assets.assetUrl('img/bkg_06.webp')).toBe(inMemoryUrl('img/bkg_06.webp'));
         });
     });
 
@@ -106,9 +106,9 @@ describe('asset preloading', () => {
         const NOT_PRELOADED = ['img/loader.gif', 'img/favicon.ico'];
 
         it('covers every image and sound the page and the scripts refer to', () => {
-            const referred = new Set(sources.match(/(?:img|audio)\/[\w.-]+\.(?:png|jpg|gif|mp3|wav)/g));
+            const referred = new Set(sources.match(/(?:img|audio)\/[\w.-]+\.(?:png|webp|gif|mp3|wav)/g));
             // display.js lists the backgrounds by file name only.
-            sources.match(/(?:bkg_\d\d|background_v2)\.jpg/g).forEach((name) => referred.add(`img/${name}`));
+            sources.match(/(?:bkg_\d\d|background_v2)\.webp/g).forEach((name) => referred.add(`img/${name}`));
             NOT_PRELOADED.forEach((path) => referred.delete(path));
 
             const missing = [...referred].filter((path) => !assets.ASSET_PATHS.includes(path));

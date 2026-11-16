@@ -15,7 +15,7 @@ export const state = {
 
     // Display Items
     backgroundEl: undefined,
-    currentBackground: 'img/background_v2.jpg',
+    currentBackground: 'img/background_v2.webp',
     levelEl: undefined,
     timeEl: undefined,
 
