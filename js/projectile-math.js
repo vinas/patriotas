@@ -14,11 +14,11 @@ export function setNewThrowItemPos(shooterX, shooterY, item, target, incline, va
 }
 
 export function stepAlongX(speed, incline) {
-    return Math.sqrt(speed / (parseFloat(Math.pow(incline,2)+1)));
+    return Math.sqrt(speed / (Math.pow(incline, 2) + 1));
 }
 
 export function slope(itemPos, targetPos) {
     const deltaX = targetPos[0] - itemPos[0],
         deltaY = targetPos[1] - itemPos[1];
-    return (deltaX != 0) ? (deltaY/deltaX).toFixed(4) : 0;
+    return (deltaX != 0) ? Number((deltaY / deltaX).toFixed(4)) : 0;
 }
