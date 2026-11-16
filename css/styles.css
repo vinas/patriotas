@@ -67,6 +67,7 @@ body {
 	justify-content: center;
 	color: #000;
 	text-align: center;
+	font-size: calc(var(--map) * 18 / 500);
 	font-weight: bold;
 	line-height: 1.25;
 	text-wrap: balance;
@@ -77,10 +78,15 @@ body {
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 500px;
+	height: var(--map);
 	background-color: #FFFFFF;
 	color: #000000;
 	display: block;
+}
+
+#presentationImage, #bustedEndGameImage, #timeUpEndGameImage {
+	width: var(--map);
+	height: var(--map);
 }
 
 .personagem {
@@ -153,8 +159,8 @@ body {
 	display: none;
 	left: 0px;
 	top: 0px;
-	width: 100%;
-	height: 500px;
+	width: var(--map);
+	height: var(--map);
 }
 
 #timeUp {
@@ -164,8 +170,8 @@ body {
 	display: none;
 	left: 0px;
 	top: 0px;
-	width: 100%;
-	height: 500px;
+	width: var(--map);
+	height: var(--map);
 }
 
 .textField {

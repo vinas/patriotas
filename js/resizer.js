@@ -50,30 +50,6 @@ function resizeVisualElements() {
     root.setProperty('--map', state.mapSize + 'px');
     root.setProperty('--char', state.charSize + 'px');
     root.setProperty('--item', state.itemSize + 'px');
-
-    const presentationImage = document.getElementById('presentationImage'),
-        bustedEndGameImage = document.getElementById('bustedEndGameImage'),
-        timeUpEndGameImage = document.getElementById('timeUpEndGameImage'),
-        endGameMessage = document.getElementById('endGameMessage'),
-        busted = document.getElementById('busted'),
-        timeUp = document.getElementById('timeUp');
-
-    document.getElementById('presentation').style.height = state.mapSize+'px';
-
-    presentationImage.style.width = state.mapSize+'px';
-    presentationImage.style.height = state.mapSize+'px';
-
-    bustedEndGameImage.style.width = state.mapSize+'px';
-    bustedEndGameImage.style.height = state.mapSize+'px';
-    timeUpEndGameImage.style.width = state.mapSize+'px';
-    timeUpEndGameImage.style.height = state.mapSize+'px';
-
-    endGameMessage.style.fontSize = scaleToMap(18)+'px';
-
-    busted.style.width = state.mapSize+'px';
-    busted.style.height = state.mapSize+'px';
-    timeUp.style.width = state.mapSize+'px';
-    timeUp.style.height = state.mapSize+'px';
 }
 
 function setClassProp(className, prop, value)
