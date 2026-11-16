@@ -43,7 +43,7 @@ const SOUND_PATHS = [
     'audio/endGame.mp3',
     'audio/bomb.mp3',
     'audio/crank-1.mp3',
-    'audio/coin1.wav'
+    'audio/coin1.mp3'
 ];
 
 export const ASSET_PATHS = IMAGE_PATHS.concat(SOUND_PATHS);
@@ -52,8 +52,7 @@ const MIME_TYPES = {
     png: 'image/png',
     webp: 'image/webp',
     gif: 'image/gif',
-    mp3: 'audio/mpeg',
-    wav: 'audio/wav'
+    mp3: 'audio/mpeg'
 };
 
 const memoryUrls = new Map();

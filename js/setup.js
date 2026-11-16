@@ -32,7 +32,7 @@ function createSounds() {
     state.loadingTheme = new Audio(assetUrl('audio/hino_independencia.mp3'));
     state.bombSound = new Audio(assetUrl('audio/bomb.mp3'));
     state.clockSound = new Audio(assetUrl('audio/crank-1.mp3'));
-    state.coinSound = new Audio(assetUrl('audio/coin1.wav'));
+    state.coinSound = new Audio(assetUrl('audio/coin1.mp3'));
 }
 
 export function cacheDomElements() {

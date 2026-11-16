@@ -35,7 +35,7 @@ describe('asset preloading', () => {
             await assets.preloadAssets();
 
             expect(assets.assetUrl('img/bkg_03.webp')).toBe(inMemoryUrl('img/bkg_03.webp'));
-            expect(assets.assetUrl('audio/coin1.wav')).toBe(inMemoryUrl('audio/coin1.wav'));
+            expect(assets.assetUrl('audio/coin1.mp3')).toBe(inMemoryUrl('audio/coin1.mp3'));
         });
 
         it('hands out the original path for a file that is not preloaded', async () => {

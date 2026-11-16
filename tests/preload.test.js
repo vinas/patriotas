@@ -78,7 +78,7 @@ describe('preloading the assets', () => {
 
             expect(isShown('resetGame')).toBe(true);
             expect(game.state.bombSound.src).toBe('audio/bomb.mp3');
-            expect(game.state.coinSound.src).toBe(inMemoryUrl('audio/coin1.wav'));
+            expect(game.state.coinSound.src).toBe(inMemoryUrl('audio/coin1.mp3'));
 
             startGame();
             expect(game.state.gameOn).toBe(true);
