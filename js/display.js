@@ -35,10 +35,8 @@ export function spawnBomb() {
 }
 
 export function throwBomb() {
-    throwItem(state.bombEl, state.bombPos, state.officers[0].pos, endBombFeedback);
+    throwAtOfficer(state.bombEl, state.bombPos, hideBomb, endBombFeedback);
     function endBombFeedback() {
-        state.bombSound.play();
-        hideBomb();
         flashOfficers();
         flash(state.levelEl);
         showFeedback(state.officers[0].element, Subtitle1, 'devagar');
@@ -238,14 +236,7 @@ export function spawnMolotov() {
 }
 
 export function throwMolotov() {
-    throwItem(state.molotovEl, state.molotovPos, state.officers[0].pos, endMolotovFeedback);
-
-    function endMolotovFeedback()
-    {
-        state.bombSound.play();
-        hideMolotov();
-        burnOfficers();
-    }
+    throwAtOfficer(state.molotovEl, state.molotovPos, hideMolotov, burnOfficers);
 }
 
 function showBackground(path) {
@@ -287,6 +278,15 @@ function showFeedback(refObj, subtitleObj, message) {
         messagePosition = messagePos(objectPosition);
         placeElement(subtitleObj, messagePosition);
     }
+}
+
+// Throws a pickup at the first officer. When it lands: the blast sound, hide the pickup, then the item's own feedback.
+function throwAtOfficer(el, pos, hide, feedback) {
+    throwItem(el, pos, state.officers[0].pos, function() {
+        state.bombSound.play();
+        hide();
+        feedback();
+    });
 }
 
 // Puts a pickup at a random spot, shows it and returns that spot.
