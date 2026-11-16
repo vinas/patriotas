@@ -10,7 +10,6 @@ export function resizeMapAndItems() {
     resizeVisualElements();
 }
 
-
 function calculateMeasurements() {
     state.mapSize = document.getElementById('background').clientWidth;
     state.crossBorderTolerance = scaleToMap(BASE_CROSS_BORDER_TOLERANCE);
@@ -58,19 +57,12 @@ function resizeVisualElements() {
         endGameMessage = document.getElementById('endGameMessage'),
         setas = document.getElementById('setas'),
         thiefInstruction = document.getElementById('thiefInstruction'),
-        difficultyBox = document.getElementById('difficultyBox'),
-        barraInfo = document.getElementById('barraInfo'),
         busted = document.getElementById('busted'),
         timeUp = document.getElementById('timeUp'),
         slideLabel = document.getElementById('slideLabel'),
         collectLabel = document.getElementById('collectLabel');
 
     document.getElementById('presentation').style.height = state.mapSize+'px';
-    document.getElementById('timeBox').style.paddingLeft = scaleToMap(10)+'px';
-    document.getElementById('scoreBox').style.paddingLeft = scaleToMap(69)+'px';
-    document.getElementById('scoreBox2').style.paddingLeft = scaleToMap(147)+'px';
-    document.getElementById('items').style.paddingTop = scaleToMap(5)+'px';
-    document.getElementById('barLeft').style.fontSize = scaleToMap(10)+'px';
 
     presentationImage.style.width = state.mapSize+'px';
     presentationImage.style.height = state.mapSize+'px';
@@ -90,16 +82,6 @@ function resizeVisualElements() {
     thiefInstruction.style.height = scaleToMap(86)+'px';
     thiefInstruction.style.paddingLeft = scaleToMap(135)+'px';
 
-    difficultyBox.style.paddingLeft = scaleToMap(250)+'px';
-    difficultyBox.style.width = scaleToMap(95)+'px';
-
-    barraInfo.style.width = state.mapSize+'px';
-    barraInfo.style.height = scaleToMap(100)+'px';
-    barraInfo.style.top = state.mapSize+'px';
-    barraInfo.style.borderBottomWidth = scaleToMap(5)+'px';
-    barraInfo.style.paddingTop = scaleToMap(5)+'px';
-    barraInfo.style.paddingBottom = scaleToMap(5)+'px';
-
     busted.style.width = state.mapSize+'px';
     busted.style.height = state.mapSize+'px';
     timeUp.style.width = state.mapSize+'px';
@@ -111,28 +93,6 @@ function resizeVisualElements() {
     collectLabel.style.paddingLeft = scaleToMap(250)+'px';
     collectLabel.style.fontSize = scaleToMap(18)+'px';
     collectLabel.style.width = scaleToMap(115)+'px';
-
-    setClassProp('barItem', 'width', scaleToMap(25)+'px');
-    setClassProp('barItem', 'height', scaleToMap(25)+'px');
-    setClassProp('barItem', 'padding-right', scaleToMap(12)+'px');
-    setClassProp('barItem', 'padding-top', scaleToMap(10)+'px');
-
-    setClassProp('actionButton', 'width', scaleToMap(100)+'px');
-    setClassProp('actionButton', 'height', scaleToMap(100)+'px');
-    const loadingPercent = document.getElementById('loadingPercent');
-    loadingPercent.style.width = scaleToMap(100)+'px';
-    loadingPercent.style.fontSize = scaleToMap(12)+'px';
-
-    setClassProp('statValue', 'font-size', scaleToMap(26)+'px');
-    setClassProp('statValue', 'padding-top', scaleToMap(8)+'px');
-    setClassProp('statLabel', 'font-size', scaleToMap(14)+'px');
-
-    setClassProp('action', 'font-size', scaleToMap(14)+'px');
-    setClassProp('action', 'padding-top', scaleToMap(5)+'px');
-    setClassProp('action', 'min-width', scaleToMap(20)+'px');
-    setClassProp('action', 'max-width', scaleToMap(90)+'px');
-
-    setClassProp('counter1', 'font-size', scaleToMap(14)+'px');
 }
 
 function setClassProp(className, prop, value)
