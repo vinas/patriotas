@@ -31,10 +31,6 @@ body {
 	overflow-y: hidden;
 }
 
-.obs {
-	font-size: small;
-}
-
 .background {
 	position: absolute;
 	top: 0;
@@ -174,13 +170,6 @@ body {
 	height: var(--map);
 }
 
-.textField {
-	border-width: 1px;
-	border-color: #000;
-	width: 188px;
-	height: 18px;
-}
-
 #setas {
 	float: left;
 	position: absolute;
@@ -287,11 +276,6 @@ body {
 .actionButton {
 	width: calc(var(--map) * 100 / 500);
 	height: calc(var(--map) * 100 / 500);
-}
-
-.timeBox {
-	float: left;
-	position: absolute;
 }
 
 #musicToggle {
