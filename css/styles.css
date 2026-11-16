@@ -46,7 +46,6 @@ body {
 	width: var(--map);
 	height: var(--map);
 	opacity: 0.6;
-	transition: src 0.3s ease;
 }
 
 .endGameMessage {
