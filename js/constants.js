@@ -28,3 +28,10 @@ export const KEY_LEFT = 'ArrowLeft',
     KEY_RIGHT = 'ArrowRight',
     KEY_DOWN = 'ArrowDown',
     KEY_ENTER = 'Enter';
+
+// Backgrounds: the 12 numbered ones plus the default, which is also the first one shown.
+export const DEFAULT_BACKGROUND = 'img/background_v2.webp',
+    BACKGROUNDS = [
+        ...Array.from({ length: 12 }, (_, i) => 'img/bkg_' + String(i + 1).padStart(2, '0') + '.webp'),
+        DEFAULT_BACKGROUND
+    ];

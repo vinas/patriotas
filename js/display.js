@@ -1,6 +1,6 @@
 import { state } from './state.js';
 import { assetUrl } from './assets.js';
-import { CLOCK_BONUS_TIME } from './constants.js';
+import { CLOCK_BONUS_TIME, DEFAULT_BACKGROUND, BACKGROUNDS } from './constants.js';
 import { element, showElements, hideElements } from './dom.js';
 import { randomCoords, messagePos } from './geometry.js';
 import { throwItem } from './motion.js';
@@ -13,8 +13,6 @@ const Money = element('money'),
     Subtitle3 = element('actionSubtitle3'),
     Busted = element('busted'),
     TimeUp = element('timeUp');
-
-const DEFAULT_BACKGROUND = 'img/background_v2.webp';
 
 export function errorNotMobile() {
     hideElements(['barraInfo', 'presentation']);
@@ -223,7 +221,7 @@ export function show2ndPoliceman() {
 }
 
 export function setNewBackground() {
-    showBackground('img/' + pickBackground());
+    showBackground(pickBackground());
 }
 
 export function faceDirection(el, scaleX) {
@@ -259,23 +257,8 @@ function showBackground(path) {
 }
 
 function pickBackground() {
-    const backgrounds = [
-        'bkg_01.webp',
-        'bkg_02.webp',
-        'bkg_03.webp',
-        'bkg_04.webp',
-        'bkg_05.webp',
-        'bkg_06.webp',
-        'bkg_07.webp',
-        'bkg_08.webp',
-        'bkg_09.webp',
-        'bkg_10.webp',
-        'bkg_11.webp',
-        'bkg_12.webp',
-        'background_v2.webp'
-    ];
-    const candidates = backgrounds.filter(function(name) {
-        return 'img/' + name !== state.currentBackground;
+    const candidates = BACKGROUNDS.filter(function(path) {
+        return path !== state.currentBackground;
     });
     return candidates[Math.floor(Math.random() * candidates.length)];
 }
