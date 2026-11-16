@@ -5,6 +5,11 @@ import { reached, moveThiefPosition } from './geometry.js';
 import { placeElement, faceDirection } from './display.js';
 import { activeOfficers, moveOfficerTowardThief } from './officer-ai.js';
 
+const DIRECTION_OF_KEY = { [KEY_LEFT]: 'left', [KEY_UP]: 'up', [KEY_RIGHT]: 'right', [KEY_DOWN]: 'down' };
+
+// The scaleX that turns a sprite towards each side.
+const FACING = { left: '1', right: '-1' };
+
 export function moveItAll(scale) {
     moveThief(scale);
     movePolice(scale);
@@ -67,35 +72,16 @@ function movePolice(scale) {
 }
 
 function moveOfficer(whichOfficer, scale) {
-    const facing = moveOfficerTowardThief(whichOfficer, scale);
+    const scaleX = FACING[moveOfficerTowardThief(whichOfficer, scale)];
     const element = state.officers[whichOfficer].element;
-    if (facing === 'right') faceDirection(element, '-1');
-    if (facing === 'left') faceDirection(element, '1');
+    if (scaleX) faceDirection(element, scaleX);
     placeElement(element, state.officers[whichOfficer].pos);
 }
 
 function setThiefHorDirection(direction) {
-    switch (direction) {
-        case 'left':
-            faceDirection(state.thiefEl, '1');
-            break;
-        case 'right':
-            faceDirection(state.thiefEl, '-1');
-            break;
-    }
+    if (FACING[direction]) faceDirection(state.thiefEl, FACING[direction]);
 }
 
 function getDirection() {
-    switch (state.pressedKey) {
-        case KEY_LEFT:
-            return 'left';
-        case KEY_UP:
-            return 'up';
-        case KEY_RIGHT:
-            return 'right';
-        case KEY_DOWN:
-            return 'down';
-        default:
-            return false;
-    }
+    return DIRECTION_OF_KEY[state.pressedKey] || false;
 }
