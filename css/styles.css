@@ -178,29 +178,33 @@ body {
 #setas {
 	float: left;
 	position: absolute;
-	padding-left: 8px;
+	width: calc(var(--map) * 48 / 500);
+	height: calc(var(--map) * 70 / 500);
+	padding-left: calc(var(--map) * 8 / 500);
 }
 
 #slideLabel {
 	float: left;
 	position: absolute;
-	padding-left: 70px;
-	font-size: 18px;
+	padding-left: calc(var(--map) * 70 / 500);
+	font-size: calc(var(--map) * 18 / 500);
 	text-align: center;
 }
 
 #thiefInstruction {
 	float: left;
 	position: absolute;
-	padding-left: 130px;
+	width: calc(var(--map) * 99 / 500);
+	height: calc(var(--map) * 86 / 500);
+	padding-left: calc(var(--map) * 135 / 500);
 }
 
 #collectLabel {
 	float: left;
 	position: absolute;
-	padding-left: 270px;
-	font-size: 18px;
-	width: 105px;
+	padding-left: calc(var(--map) * 250 / 500);
+	font-size: calc(var(--map) * 18 / 500);
+	width: calc(var(--map) * 115 / 500);
 	text-align: center;
 }
 

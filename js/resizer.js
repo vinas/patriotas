@@ -55,12 +55,8 @@ function resizeVisualElements() {
         bustedEndGameImage = document.getElementById('bustedEndGameImage'),
         timeUpEndGameImage = document.getElementById('timeUpEndGameImage'),
         endGameMessage = document.getElementById('endGameMessage'),
-        setas = document.getElementById('setas'),
-        thiefInstruction = document.getElementById('thiefInstruction'),
         busted = document.getElementById('busted'),
-        timeUp = document.getElementById('timeUp'),
-        slideLabel = document.getElementById('slideLabel'),
-        collectLabel = document.getElementById('collectLabel');
+        timeUp = document.getElementById('timeUp');
 
     document.getElementById('presentation').style.height = state.mapSize+'px';
 
@@ -74,25 +70,10 @@ function resizeVisualElements() {
 
     endGameMessage.style.fontSize = scaleToMap(18)+'px';
 
-    setas.style.width = scaleToMap(48)+'px';
-    setas.style.height = scaleToMap(70)+'px';
-    setas.style.paddingLeft = scaleToMap(8)+'px';
-
-    thiefInstruction.style.width = scaleToMap(99)+'px';
-    thiefInstruction.style.height = scaleToMap(86)+'px';
-    thiefInstruction.style.paddingLeft = scaleToMap(135)+'px';
-
     busted.style.width = state.mapSize+'px';
     busted.style.height = state.mapSize+'px';
     timeUp.style.width = state.mapSize+'px';
     timeUp.style.height = state.mapSize+'px';
-
-    slideLabel.style.fontSize = scaleToMap(18)+'px';
-    slideLabel.style.paddingLeft = scaleToMap(70)+'px';
-
-    collectLabel.style.paddingLeft = scaleToMap(250)+'px';
-    collectLabel.style.fontSize = scaleToMap(18)+'px';
-    collectLabel.style.width = scaleToMap(115)+'px';
 }
 
 function setClassProp(className, prop, value)
