@@ -84,18 +84,14 @@ function handleSwipe() {
     if (pos.up.time - pos.down.time < 500) {
         if (Math.abs(pos.up.x - pos.down.x) > Math.abs(pos.up.y - pos.down.y)) {
             if (pos.up.x > pos.down.x) {
-                // console.log('identified: right');
                 state.pressedKey = KEY_RIGHT;
             } else {
-                // console.log('identified: left');
                 state.pressedKey = KEY_LEFT;
             }
         } else {
             if (pos.up.y > pos.down.y) {
-                // console.log('identified: down');
                 state.pressedKey = KEY_DOWN;
             } else {
-                // console.log('identified: up');
                 state.pressedKey = KEY_UP;
             }
         }
