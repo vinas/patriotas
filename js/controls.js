@@ -60,7 +60,8 @@ function trackSwipes() {
     });
     document.addEventListener("touchend", function(obj) {
         if (isControlTarget(obj.target)) return;
-        recordPointer('up', touchUpPos, handleSwipe);
+        recordPointer('up', touchUpPos);
+        handleSwipe();
         touchUpPos = {};
     });
     document.addEventListener("touchmove", function(obj) {
@@ -69,9 +70,9 @@ function trackSwipes() {
     });
     document.addEventListener("mouseup", function(obj) {
         if (isControlTarget(obj.target)) return;
-        recordPointer('up', obj, handleSwipe);
+        recordPointer('up', obj);
+        handleSwipe();
     });
-
 }
 
 function isControlTarget(target) {
@@ -79,33 +80,23 @@ function isControlTarget(target) {
 }
 
 function handleSwipe() {
-    if (pos.up.x === undefined || pos.up.y === undefined) return;
-    if (Math.max(Math.abs(pos.up.x - pos.down.x), Math.abs(pos.up.y - pos.down.y)) < MIN_SWIPE_DISTANCE) return;
-    if (pos.up.time - pos.down.time < 500) {
-        if (Math.abs(pos.up.x - pos.down.x) > Math.abs(pos.up.y - pos.down.y)) {
-            if (pos.up.x > pos.down.x) {
-                state.pressedKey = KEY_RIGHT;
-            } else {
-                state.pressedKey = KEY_LEFT;
-            }
-        } else {
-            if (pos.up.y > pos.down.y) {
-                state.pressedKey = KEY_DOWN;
-            } else {
-                state.pressedKey = KEY_UP;
-            }
-        }
-
+    const { up, down } = pos;
+    if (up.x === undefined || up.y === undefined) return;
+    const dx = up.x - down.x,
+        dy = up.y - down.y;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < MIN_SWIPE_DISTANCE) return;
+    if (up.time - down.time >= 500) return;
+    if (Math.abs(dx) > Math.abs(dy)) {
+        state.pressedKey = dx > 0 ? KEY_RIGHT : KEY_LEFT;
+    } else {
+        state.pressedKey = dy > 0 ? KEY_DOWN : KEY_UP;
     }
 }
 
-function recordPointer(action, obj, callback) {
-    const x = obj.x;
-    const y = obj.y;
+function recordPointer(action, obj) {
     pos[action] = {
-        x: x,
-        y: y,
+        x: obj.x,
+        y: obj.y,
         time: Date.now()
     };
-    if (callback) callback();
 }
