@@ -74,11 +74,11 @@ describe('preloading the assets', () => {
     describe('when a file cannot be downloaded', () => {
         it('still starts, and that one file keeps its server URL', async () => {
             vi.spyOn(console, 'warn').mockImplementation(() => {});
-            const game = await bootGame({ assets: { failing: ['audio/bomb.mp3', 'img/bkg_04.jpg'] } });
+            const game = await bootGame({ assets: { failing: ['audio/bomb.mp3', 'img/bkg_04.webp'] } });
 
             expect(isShown('resetGame')).toBe(true);
             expect(game.state.bombSound.src).toBe('audio/bomb.mp3');
-            expect(game.state.coinSound.src).toBe(inMemoryUrl('audio/coin1.wav'));
+            expect(game.state.coinSound.src).toBe(inMemoryUrl('audio/coin1.mp3'));
 
             startGame();
             expect(game.state.gameOn).toBe(true);

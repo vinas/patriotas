@@ -72,7 +72,7 @@ Browsers don't reliably keep images and sounds around: audio is streamed in piec
 - Any code that changes an image's `src` goes through `assetUrl(path)`, which returns the in-memory URL, or the plain path for a file that couldn't be preloaded (that file then loads from the server when needed, and the game still starts).
 - **Adding an image or sound:** add its path to the lists at the top of `js/assets.js`. A test fails if the page or the scripts refer to an `img/` or `audio/` file that isn't in the lists.
 - `img/loader.gif` and the favicon are deliberately not preloaded: they're needed before the preload can start.
-- The first visit downloads about 9 MB (mostly the two anthem MP3s) before Start appears, and that memory is held for the whole session.
+- The first visit downloads about 3.4 MB (mostly the two anthem MP3s) before Start appears, and that memory is held for the whole session.
 
 ## Testing
 

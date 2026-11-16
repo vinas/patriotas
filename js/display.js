@@ -14,7 +14,7 @@ const Money = element('money'),
     Busted = element('busted'),
     TimeUp = element('timeUp');
 
-const DEFAULT_BACKGROUND = 'img/background_v2.jpg';
+const DEFAULT_BACKGROUND = 'img/background_v2.webp';
 
 export function errorNotMobile() {
     hideElements(['barraInfo', 'presentation']);
@@ -260,19 +260,19 @@ function showBackground(path) {
 
 function pickBackground() {
     const backgrounds = [
-        'bkg_01.jpg',
-        'bkg_02.jpg',
-        'bkg_03.jpg',
-        'bkg_04.jpg',
-        'bkg_05.jpg',
-        'bkg_06.jpg',
-        'bkg_07.jpg',
-        'bkg_08.jpg',
-        'bkg_09.jpg',
-        'bkg_10.jpg',
-        'bkg_11.jpg',
-        'bkg_12.jpg',
-        'background_v2.jpg'
+        'bkg_01.webp',
+        'bkg_02.webp',
+        'bkg_03.webp',
+        'bkg_04.webp',
+        'bkg_05.webp',
+        'bkg_06.webp',
+        'bkg_07.webp',
+        'bkg_08.webp',
+        'bkg_09.webp',
+        'bkg_10.webp',
+        'bkg_11.webp',
+        'bkg_12.webp',
+        'background_v2.webp'
     ];
     const candidates = backgrounds.filter(function(name) {
         return 'img/' + name !== state.currentBackground;
