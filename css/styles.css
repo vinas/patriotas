@@ -10,6 +10,13 @@
   font-weight: 700;
 }
 
+:root {
+	/* Set by js/resizer.js to the real screen size; these are the 500px baseline */
+	--map: 500px;
+	--char: 75px;
+	--item: 55px;
+}
+
 html, body {
 	overscroll-behavior: none;
 	touch-action: none;
@@ -33,13 +40,16 @@ body {
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 500px;
+	height: var(--map);
 	background-color: #000000;
 	color: #FFFFFF;
 	text-align: center;
 }
 
 #backgroundImage {
+	width: var(--map);
+	height: var(--map);
+	opacity: 0.6;
 	transition: src 0.3s ease;
 }
 
@@ -76,15 +86,15 @@ body {
 .personagem {
 	display: none;
 	position: absolute;
-	width: 50px;
-	height: 50px;
+	width: var(--char);
+	height: var(--char);
 }
 
 .item {
 	display: none;
 	position: absolute;
-	width: 25px;
-	height: 25px;
+	width: var(--item);
+	height: var(--item);
 }
 
 #barraInfo {

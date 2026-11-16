@@ -47,7 +47,10 @@ function setSpeedTable(minMoveRate) {
 }
 
 function resizeVisualElements() {
-    resizeGamePlayElements();
+    const root = document.documentElement.style;
+    root.setProperty('--map', state.mapSize + 'px');
+    root.setProperty('--char', state.charSize + 'px');
+    root.setProperty('--item', state.itemSize + 'px');
 
     const presentationImage = document.getElementById('presentationImage'),
         bustedEndGameImage = document.getElementById('bustedEndGameImage'),
@@ -130,20 +133,6 @@ function resizeVisualElements() {
     setClassProp('action', 'max-width', scaleToMap(90)+'px');
 
     setClassProp('counter1', 'font-size', scaleToMap(14)+'px');
-}
-
-function resizeGamePlayElements()
-{
-    document.getElementById('background').style.height = state.mapSize+'px';
-    state.backgroundEl.style.width = state.mapSize+"px";
-    state.backgroundEl.style.height = state.mapSize+"px";
-    state.backgroundEl.style.opacity = '0.6';
-
-    setClassProp('personagem', 'width', state.charSize+'px');
-    setClassProp('personagem', 'height', state.charSize+'px');
-
-    setClassProp('item', 'width', state.itemSize+'px');
-    setClassProp('item', 'height', state.itemSize+'px');
 }
 
 function setClassProp(className, prop, value)
