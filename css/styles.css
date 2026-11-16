@@ -144,17 +144,7 @@ body {
 	display: none;
 }
 
-#busted {
-	position: absolute;
-	color: #FFFFFF;
-	display: none;
-	left: 0px;
-	top: 0px;
-	width: var(--map);
-	height: var(--map);
-}
-
-#timeUp {
+#busted, #timeUp {
 	position: absolute;
 	color: #FFFFFF;
 	display: none;
