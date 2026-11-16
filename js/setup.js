@@ -5,6 +5,7 @@ import { scaleToMap } from './geometry.js';
 import { showStartButton, showLoadProgress } from './display.js';
 import { changePoliceMoveRate } from './motion.js';
 import { isTwoPolicemenLevel } from './officer-ai.js';
+import { applyMusicVolume } from './sounds.js';
 
 export function isMobilePortrait() {
     const ua = navigator.userAgent || '';
@@ -67,21 +68,16 @@ export function resetAllValues() {
 
 export function installFocusHandlers() {
     window.addEventListener('blur', function() {
-        state.fastTheme.pause();
-        state.slowTheme.pause();
-        state.loadingTheme.pause();
-        state.endGameSound.pause();
+        [state.fastTheme, state.slowTheme, state.loadingTheme, state.endGameSound].forEach(function(sound) {
+            sound.pause();
+        });
     });
 
     window.addEventListener('focus', function() {
-        if (state.gameOn) {
-            const levelTheme = isTwoPolicemenLevel() ? state.fastTheme : state.slowTheme;
-            levelTheme.play().catch(function() {});
-            levelTheme.volume = state.musicMuted ? 0 : 1;
-            return;
-        }
-        state.loadingTheme.play().catch(function() {});
-        state.loadingTheme.volume = state.musicMuted ? 0 : 1;
+        const levelTheme = isTwoPolicemenLevel() ? state.fastTheme : state.slowTheme;
+        const theme = state.gameOn ? levelTheme : state.loadingTheme;
+        theme.play().catch(function() {});
+        applyMusicVolume();
     });
 }
 
