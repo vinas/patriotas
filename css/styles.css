@@ -27,8 +27,6 @@ body {
 	width: 100%;
 	font-family: Silkscreen;
 	overflow: hidden;
-	overflow-x: hidden;
-	overflow-y: hidden;
 }
 
 .background {
@@ -112,7 +110,6 @@ body {
 }
 
 .statValue {
-	font-family: Silkscreen;
 	font-weight: 700;
 	font-size: calc(var(--map) * 26 / 500);
 	color: #FFF;
@@ -133,7 +130,6 @@ body {
 	min-width: calc(var(--map) * 20 / 500);
 	max-width: calc(var(--map) * 90 / 500);
 	position: absolute;
-
 }
 
 .counter1 {
@@ -222,7 +218,6 @@ body {
 }
 
 #loadingPercent {
-	font-family: Silkscreen;
 	color: #FFD61F;
 	text-align: center;
 	width: calc(var(--map) * 100 / 500);
@@ -256,7 +251,6 @@ body {
 
 #musicToggle {
 	display: none;
-	font-family: Silkscreen;
 	font-size: 45px;
 	color: #FFD61F;
 	background-color: #3a3a3a;
