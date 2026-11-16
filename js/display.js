@@ -29,8 +29,7 @@ export function showLoadProgress(percent) {
 }
 
 export function spawnBomb() {
-    state.bombPos = randomCoords();
-    displayItem(state.bombEl, state.bombPos);
+    state.bombPos = spawnItem(state.bombEl);
     state.isBombVisible = true;
     state.isBombThrown = false;
 }
@@ -55,8 +54,7 @@ export function showBustedScreen() {
 }
 
 export function spawnClock() {
-    state.clockPos = randomCoords();
-    displayItem(state.clockEl, state.clockPos);
+    state.clockPos = spawnItem(state.clockEl);
     state.isClockVisible = true;
 }
 
@@ -234,8 +232,7 @@ export function hideBomb() {
 }
 
 export function spawnMolotov() {
-    state.molotovPos = randomCoords();
-    displayItem(state.molotovEl, state.molotovPos);
+    state.molotovPos = spawnItem(state.molotovEl);
     state.isMolotovVisible = true;
     state.isMolotovThrown = false;
 }
@@ -290,6 +287,13 @@ function showFeedback(refObj, subtitleObj, message) {
         messagePosition = messagePos(objectPosition);
         placeElement(subtitleObj, messagePosition);
     }
+}
+
+// Puts a pickup at a random spot, shows it and returns that spot.
+function spawnItem(el) {
+    const pos = randomCoords();
+    displayItem(el, pos);
+    return pos;
 }
 
 function displayItem(obj, arrPosition)
