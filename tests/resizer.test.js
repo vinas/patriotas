@@ -15,8 +15,8 @@ describe('map scaling', () => {
         expect(game.state.itemSize).toBe(42); // floor(55 * 390 / 500)
     });
 
-    it('scales the busted message font with the map', () => {
-        expect(document.getElementById('endGameMessage').style.fontSize).toBe('14px'); // floor(18 * 390 / 500)
+    it('exposes the map size to the stylesheet', () => {
+        expect(document.documentElement.style.getPropertyValue('--map')).toBe('390px');
     });
 
     it('measuring again does not scale the sizes a second time', async () => {

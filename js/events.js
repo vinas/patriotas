@@ -20,7 +20,7 @@ export function checkGotItem() {
 }
 
 function gotMoney() {
-    if (reached(state.thiefPos, state.charSize, state.moneyPos, state.itemSize)) {
+    if (thiefReached(state.moneyPos)) {
         state.coinSound.play();
         scorePoints();
         state.time = state.time + MONEY_BONUS_TIME;
@@ -30,7 +30,7 @@ function gotMoney() {
 }
 
 function gotClock() {
-    if (reached(state.thiefPos, state.charSize, state.clockPos, state.itemSize)) {
+    if (thiefReached(state.clockPos)) {
         state.time = state.time + CLOCK_BONUS_TIME;
         hideClock();
         showClockBonus();
@@ -39,7 +39,7 @@ function gotClock() {
 
 function gotMolotov() {
     if (state.isMolotovThrown) return;
-    if (reached(state.thiefPos, state.charSize, state.molotovPos, state.itemSize)) {
+    if (thiefReached(state.molotovPos)) {
         state.isMolotovThrown = true;
         state.molotovTime = MOLOTOV_FREEZE_TIME;
         throwMolotov();
@@ -48,7 +48,7 @@ function gotMolotov() {
 
 function gotBomb() {
     if (state.isBombThrown) return;
-    if (reached(state.thiefPos, state.charSize, state.bombPos, state.itemSize)) {
+    if (thiefReached(state.bombPos)) {
         state.isBombThrown = true;
         throwBomb();
         if (state.currLevel > 1) {
@@ -56,6 +56,10 @@ function gotBomb() {
             renderLevel();
         }
     }
+}
+
+function thiefReached(itemPos) {
+    return reached(state.thiefPos, state.charSize, itemPos, state.itemSize);
 }
 
 function isThiefCaught() {

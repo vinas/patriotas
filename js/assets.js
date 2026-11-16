@@ -4,6 +4,8 @@
 // img/loader.gif and the favicon are left out on purpose: they are needed before
 // the preload can even start.
 
+import { BACKGROUNDS } from './constants.js';
+
 const IMAGE_PATHS = [
     'img/title.png',
     'img/detalhes.png',
@@ -21,19 +23,7 @@ const IMAGE_PATHS = [
     'img/bomb_v2.png',
     'img/busted_v3.png',
     'img/timeisup_01.png',
-    'img/background_v2.webp',
-    'img/bkg_01.webp',
-    'img/bkg_02.webp',
-    'img/bkg_03.webp',
-    'img/bkg_04.webp',
-    'img/bkg_05.webp',
-    'img/bkg_06.webp',
-    'img/bkg_07.webp',
-    'img/bkg_08.webp',
-    'img/bkg_09.webp',
-    'img/bkg_10.webp',
-    'img/bkg_11.webp',
-    'img/bkg_12.webp'
+    ...BACKGROUNDS
 ];
 
 const SOUND_PATHS = [

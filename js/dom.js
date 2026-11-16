@@ -1,6 +1,5 @@
-export function element(el) {
-    if (isString(el)) return document.getElementById(el);
-    return false;
+export function element(id) {
+    return document.getElementById(id);
 }
 
 export function hideElements(el) {
@@ -19,10 +18,6 @@ function setDisplay(el, value) {
         });
         return;
     }
-    const target = isString(el) ? element(el) : el;
+    const target = typeof el === 'string' ? element(el) : el;
     target.style.display = value;
-}
-
-function isString(va) {
-    return (typeof va === 'string' || va instanceof String);
 }

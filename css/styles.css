@@ -10,6 +10,13 @@
   font-weight: 700;
 }
 
+:root {
+	/* Set by js/resizer.js to the real screen size; these are the 500px baseline */
+	--map: 500px;
+	--char: 75px;
+	--item: 55px;
+}
+
 html, body {
 	overscroll-behavior: none;
 	touch-action: none;
@@ -33,13 +40,16 @@ body {
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 500px;
+	height: var(--map);
 	background-color: #000000;
 	color: #FFFFFF;
 	text-align: center;
 }
 
 #backgroundImage {
+	width: var(--map);
+	height: var(--map);
+	opacity: 0.6;
 	transition: src 0.3s ease;
 }
 
@@ -57,6 +67,7 @@ body {
 	justify-content: center;
 	color: #000;
 	text-align: center;
+	font-size: calc(var(--map) * 18 / 500);
 	font-weight: bold;
 	line-height: 1.25;
 	text-wrap: balance;
@@ -67,61 +78,66 @@ body {
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 500px;
+	height: var(--map);
 	background-color: #FFFFFF;
 	color: #000000;
 	display: block;
 }
 
+#presentationImage, #bustedEndGameImage, #timeUpEndGameImage {
+	width: var(--map);
+	height: var(--map);
+}
+
 .personagem {
 	display: none;
 	position: absolute;
-	width: 50px;
-	height: 50px;
+	width: var(--char);
+	height: var(--char);
 }
 
 .item {
 	display: none;
 	position: absolute;
-	width: 25px;
-	height: 25px;
+	width: var(--item);
+	height: var(--item);
 }
 
 #barraInfo {
 	background-color: #575757;
 	position: absolute;
 	float: left;
-	top: 500px;
-	width: 100%;
-	height: 100px;
+	top: var(--map);
+	width: var(--map);
+	height: calc(var(--map) * 100 / 500);
 	border-bottom-style: solid;
-    border-bottom-width: 5px;
+	border-bottom-width: calc(var(--map) * 5 / 500);
 	border-bottom-color:  #2B2B2B;
-	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-top: calc(var(--map) * 5 / 500);
+	padding-bottom: calc(var(--map) * 5 / 500);
 }
 
 .statValue {
 	font-family: Silkscreen;
 	font-weight: 700;
-	font-size: 26px;
+	font-size: calc(var(--map) * 26 / 500);
 	color: #FFF;
-	padding-top: 8px;
+	padding-top: calc(var(--map) * 8 / 500);
 }
 
 .statLabel {
-	font-size: 14px;
+	font-size: calc(var(--map) * 14 / 500);
 	color: #FFD61F;
 }
 
 .action {
-	font-size: 14px;
+	font-size: calc(var(--map) * 14 / 500);
 	color: #FFD61F;
-	padding-top: 5px;
+	padding-top: calc(var(--map) * 5 / 500);
 	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 	font-weight: bold;
-	min-width: 20px;
-	max-width: 90px;
+	min-width: calc(var(--map) * 20 / 500);
+	max-width: calc(var(--map) * 90 / 500);
 	float: left;
 	position: absolute;
 
@@ -130,7 +146,7 @@ body {
 .counter1 {
 	position: absolute;
 	float: left;
-	font-size: 14px;
+	font-size: calc(var(--map) * 14 / 500);
 	color: #FFFF00;
 	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 	display: none;
@@ -143,8 +159,8 @@ body {
 	display: none;
 	left: 0px;
 	top: 0px;
-	width: 100%;
-	height: 500px;
+	width: var(--map);
+	height: var(--map);
 }
 
 #timeUp {
@@ -154,8 +170,8 @@ body {
 	display: none;
 	left: 0px;
 	top: 0px;
-	width: 100%;
-	height: 500px;
+	width: var(--map);
+	height: var(--map);
 }
 
 .textField {
@@ -168,29 +184,33 @@ body {
 #setas {
 	float: left;
 	position: absolute;
-	padding-left: 8px;
+	width: calc(var(--map) * 48 / 500);
+	height: calc(var(--map) * 70 / 500);
+	padding-left: calc(var(--map) * 8 / 500);
 }
 
 #slideLabel {
 	float: left;
 	position: absolute;
-	padding-left: 70px;
-	font-size: 18px;
+	padding-left: calc(var(--map) * 70 / 500);
+	font-size: calc(var(--map) * 18 / 500);
 	text-align: center;
 }
 
 #thiefInstruction {
 	float: left;
 	position: absolute;
-	padding-left: 130px;
+	width: calc(var(--map) * 99 / 500);
+	height: calc(var(--map) * 86 / 500);
+	padding-left: calc(var(--map) * 135 / 500);
 }
 
 #collectLabel {
 	float: left;
 	position: absolute;
-	padding-left: 270px;
-	font-size: 18px;
-	width: 105px;
+	padding-left: calc(var(--map) * 250 / 500);
+	font-size: calc(var(--map) * 18 / 500);
+	width: calc(var(--map) * 115 / 500);
 	text-align: center;
 }
 
@@ -206,7 +226,24 @@ body {
 }
 
 #items {
-	padding-top: 5px;
+	padding-top: calc(var(--map) * 5 / 500);
+}
+
+#timeBox {
+	padding-left: calc(var(--map) * 10 / 500);
+}
+
+#scoreBox {
+	padding-left: calc(var(--map) * 69 / 500);
+}
+
+#scoreBox2 {
+	padding-left: calc(var(--map) * 147 / 500);
+}
+
+#difficultyBox {
+	padding-left: calc(var(--map) * 250 / 500);
+	width: calc(var(--map) * 95 / 500);
 }
 
 #scoreBar {
@@ -221,10 +258,13 @@ body {
 	font-family: Silkscreen;
 	color: #FFD61F;
 	text-align: center;
+	width: calc(var(--map) * 100 / 500);
+	font-size: calc(var(--map) * 12 / 500);
 }
 
 #barLeft {
 	float: left;
+	font-size: calc(var(--map) * 10 / 500);
 	padding-top: 10px;
 	position: absolute;
 	width: 78%;
@@ -238,6 +278,15 @@ body {
 
 .barItem {
 	float: left;
+	width: calc(var(--map) * 25 / 500);
+	height: calc(var(--map) * 25 / 500);
+	padding-right: calc(var(--map) * 12 / 500);
+	padding-top: calc(var(--map) * 10 / 500);
+}
+
+.actionButton {
+	width: calc(var(--map) * 100 / 500);
+	height: calc(var(--map) * 100 / 500);
 }
 
 .timeBox {
@@ -252,8 +301,6 @@ body {
 	color: #FFD61F;
 	background-color: #3a3a3a;
 	border: 2px solid #FFD61F;
-	width: 52px;
-	height: 52px;
 	line-height: 52px;
 	text-align: center;
 	cursor: pointer;

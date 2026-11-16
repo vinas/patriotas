@@ -1,6 +1,6 @@
 import { state } from './state.js';
 import { assetUrl } from './assets.js';
-import { CLOCK_BONUS_TIME } from './constants.js';
+import { CLOCK_BONUS_TIME, DEFAULT_BACKGROUND, BACKGROUNDS } from './constants.js';
 import { element, showElements, hideElements } from './dom.js';
 import { randomCoords, messagePos } from './geometry.js';
 import { throwItem } from './motion.js';
@@ -13,8 +13,6 @@ const Money = element('money'),
     Subtitle3 = element('actionSubtitle3'),
     Busted = element('busted'),
     TimeUp = element('timeUp');
-
-const DEFAULT_BACKGROUND = 'img/background_v2.webp';
 
 export function errorNotMobile() {
     hideElements(['barraInfo', 'presentation']);
@@ -31,17 +29,14 @@ export function showLoadProgress(percent) {
 }
 
 export function spawnBomb() {
-    state.bombPos = randomCoords();
-    displayItem(state.bombEl, state.bombPos);
+    state.bombPos = spawnItem(state.bombEl);
     state.isBombVisible = true;
     state.isBombThrown = false;
 }
 
 export function throwBomb() {
-    throwItem(state.bombEl, state.bombPos, state.officers[0].pos, endBombFeedback);
+    throwAtOfficer(state.bombEl, state.bombPos, hideBomb, endBombFeedback);
     function endBombFeedback() {
-        state.bombSound.play();
-        hideBomb();
         flashOfficers();
         flash(state.levelEl);
         showFeedback(state.officers[0].element, Subtitle1, 'devagar');
@@ -57,8 +52,7 @@ export function showBustedScreen() {
 }
 
 export function spawnClock() {
-    state.clockPos = randomCoords();
-    displayItem(state.clockEl, state.clockPos);
+    state.clockPos = spawnItem(state.clockEl);
     state.isClockVisible = true;
 }
 
@@ -76,9 +70,8 @@ export function resetHud() {
     state.timeEl.innerHTML = state.time;
 }
 
-export function flash(obj, color) {
+export function flash(obj, color = '#FFD61F') {
     let flashCount = 0;
-    color = (!color) ? '#FFD61F' : color;
 
     flashThis();
 
@@ -86,9 +79,7 @@ export function flash(obj, color) {
         obj.style.backgroundColor = (flashCount % 2 == 0) ? color : '';
         flashCount++;
         if (flashCount < 6) {
-            setTimeout(function() {
-                flashThis();
-            }, 100);
+            setTimeout(flashThis, 100);
         }
     }
 }
@@ -98,8 +89,6 @@ function flashOfficers() {
         flash(officer.element);
     });
 }
-
-
 
 export function spawnMoney() {
     state.moneyPos = randomCoords();
@@ -223,7 +212,7 @@ export function show2ndPoliceman() {
 }
 
 export function setNewBackground() {
-    showBackground('img/' + pickBackground());
+    showBackground(pickBackground());
 }
 
 export function faceDirection(el, scaleX) {
@@ -236,21 +225,13 @@ export function hideBomb() {
 }
 
 export function spawnMolotov() {
-    state.molotovPos = randomCoords();
-    displayItem(state.molotovEl, state.molotovPos);
+    state.molotovPos = spawnItem(state.molotovEl);
     state.isMolotovVisible = true;
     state.isMolotovThrown = false;
 }
 
 export function throwMolotov() {
-    throwItem(state.molotovEl, state.molotovPos, state.officers[0].pos, endMolotovFeedback);
-
-    function endMolotovFeedback()
-    {
-        state.bombSound.play();
-        hideMolotov();
-        burnOfficers();
-    }
+    throwAtOfficer(state.molotovEl, state.molotovPos, hideMolotov, burnOfficers);
 }
 
 function showBackground(path) {
@@ -259,23 +240,8 @@ function showBackground(path) {
 }
 
 function pickBackground() {
-    const backgrounds = [
-        'bkg_01.webp',
-        'bkg_02.webp',
-        'bkg_03.webp',
-        'bkg_04.webp',
-        'bkg_05.webp',
-        'bkg_06.webp',
-        'bkg_07.webp',
-        'bkg_08.webp',
-        'bkg_09.webp',
-        'bkg_10.webp',
-        'bkg_11.webp',
-        'bkg_12.webp',
-        'background_v2.webp'
-    ];
-    const candidates = backgrounds.filter(function(name) {
-        return 'img/' + name !== state.currentBackground;
+    const candidates = BACKGROUNDS.filter(function(path) {
+        return path !== state.currentBackground;
     });
     return candidates[Math.floor(Math.random() * candidates.length)];
 }
@@ -295,9 +261,7 @@ function showFeedback(refObj, subtitleObj, message) {
         subtitleObj.innerHTML = (counter % 2 == 0) ? message : '';
         counter++;
         if (counter < 6) {
-            setTimeout(function() {
-                blinkMsg();
-            }, interval);
+            setTimeout(blinkMsg, interval);
         }
     }
 
@@ -307,6 +271,22 @@ function showFeedback(refObj, subtitleObj, message) {
         messagePosition = messagePos(objectPosition);
         placeElement(subtitleObj, messagePosition);
     }
+}
+
+// Throws a pickup at the first officer. When it lands: the blast sound, hide the pickup, then the item's own feedback.
+function throwAtOfficer(el, pos, hide, feedback) {
+    throwItem(el, pos, state.officers[0].pos, function() {
+        state.bombSound.play();
+        hide();
+        feedback();
+    });
+}
+
+// Puts a pickup at a random spot, shows it and returns that spot.
+function spawnItem(el) {
+    const pos = randomCoords();
+    displayItem(el, pos);
+    return pos;
 }
 
 function displayItem(obj, arrPosition)

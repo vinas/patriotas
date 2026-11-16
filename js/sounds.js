@@ -41,25 +41,21 @@ function primeSounds() {
     });
     state.loadingTheme.currentTime = 18;
 
-    const themeVolume = state.musicMuted ? 0 : 1;
-    themes.forEach(function(theme) {
-        theme.volume = themeVolume;
-    });
+    applyMusicVolume();
     effects.forEach(function(effect) {
         effect.volume = 1;
     });
 }
 
+export function applyMusicVolume() {
+    const volume = state.musicMuted ? 0 : 1;
+    [state.fastTheme, state.slowTheme, state.loadingTheme].forEach(function(theme) {
+        theme.volume = volume;
+    });
+}
+
 export function toggleMusic() {
     state.musicMuted = !state.musicMuted;
-    const vol = state.musicMuted ? 0 : 1;
-    state.fastTheme.volume = vol;
-    state.slowTheme.volume = vol;
-    state.loadingTheme.volume = vol;
-    const btn = document.getElementById('musicToggle');
-    if (state.musicMuted) {
-        btn.classList.add('muted');
-    } else {
-        btn.classList.remove('muted');
-    }
+    applyMusicVolume();
+    document.getElementById('musicToggle').classList.toggle('muted', state.musicMuted);
 }

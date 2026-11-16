@@ -1,3 +1,5 @@
+import { DEFAULT_BACKGROUND } from './constants.js';
+
 export const state = {
     // Characters
     thiefEl: undefined,
@@ -15,7 +17,7 @@ export const state = {
 
     // Display Items
     backgroundEl: undefined,
-    currentBackground: 'img/background_v2.webp',
+    currentBackground: DEFAULT_BACKGROUND,
     levelEl: undefined,
     timeEl: undefined,
 

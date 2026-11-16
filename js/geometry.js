@@ -22,27 +22,13 @@ export function messagePos(objPosArr) {
     return [leftPos, topPos];
 }
 
+// Direction -> [axis, sign]: axis 0 is horizontal (x), 1 is vertical (y).
+const STEPS = { left: [0, -1], right: [0, 1], up: [1, -1], down: [1, 1] };
+
 export function moveThiefPosition(posArr, movRate, direction) {
     if (!direction) return posArr;
-    let level;
-    switch (direction) {
-        case 'left':
-            posArr[0] = posArr[0] - movRate;
-            level = 0;
-            break;
-        case 'right':
-            posArr[0] = posArr[0] + movRate;
-            level = 0;
-            break;
-        case 'up':
-            posArr[1] = posArr[1] - movRate;
-            level = 1;
-            break;
-        case 'down':
-            posArr[1] = posArr[1] + movRate;
-            level = 1;
-    }
-    posArr[level] = adjustCrossBorder(posArr[level])
+    const [axis, sign] = STEPS[direction];
+    posArr[axis] = adjustCrossBorder(posArr[axis] + sign * movRate);
     return posArr;
 }
 
